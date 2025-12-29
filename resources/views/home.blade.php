@@ -1,7 +1,11 @@
-@extends('layouts.app')
+@extends('layouts.HomeLayout')
+
+@push('top')
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+@endpush
 
 @section('content')
-<section class="hero min-h-screen sm:h-auto bg-fixed bg-cover bg-center relative" style="background-image: url('{{ url(asset('assets/img/team.jpg')) }}');" id="beranda">
+<section class="hero min-h-screen bg-fixed bg-cover bg-center relative" style="background-image: url('{{ url(asset('assets/img/team.jpg')) }}');" id="beranda">
   <!-- Gradient Overlay -->
   <div class="absolute inset-0 bg-gradient-black from-black/60 via-transparent to-black/60 h-full"></div>
   <!-- Color Overlay -->
@@ -9,7 +13,7 @@
   
   <div class="hero-content flex-col lg:flex-row-reverse text-white relative z-10">
       <div data-aos="fade-up" data-aos-delay="300">
-          <h1 class="text-5xl font-bold">Selamat datang di Website resmi </h1>
+          <h1 class="text-5xl font-bold font-display">Selamat datang di Website resmi </h1>
           <h1 class="text-5xl font-bold">Omah Sehat Banyuwangi </h1>
           <p class="py-6">Segera lakukan reservasi layanan terapi kami secara online untuk mendapatkan tubuh yang sehat dengan klik tombol reservasi</p>
           <a href="{{ route('pesan.reservasi.terapi') }}" class="btn btn-primary">reservasi</a>
@@ -18,7 +22,7 @@
 </section>
 
 
-<section class="py-12 bg-base-100" id="layanan-terapi">
+<section class="py-12" id="layanan-terapi">
 <div class="container mx-auto px-4">
     <h2 class="text-3xl font-bold text-center mb-8">Layanan kami</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
@@ -116,7 +120,7 @@
 </div>
 </section>
 
-<section class="py-12 gradient-blue from-blue-500 via-teal-400 to-indigo-600" id="visi-misi">
+<section class="py-12 bg-linear-to-r from-blue-500 via-teal-400 to-indigo-600" id="visi-misi">
 <div class="container mx-auto px-6 lg:px-16 text-center">
     <h2 class="text-4xl font-bold mb-8 text-white">Visi & Misi</h2>
     <p class="text-gray-200 mb-12 max-w-2xl mx-auto" data-aos="fade-up" data-aos-duration="1000">
@@ -125,14 +129,14 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <!-- Visi Section -->
         <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow" data-aos="zoom-in-up" data-aos-duration="1000">
-            <h3 class="text-2xl font-semibold mb-4 text-gray-800"><i class="fa-brands fa-dart-lang"></i> Visi</h3>
+            <h3 class="text-2xl font-semibold mb-4 text-gray-800"><i class="fa-solid fa-eye"></i> Visi</h3>
             <p class="text-gray-600 text-custom-dark">
                 Menjadi pusat terapi kesehatan terpercaya yang mengutamakan kualitas layanan dan kepuasan pelanggan.
             </p>
         </div>
         <!-- Misi Section -->
         <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow" data-aos="zoom-in-up" data-aos-duration="1000">
-            <h3 class="text-2xl font-semibold mb-4 text-gray-800"><i class="fa-solid fa-rocket"></i> Misi</h3>
+            <h3 class="text-2xl font-semibold mb-4 text-gray-800"><i class="fa-solid fa-bullseye"></i> Misi</h3>
             <ul class="list-disc text-gray-600 pl-4 text-left text-custom-dark">
                 <li>Menyediakan layanan terapi berkualitas dengan pendekatan holistik.</li>
                 <li>Mengutamakan profesionalisme dan etika dalam setiap layanan.</li>
@@ -239,20 +243,26 @@
         </div>
       </div>
       <div class="mt-8">
-        <a href="#apply" class="btn btn-primary text-white" data-aos="zoom-in-up" data-aos="600" data-aos-duration="1000">Daftar Sekarang</a>
+        <a href="{{ route('register.therapist') }}" class="btn btn-primary text-white" data-aos="zoom-in-up" data-aos="600" data-aos-duration="1000">Daftar Sekarang</a>
       </div>
     </div>
   </section>
   
   <!-- Lightbox Modal -->
   <div id="lightbox" 
-       class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center hidden z-50" 
+       class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center hidden z-[2000]" 
        onclick="closeLightbox()">
-    <img id="lightbox-img" src="" alt="Full Image" class="max-w-full max-h-full z-50" />
+    <img id="lightbox-img" src="" alt="Full Image" class="max-w-full max-h-full z-[2000]" />
   </div>
   
 
-<section class="py-12 bg-base-100" id="katalog-produk">
+  <section class="py-12 bg-gray-100" id="lokasi-kami">
+    <h2 class="text-3xl font-bold text-center mb-8">Lokasi Kami</h2>
+    <div id="map" class="w-full h-[500px]"></div>
+  </section>
+
+
+<section class="py-12" id="katalog-produk">
 <div class="container mx-auto px-4">
     <h2 class="text-3xl font-bold text-center mb-8">Katalog Produk</h2>
     <div class="relative overflow-hidden">
@@ -263,7 +273,7 @@
                     <img src="{{ url(asset('assets/img/produk-1.jpg')) }}" alt="Produk 1" class="w-full h-48 object-cover">
                     <div class="p-4 text-center">
                         <h3 class="text-lg font-semibold text-black">Trace Mineral Impro</h3>
-                        <p class="text-gray-600">Deskripsi singkat produk.</p>
+                        <p class="text-gray-600">Trace mineral impro adalah suplemen mineral yang mengandung unsur jejak (trace elements). Unsur jejak adalah mineral yang dibutuhkan tubuh dalam jumlah kecil, yaitu kurang dari 100 mg per hari. .</p>
                     </div>
                 </div>
             </div>
@@ -277,16 +287,73 @@
 </section>
 
 <!-- Scroll to Top Button -->
-<button id="scrollToTop" class="fixed bottom-5 right-5 p-3 bg-blue-500 text-white rounded-full shadow-lg hover:bg-blue-600 transition duration-300">
+<button id="scrollToTop" class="fixed bottom-5 right-5 p-3 bg-blue-500 text-white rounded-full shadow-lg hover:bg-blue-600 transition duration-300 z-[1000]">
     <i class="fa-solid fa-arrow-up"></i>
 </button>
-
 @endsection
 
 @push('bottom')
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  <script>
 
+      var map = L.map('map').setView([ -8.2318518, 114.3465796 ], 16);
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(map);
+
+      L.marker([ -8.229908273576507, 114.34335350990297 ]).addTo(map)
+          .bindPopup('<b>Omah Sehat Banyuwangi</b>')
+          .openPopup();
+
+      window.onload = function() {
+        document.getElementById('map').classList.remove('opacity-0');
+        document.getElementById('map').classList.add('opacity-100');
+      };
+
+  </script>
+
+  <script>
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+    var adBlockDetected = false;
+    
+    // Coba menambahkan elemen iklan yang umum diblokir
+    var adTest = document.createElement('div');
+    adTest.innerHTML = '&nbsp;';
+    adTest.className = 'adsbox';  // Kelas yang umumnya diblokir oleh adblocker
+    document.body.appendChild(adTest);
+
+    // Cek apakah elemen iklan berhasil dimuat
+    setTimeout(function () {
+        if (adTest.offsetHeight === 0) {
+            adBlockDetected = true;
+        }
+        
+        // Jika adblocker terdeteksi, tampilkan notifikasi
+        if (adBlockDetected) {
+            var notification = document.createElement('div');
+            notification.innerHTML = 'Adblocker terdeteksi! Harap nonaktifkan untuk mendukung situs ini.';
+            notification.style.position = 'fixed';
+            notification.style.top = '20px';
+            notification.style.left = '50%';
+            notification.style.transform = 'translateX(-50%)';
+            notification.style.backgroundColor = '#f44336';
+            notification.style.color = 'white';
+            notification.style.padding = '10px 20px';
+            notification.style.borderRadius = '5px';
+            notification.style.zIndex = '9999';
+            notification.style.fontSize = '16px';
+            notification.style.fontWeight = 'bold';
+            document.body.appendChild(notification);
+        }
+    }, 100);
+});
+</script>
+  </script>
   <script src="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.js"></script>
   <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
   <script src="{{ url(asset('assets/js/nav.js')) }}"></script>
   <script src="{{ url(asset('assets/js/home.js')) }}"></script>
+
 @endpush

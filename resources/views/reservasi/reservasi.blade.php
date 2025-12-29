@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.HomeLayout')
 
 @push('top')
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -116,5 +116,4 @@
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script src="{{ url(asset('assets/js/nav.js')) }}"></script>
   <script type="module" src="{{ url(asset('assets/js/reservasi.js')) }}"></script>
-
 @endpush

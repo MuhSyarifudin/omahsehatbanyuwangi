@@ -4,9 +4,9 @@ const header = document.getElementById('header');
 // Tambahkan event listener untuk scroll
 window.addEventListener('scroll', () => {
     if (window.scrollY > 50) { // Jika scroll lebih dari 50px
-        header.classList.add('fixed');
+        header.classList.add("fixed", "top-0", "left-0", "w-full", "shadow-lg", "bg-white", "z-[1000]");
     } else {
-        header.classList.remove('fixed');
+        header.classList.remove("fixed", "top-0", "left-0", "w-full", "shadow-lg", "bg-white", "z-50", "relative", "top-0", "z-[1000]");
     }
 });
 

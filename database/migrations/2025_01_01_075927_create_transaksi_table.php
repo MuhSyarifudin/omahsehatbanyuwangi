@@ -13,7 +13,9 @@ return new class extends Migration
     {
         Schema::create('transaksi', function (Blueprint $table) {
             $table->id();
+            $table->string('order_id');
             $table->string('nama');
+            $table->unsignedBigInteger('terapi_id');
             $table->string('nama_terapi');
             $table->string('tempat');
             $table->string('tanggal');
@@ -24,7 +26,7 @@ return new class extends Migration
             $table->string('nohp');
             $table->integer('jumlah');
             $table->unsignedBigInteger('total_harga');
-            $table->string('status')->default('Unpaid');
+            $table->string('status')->default('pending');
             $table->timestamps();
         });
     }

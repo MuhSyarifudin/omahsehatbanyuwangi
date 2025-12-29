@@ -17,14 +17,28 @@ class RedirectIfAuthenticated
      */
     public function handle(Request $request, Closure $next, string ...$guards): Response
     {
-        $guards = empty($guards) ? [null] : $guards;
+        $guards = empty($guards) ? ['web'] : $guards;
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
+                $user = Auth::guard($guard)->user();
+    
+                // Cek role pengguna dan arahkan ke halaman yang sesuai
+                if ($user->role === 'admin') {
+                    return redirect()->route('admin.dashboard');
+                }
+    
+                if ($user->role === 'therapist') {
+                    if (!$user->hasVerifiedEmail()) {
+                        return redirect()->route('verification.notice');
+                    }
+                    return redirect()->route('therapist.dashboard');
+                }
+    
                 return redirect(RouteServiceProvider::HOME);
             }
         }
-
+    
         return $next($request);
     }
 }

@@ -12,6 +12,7 @@ use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
 {
+
     /**
      * Display the login view.
      */
@@ -26,6 +27,21 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
+        $request->session()->regenerate();
+
+        $user = Auth::user(); 
+
+        if ($user->role === 'admin') {
+            return redirect()->route('admin.dashboard');
+        }
+    
+        if ($user->role === 'therapist') {
+            if (!$user->hasVerifiedEmail()) {
+                Auth::logout();
+                return redirect()->back()->with('error', 'Anda belum melakukan verifikasi email.');
+            }
+            return redirect()->route('therapist.dashboard');
+        }
 
         $request->session()->regenerate();
 

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.HomeLayout')
 @push('top')
 <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key') }}"></script>
 @endpush
@@ -54,7 +54,7 @@
           <tbody>
             <!-- Contoh data produk -->
             <tr>
-              <td class="border-b">{{ $transaksi->nama_terapi }}</td>
+              <td class="border-b">{{ $transaksi->nama_terapi }} - {{ $jenis_terapi->jenis_terapi }}</td>
               <td class="border-b">{{ $transaksi->jumlah }}</td>
               <td class="border-b">{{ $harga_terapi }}</td>
               <td class="border-b">{{ $transaksi->total_harga }}</td>
