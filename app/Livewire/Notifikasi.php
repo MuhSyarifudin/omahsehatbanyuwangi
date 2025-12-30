@@ -17,12 +17,6 @@ class Notifikasi extends Component
         $this->loadNotifikasi();
     }
 
-    public function updateNotifikasi(){
-        
-        $this->loadNotifikasi();
-
-    }
-
     public function loadNotifikasi()
     {
         if (Auth::check()) {
@@ -30,6 +24,12 @@ class Notifikasi extends Component
         } else {
             $this->notifikasi = collect(); // Return empty collection to avoid errors
         }
+    }
+
+    public function tandaiSemuaDibaca()
+    {
+        Auth::user()->unreadNotifications->markAsRead();
+        $this->loadNotifikasi();
     }
 
     public function tandaiDibaca($id)

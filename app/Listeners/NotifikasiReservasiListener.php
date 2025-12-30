@@ -2,23 +2,27 @@
 
 namespace App\Listeners;
 
+use App\Events\NotifikasiReservasiEvent;
 use App\Models\User;
-use App\Events\NotificationSent;
 use App\Notifications\NotifikasiReservasi;
 use Illuminate\Support\Facades\Notification;
 
-class NotificationSentListener
+class NotifikasiReservasiListener
 {
-
+    /**
+     * Create the event listener.
+     */
     public function __construct()
     {
-        
+        //
     }
 
-    public function handle(NotificationSent $event): void
+    /**
+     * Handle the event.
+     */
+    public function handle(NotifikasiReservasiEvent $event): void
     {
         $admins = User::where('role','admin')->get();
         Notification::send($admins,new NotifikasiReservasi($event->transaksi));
-
     }
 }

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\NotificationSent;
-use App\Http\Requests\StoreReservationRequest;
-use Illuminate\Support\Facades\DB;
 use App\Models\Transaksi;
+use Illuminate\Support\Facades\DB;
+use App\Events\NotifikasiReservasiEvent;
+use App\Http\Requests\StoreReservationRequest;
 
 class CheckoutController extends Controller
 {
@@ -13,28 +13,33 @@ class CheckoutController extends Controller
 
         $request->validated();
         
-        $terapi = DB::table('layanan_terapi')->where('id',$request->terapi)->first();
+        $terapi = DB::table('layanan_terapi')
+        ->where('id', $request->terapi)
+        ->first();
 
-        $request->request->add(['total_harga'=>$request->jumlah * $terapi->harga]);
+        $transaksi = DB::transaction(function () use ($request,$terapi) {
 
-        $transaksi =  new Transaksi();
+            $totalHarga = $request->jumlah * $terapi->harga;
 
-        $transaksi->nama = $request->nama_lengkap;
-        $transaksi->nama_terapi = DB::table('layanan_terapi')->where('id',$request->terapi)->first()->nama;
-        if (Isset($request->alamat)) {
-            $transaksi->alamat = $request->alamat;
-        }
-        $transaksi->jenis_kelamin = $request->jenis_kelamin;
-        $transaksi->nohp = $request->nohp;
-        $transaksi->tempat = $request->layanan;
-        $transaksi->tanggal = $request->tanggal;
-        $transaksi->hari = $request->hari;
-        $transaksi->jam = $request->jam;
-        $transaksi->jumlah = $request->jumlah;
-        $transaksi->total_harga = $request->total_harga;
-        $transaksi->terapi_id = $request->terapi;
-        $transaksi->order_id = 'ORDER_' . time();
-        $transaksi->save();
+            $trx =  new Transaksi();
+
+            $trx->nama = $request->nama_lengkap;
+            $trx->nama_terapi =$terapi->nama;
+            $trx->alamat = $request->alamat ?? null;
+            $trx->jenis_kelamin = $request->jenis_kelamin;
+            $trx->nohp = $request->nohp;
+            $trx->tempat = $request->layanan;
+            $trx->tanggal = $request->tanggal;
+            $trx->hari = $request->hari;
+            $trx->jam = $request->jam;
+            $trx->jumlah = $request->jumlah;
+            $trx->total_harga = $totalHarga;
+            $trx->terapi_id = $terapi->id;
+            $trx->order_id = 'ORDER_' . time();
+            $trx->save();
+        
+            return $trx;
+        });
 
         $harga_terapi = DB::table('layanan_terapi')->where('id',$request->terapi)->first()->harga;
 
@@ -65,7 +70,7 @@ class CheckoutController extends Controller
         session()->put('snapToken',$snapToken);
         session()->put('harga_terapi',$harga_terapi);
     
-        event(new NotificationSent($transaksi));
+        event(new NotifikasiReservasiEvent($transaksi));
 
         if ($transaksi->tempat == "Center") {
 

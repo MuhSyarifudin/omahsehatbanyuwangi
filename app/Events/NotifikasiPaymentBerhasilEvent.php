@@ -10,22 +10,16 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class NotificationSent implements ShouldBroadcast
+class NotifikasiPaymentBerhasilEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    /**
+     * Create a new event instance.
+     */
     public function __construct(public $transaksi)
     {
         
     }
 
-    public function broadcastOn()
-    {
-        return ['my-channel'];
-    }
-  
-    public function broadcastAs()
-    {
-        return 'my-event';
-    }
 }

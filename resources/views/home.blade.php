@@ -5,6 +5,7 @@
 @endpush
 
 @section('content')
+
 <section class="hero min-h-screen bg-fixed bg-cover bg-center relative" style="background-image: url('{{ url(asset('assets/img/team.jpg')) }}');" id="beranda">
   <!-- Gradient Overlay -->
   <div class="absolute inset-0 bg-gradient-black from-black/60 via-transparent to-black/60 h-full"></div>
@@ -258,8 +259,19 @@
 
   <section class="py-12 bg-gray-100" id="lokasi-kami">
     <h2 class="text-3xl font-bold text-center mb-8">Lokasi Kami</h2>
-    <div id="map" class="w-full h-[500px]"></div>
+  
+    <div class="relative">
+      <!-- Overlay hitam -->
+      <div
+        id="map-overlay"
+        class="absolute inset-0 bg-black z-10 transition-opacity duration-500"
+      ></div>
+  
+      <!-- Map -->
+      <div id="map" class="w-full h-[500px] opacity-0 transition-opacity duration-500"></div>
+    </div>
   </section>
+  
 
 
 <section class="py-12" id="katalog-produk">
@@ -270,10 +282,21 @@
             <!-- Item 1 -->
             <div class="carousel-item snap-start w-full sm:w-1/2 md:w-1/3 lg:w-1/4 flex-shrink-0 flex justify-center">
                 <div class="bg-white shadow-lg rounded-lg overflow-hidden">
-                    <img src="{{ url(asset('assets/img/produk-1.jpg')) }}" alt="Produk 1" class="w-full h-48 object-cover">
+                    <img src="{{ url(asset('assets/img/produk-1.jpg')) }}" alt="Produk 1" class="w-full h-48 object-cover" onclick="openLightbox(this)">
                     <div class="p-4 text-center">
                         <h3 class="text-lg font-semibold text-black">Trace Mineral Impro</h3>
-                        <p class="text-gray-600">Trace mineral impro adalah suplemen mineral yang mengandung unsur jejak (trace elements). Unsur jejak adalah mineral yang dibutuhkan tubuh dalam jumlah kecil, yaitu kurang dari 100 mg per hari. .</p>
+                        <p class="text-gray-600"></p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Item 2 -->
+            <div class="carousel-item snap-start w-full sm:w-1/2 md:w-1/3 lg:w-1/4 flex-shrink-0 flex justify-center">
+                <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+                    <img src="{{ url(asset('assets/img/produk-2.jpeg')) }}" alt="Produk 2" class="w-full h-48 object-cover" onclick="openLightbox(this)">
+                    <div class="p-4 text-center">
+                        <h3 class="text-lg font-semibold text-black">Minyak Waras</h3>
+                        <p class="text-gray-600"></p>
                     </div>
                 </div>
             </div>
@@ -311,11 +334,7 @@
         document.getElementById('map').classList.add('opacity-100');
       };
 
-  </script>
-
-  <script>
-    <script>
-document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function () {
     var adBlockDetected = false;
     
     // Coba menambahkan elemen iklan yang umum diblokir

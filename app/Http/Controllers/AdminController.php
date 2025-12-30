@@ -2,13 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\DB;
-use App\Models\Transaksi;
+use App\Events\NotificationBellEvent;
 use App\Models\User;
+use App\Models\Transaksi;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
     public function index(){
+
+
+
+        // event(new NotificationBellEvent(Auth::user()));
 
         $keuntunganPerBulan = DB::table('transaksi')
         ->select(DB::raw('YEAR(created_at) as year'), DB::raw('MONTH(created_at) as month'), DB::raw('SUM(total_harga) as total_keuntungan'))

@@ -1,4 +1,7 @@
 @extends('layouts.DashboardLayout')
+@push('top')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pusher/8.4.0/pusher.min.js" integrity="sha512-p3rR75Is6DCK1r2D8mdxLQhe4IWVDSTUBdxqs0Veum0hHDSY+sH9M6U6Cesr1umlxbiEK9w/3IhXFlZcWT1AoA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+@endpush
 @section('content')
                  <!-- start::Stats -->
                  <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-10">
@@ -31,7 +34,7 @@
                             </div>
                             <div class="flex flex-col">
                                 <div class="flex items-end">
-                                    <span class="text-2xl 2xl:text-4xl font-bold">{{ $jumlahReservasi }}</span>
+                                    <span class="text-2xl 2xl:text-4xl font-bold" id="jumlah-reservasi">{{ $jumlahReservasi }}</span>
                                 </div>
                             </div>
                         </div>
@@ -78,3 +81,10 @@
                 
             </div>
 @endsection
+
+@push('bottom')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+
+@endpush

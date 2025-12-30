@@ -11,7 +11,7 @@
                     >
                         <svg class="w-6 h-6 cursor-pointer hover:text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
                         <sub>
-                            <span class="bg-red-600 text-gray-100 px-1.5 py-0.5 rounded-full -ml-1 animate-pulse">
+                            <span  wire:poll.5s class="bg-red-600 text-gray-100 px-1.5 py-0.5 rounded-full -ml-1 animate-pulse">
                                 {{ count($notifikasi) }}
                             </span>
                         </sub>
@@ -32,7 +32,7 @@
                             <div class="flex items-center justify-between px-4 py-2">
                                 <span class="font-bold">Notifications</span>
 
-                                <span class="text-xs px-1.5 py-0.5 bg-red-600 text-gray-100 rounded">
+                                <span class="text-xs px-1.5 py-0.5 bg-red-600 text-gray-100 rounded" wire:poll.5s>
                                     {{ count($notifikasi) }}
                                 </span>
                             </div>
@@ -42,9 +42,7 @@
                             @if(count($notifikasi) > 0)
                                 @foreach ($notifikasi as $notif)
                                         <a 
-                                        wire:click="tandaiDibaca('{{ $notif->id }}')"
                                         x-data="{ linkHover: false }"
-                                        href="#"
                                         class="flex items-center justify-between py-4 px-3 hover:bg-gray-100 bg-opacity-20"
                                         @mouseover="linkHover = true"
                                         @mouseleave="linkHover = false"
@@ -63,10 +61,11 @@
                                         <span class="text-xs font-bold">
                                             {{ $notif->created_at->diffForHumans() }}
                                         </span>
-                                    </a>                                    
+                                    </a>   
+                                    <button wire:click="tandaiDibaca({{ $notif->id }})" class="btn bg-amber-400 justify-end rounded-2xl text-xs m-1 p-1">Tandai dibaca</button>                                 
                                 @endforeach
                             @else
-                            <p class="text-muted mt-2">Tidak ada notifikasi baru</p>
+                            <center><p class="text-muted mt-2">Tidak ada notifikasi baru</p></center>
                             @endif
                             <!-- end::Submenu link -->
                         </div>

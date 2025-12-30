@@ -2,8 +2,16 @@
 
 namespace App\Providers;
 
+use App\Events\NotificationCheckout;
+use App\Events\NotificationPaymentDone;
 use App\Events\NotificationSent;
+use App\Events\NotifikasiPaymentBerhasilEvent;
+use App\Events\NotifikasiReservasiEvent;
+use App\Listeners\NotificationCheckoutListener;
+use App\Listeners\NotificationPaymentDoneListener;
 use App\Listeners\NotificationSentListener;
+use App\Listeners\NotifikasiPaymentBerhasilListener;
+use App\Listeners\NotifikasiReservasiListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -20,8 +28,11 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
-        NotificationSent::class =>[
-            NotificationSentListener::class,
+        NotifikasiReservasiEvent::class =>[
+            NotifikasiReservasiListener::class,
+        ],
+        NotifikasiPaymentBerhasilEvent::class =>[
+            NotifikasiPaymentBerhasilListener::class,
         ]
     ];
 
