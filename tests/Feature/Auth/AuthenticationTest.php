@@ -5,6 +5,7 @@ namespace Tests\Feature\Auth;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 
 class AuthenticationTest extends TestCase
@@ -45,6 +46,10 @@ class AuthenticationTest extends TestCase
 
     public function test_users_can_logout(): void
     {
+
+        $user = User::where('id',Auth::user()->id)->first();
+        $user->tokens()->where('tokenable_id',$user->id)->delete();
+
         $user = User::factory()->create();
 
         $response = $this->actingAs($user)->post('/logout');
