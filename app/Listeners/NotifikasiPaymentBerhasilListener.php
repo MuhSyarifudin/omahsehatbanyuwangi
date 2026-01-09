@@ -7,6 +7,7 @@ use App\Events\NotifikasiPaymentBerhasilEvent;
 use App\Models\User;
 use App\Notifications\NotifikasiPaymentDone;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Notification;
 
 class NotifikasiPaymentBerhasilListener
@@ -27,9 +28,12 @@ class NotifikasiPaymentBerhasilListener
         $admins = User::where('role','admin')->get();
         Notification::send($admins,new NotifikasiPaymentDone($event->transaksi));
 
-        foreach ($admins as $admin) {
-            event(new NotificationBellEvent($admin));
-        }
+        // foreach ($admins as $admin) {
+        //     event(new NotificationBellEvent($admin));
+        // }
+
+        event(new NotificationBellEvent());
+        
     }
 
 }

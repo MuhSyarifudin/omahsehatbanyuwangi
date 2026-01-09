@@ -230,12 +230,12 @@
 
                 const userId = {{ auth()->id() }};
 
-                Echo.private(`notification-bell.${userId}`)
-                    .listen('.notification-update', (e) => {
-                        loadNotifikasi();
-                        loadNotifikasiList();
-                        LoadReservasiCount();
-                    });
+                Echo.join('notification-bell')
+                .listen('.notification-update', (e) => {
+                    loadNotifikasi();
+                    loadNotifikasiList();
+                    LoadReservasiCount();
+                });
 
         })
         </script>

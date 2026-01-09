@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
 
         $daftar_user = [
                 ['name'=>'Niken Kurnia Ningrum','email'=>'nikenkurnia@gmail.com','password'=>Hash::make('12345678'),'role'=>'admin'],
-                ['name'=>'Muahamad Syarifudin Abdul Jalal','email'=>'suicideudin@gmail.com','password'=>Hash::make('12345678'),'role'=>'admin'],
+                ['name'=>'Muhamad Syarifudin Abdul Jalal','email'=>'suicideudin@gmail.com','password'=>Hash::make('12345678'),'role'=>'admin'],
                 ['name'=>'Anugerah Bimasakti','email'=>'anugerah27@gmail.com','password'=>Hash::make('12345678'),'role'=>'admin']
         ];
 
