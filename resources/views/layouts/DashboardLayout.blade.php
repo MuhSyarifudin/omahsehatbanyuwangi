@@ -75,11 +75,12 @@
         
 
         <script>
-         let token = document.querySelector('meta[name="api-token"]').getAttribute('content');
 
-        function loadNotifikasi() {
+        addEventListener("DOMContentLoaded", () => { 
+            const token = document.querySelector('meta[name="api-token"]').getAttribute('content');
 
-                fetch('/api/get-count', {
+            function LoadReservasiCount() {
+                fetch('/api/get-reservasi-count', {
                     method: 'GET',
                     headers: {
                         'Authorization': 'Bearer ' + token,
@@ -87,85 +88,157 @@
                     }
                 })
                 .then(res => {
-                    if (res.status === 401) throw 'Unauthenticated';
+                    if (res.status === 401) throw new Error('Unauthenticated');
                     return res.json();
                 })
                 .then(data => {
-                    const badge1 = document.getElementById('notif-badge-luar-1');
-                    const badge2 = document.getElementById('notif-badge-luar-2');
-
-                    if (data.count_notifikasi > 0) {
-                        badge1.textContent = data.count_notifikasi;
-                        badge1.classList.remove('hidden');
-                        badge2.textContent = data.count_notifikasi;
-                        badge2.classList.remove('hidden');
-
-                    } else {
-                        badge1.classList.add('hidden');
-                        badge2.classList.add('hidden');
-                    }
+                    const jumlahReservasi = document.getElementById('jumlah-reservasi');
+                    jumlahReservasi.innerText = data.count_reservasi > 0 ? data.count_reservasi : 0;
                 })
                 .catch(err => console.error(err));
             }
 
-        loadNotifikasi();
-        setInterval(loadNotifikasi, 1000);
+            LoadReservasiCount();
 
-            function loadNotifikasiList() {
+            function loadNotifikasi() {
 
-            fetch('/api/get-notifikasi', {
-                headers: {
-                    'Authorization': 'Bearer ' + token,
-                    'Accept': 'application/json'
+                    fetch('/api/get-count', {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': 'Bearer ' + token,
+                            'Accept': 'application/json',
+                        }
+                    })
+                    .then(res => {
+                        if (res.status === 401) throw 'Unauthenticated';
+                        return res.json();
+                    })
+                    .then(data => {
+                        const badge1 = document.getElementById('notif-badge-luar-1');
+                        const badge2 = document.getElementById('notif-badge-luar-2');
+
+                        if (data.count_notifikasi > 0) {
+                            badge1.textContent = data.count_notifikasi;
+                            badge1.classList.remove('hidden');
+                            badge2.textContent = data.count_notifikasi;
+                            badge2.classList.remove('hidden');
+
+                        } else {
+                            badge1.classList.add('hidden');
+                            badge2.classList.add('hidden');
+                        }
+                    })
+                    .catch(err => console.error(err));
                 }
-            })
-            .then(res => res.json())
-            .then(data => {
 
-                const list = document.getElementById('notif-list');
-                const empty = document.getElementById('no-notif-message');
+                loadNotifikasi()
 
-            list.innerHTML = '';
+                function markAsRead(notificationId) {
+                    fetch(`/api/notifications/${notificationId}/read`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': 'Bearer ' + token,
+                            'Accept': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                        }
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log(data.message);
 
-            if (!data.notifikasi || data.notifikasi.length === 0) {
-                empty.classList.remove('hidden');
-                return;
+                        loadNotifikasi();
+                        loadNotifikasiList();
+                        // Optional: hapus notif dari UI
+                        document.getElementById(`notif-${notificationId}`)?.remove();
+                    })
+                    .catch(err => console.error(err));
             }
 
-            empty.classList.add('hidden');
+                function loadNotifikasiList() {
 
-                data.notifikasi.forEach(notif => {
-                    list.innerHTML += `
-                                        <a 
-                                        x-data="{ linkHover: false }"
-                                        class="flex items-center justify-between py-4 px-3 hover:bg-gray-100 bg-opacity-20"
-                                        @mouseover="linkHover = true"
-                                        @mouseleave="linkHover = false"
-                                        
+                fetch('/api/get-notifikasi', {
+                    headers: {
+                        'Authorization': 'Bearer ' + token,
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(res => {
+                    if (res.status === 401) throw 'Unauthenticated';
+                    return res.json();
+                })
+                .then(data => {
+
+                    const list = document.getElementById('notif-list');
+                    const empty = document.getElementById('no-notif-message');
+
+                list.innerHTML = '';
+
+                if (!data.notifikasi || data.notifikasi.length === 0) {
+                    empty.classList.remove('hidden');
+                    return;
+                }
+
+                empty.classList.add('hidden');
+
+                    data.notifikasi.forEach(notif => {
+                        list.innerHTML += `<a 
+                            x-data="{ linkHover: false }"
+                            class="flex items-center justify-between py-4 px-3 hover:bg-gray-100 bg-opacity-20"
+                            @mouseover="linkHover = true"
+                            @mouseleave="linkHover = false"
+                        >
+                            <div class="flex items-center">
+                                <svg class="w-8 h-8 bg-primary bg-opacity-20 text-primary px-1.5 py-0.5 rounded-full"
+                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z">
+                                    </path>
+                                </svg>
+
+                                <div class="text-sm ml-3">
+                                    <p 
+                                        class="text-gray-600 font-bold capitalize"
+                                        :class=" linkHover ? 'text-primary' : ''"
                                     >
-                                        <div class="flex items-center">
-                                            <svg class="w-8 h-8 bg-primary bg-opacity-20 text-primary px-1.5 py-0.5 rounded-full" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                                            <div class="text-sm ml-3">
-                                                <p 
-                                                    class="text-gray-600 font-bold capitalize"
-                                                    :class=" linkHover ? 'text-primary' : ''"
-                                                >${notif.data.status}</p>
-                                                <p class="text-xs">${notif.data.message}</p>
-                                            </div>
-                                        </div>
-                                        <span class="text-xs font-bold">
-                                            ${notif.created_at}
-                                        </span>
-                                    </a>   
-                                    <button data-id="${notif.id}" class="btn bg-amber-400 justify-end rounded-2xl text-xs m-1 p-1">Tandai dibaca</button>                                 
-                    `;
+                                        ${notif.data.status}
+                                    </p>
+                                    <p class="text-xs">${notif.data.message}</p>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col items-end gap-1">
+                                <span class="text-xs font-bold">
+                                    ${notif.created_at}
+                                </span>
+
+                                <!-- Tombol Tandai Dibaca -->
+                                <button
+                                    class="text-xs text-primary hover:underline cursor-pointer"
+                                    @click.stop="markAsRead(${notif.id})"
+                                    type="button"
+                                >
+                                    Tandai dibaca
+                                </button>
+                            </div>
+                        </a>
+                        `;
+                    });
                 });
-            });
-        }
+                }
 
-        loadNotifikasiList();
-        setInterval(loadNotifikasiList, 5000);
+                loadNotifikasiList()
 
+                const userId = {{ auth()->id() }};
+
+                Echo.private(`notification-bell.${userId}`)
+                    .listen('.notification-update', (e) => {
+                        alert('PUSHER SUDAH TERHUBUNG')
+                        loadNotifikasi();
+                        loadNotifikasiList();
+                        LoadReservasiCount();
+                    });
+
+        })
         </script>
         @stack('bottom')
     </body>

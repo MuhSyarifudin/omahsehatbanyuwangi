@@ -3,11 +3,20 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Transaksi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
+
+    public function get_reservasi_count(){
+
+        $reservasi_count = Transaksi::all()->count();
+
+        return response()->json(['count_reservasi'=>$reservasi_count],200);
+    }
+
     public function jumlah_notifikasi(){
         $user = Auth::user();
         $count_notifikasi = $user->unreadNotifications->count();

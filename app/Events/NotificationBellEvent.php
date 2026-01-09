@@ -2,29 +2,25 @@
 
 namespace App\Events;
 
-use App\Models\User;
-use Illuminate\Broadcasting\Channel;
-use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
-use Illuminate\Notifications\ChannelManager;
+use Illuminate\Broadcasting\PrivateChannel;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Queue\SerializesModels;
 
-class NotificationBellEvent
+class NotificationBellEvent implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $user;
+    public $userId;
     public $count;
     /**
      * Create a new event instance.
      */
     public function __construct($user)
     {
-
-        $this->user = $user->unreadNotifications;
+        $this->userId = $user->id;
         $this->count = $user->unreadNotifications->count();
     }
 
@@ -36,7 +32,7 @@ class NotificationBellEvent
     public function broadcastOn(): array
     {
         return [
-            new Channel('notification-count'),
+            new PrivateChannel('notification-bell.' . $this->userId),
         ];
     }
 
@@ -47,7 +43,14 @@ class NotificationBellEvent
      */
     public function broadcastAs()
     {
-        return 'notification-count-update';
+        return 'notification-update';
     }
 
+    public function broadcastWith(): array
+    {
+        return [
+            'userId' => $this->userId,
+            'count'  => $this->count,
+        ];
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 
+use App\Events\NotificationBellEvent;
 use App\Events\NotifikasiReservasiEvent;
 use App\Models\User;
 use App\Notifications\NotifikasiReservasi;
@@ -24,5 +25,9 @@ class NotifikasiReservasiListener
     {
         $admins = User::where('role','admin')->get();
         Notification::send($admins,new NotifikasiReservasi($event->transaksi));
+
+        foreach ($admins as $admin) {
+            event(new NotificationBellEvent($admin));
+        }
     }
 }

@@ -27,4 +27,5 @@ Route::get('/tes',[DashboardController::class,'tes']);
 Route::middleware(['auth:sanctum','throttle:120,1'])->group(function(){
     Route::get('/get-count',[DashboardController::class,'jumlah_notifikasi']);
     Route::get('/get-notifikasi',[DashboardController::class, 'get_notifikasi']);
+    Route::get('/get-reservasi-count',[DashboardController::class,'get_reservasi_count']);
 });

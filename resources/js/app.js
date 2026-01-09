@@ -10,14 +10,3 @@ window.Echo = new Echo({
     cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
     forceTLS: true
 });
-
-
-// window.Echo.channel('notification-count')
-//     .listen('.notification-count-update', function(data) {
-//         console.log('Data diterima:', data);
-//         const badge = document.getElementById('notif-badge-luar');
-//                 if (badge) {
-//                     badge.innerText = data.count;
-//                     badge.classList.remove('hidden');
-//                 }
-//     });

@@ -12,10 +12,6 @@ class AdminController extends Controller
 {
     public function index(){
 
-
-
-        // event(new NotificationBellEvent(Auth::user()));
-
         $keuntunganPerBulan = DB::table('transaksi')
         ->select(DB::raw('YEAR(created_at) as year'), DB::raw('MONTH(created_at) as month'), DB::raw('SUM(total_harga) as total_keuntungan'))
         ->where('status','paid')

@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 
+use App\Events\NotificationBellEvent;
 use App\Events\NotifikasiPaymentBerhasilEvent;
 use App\Models\User;
 use App\Notifications\NotifikasiPaymentDone;
@@ -25,6 +26,10 @@ class NotifikasiPaymentBerhasilListener
     {
         $admins = User::where('role','admin')->get();
         Notification::send($admins,new NotifikasiPaymentDone($event->transaksi));
+
+        foreach ($admins as $admin) {
+            event(new NotificationBellEvent($admin));
+        }
     }
 
 }
