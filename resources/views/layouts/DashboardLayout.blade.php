@@ -232,7 +232,6 @@
 
                 Echo.private(`notification-bell.${userId}`)
                     .listen('.notification-update', (e) => {
-                        alert('PUSHER SUDAH TERHUBUNG')
                         loadNotifikasi();
                         loadNotifikasiList();
                         LoadReservasiCount();
