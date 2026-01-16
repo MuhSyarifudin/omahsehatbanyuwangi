@@ -1,16 +1,18 @@
 <?php
 
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\CheckoutController;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\PaymentPageController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Api\DashboardController;
+use App\Http\Controllers\DeviceController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ReservasiController;
+use App\Http\Controllers\TherapistController;
+use App\Http\Controllers\PaymentPageController;
 use App\Http\Controllers\SendPaymentController;
 use App\Http\Controllers\ShowPaymentController;
-use App\Http\Controllers\TherapistController;
-use App\Http\Controllers\TransaksiController;
-use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +43,14 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('tes',function(){
         return view('tes');
     });
+
+    Route::resource('messages', MessageController::class);
+    Route::resource('devices', DeviceController::class);
+
+    Route::post('send-message', [DeviceController::class, 'sendMessage'])->name('send.message');
+    Route::post('devices/status', [DeviceController::class, 'checkDeviceStatus']);
+    Route::post('devices/activate', [DeviceController::class, 'activateDevice'])->name('devices.activate');
+    Route::post('devices/disconnect', [DeviceController::class, 'disconnect'])->name('devices.disconnect');
 });
 
 Route::middleware(['auth', 'role:therapist', 'verified'])->group(function () {
@@ -56,5 +66,15 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+Route::middleware(['auth'])->prefix('api')->group(function () {
+    Route::get('/get-count', [DashboardController::class, 'jumlah_notifikasi']);
+    Route::get('/get-notifikasi', [DashboardController::class, 'get_notifikasi']);
+    Route::get('/get-reservasi-count', [DashboardController::class, 'get_reservasi_count']);
+    Route::get('/get-users-count', [DashboardController::class, 'get_users_count']);
+    Route::post('/notifikasi/{id}/read',[DashboardController::class,'markAsRead']);
+    Route::post('/notifikasi/read-all', [DashboardController::class, 'markAsReadAll']);
+});
+
 
 require __DIR__.'/auth.php';

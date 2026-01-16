@@ -117,6 +117,7 @@
 
 
 @push('bottom')
+<script type="module" src="{{ url(asset('assets/js/notification.js')) }}"></script>
 <script>
     $(document).ready(function () {
         let table = $('#tabel_reservasi').DataTable();

@@ -1,8 +1,15 @@
-import path from 'path'
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
+import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
+  server: {
+    host: 'omahsehatbanyuwangi.test',
+    port: 5173,
+    strictPort: true,
+    cors: true,
+    origin: 'http://omahsehatbanyuwangi.test:5173',
+  },
   plugins: [
     laravel({
       input: [
@@ -11,15 +18,6 @@ export default defineConfig({
       ],
       refresh: true,
     }),
-  ],
-  resolve: {
-    alias: {
-      '@tailwindConfig': path.resolve(__dirname, 'tailwind.config.js'),
-    },
-  },
-  optimizeDeps: {
-    include: [
-      '@tailwindConfig',
-    ]
-  },   
-});
+    tailwindcss(),
+  ]
+})

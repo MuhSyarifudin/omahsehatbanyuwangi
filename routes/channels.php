@@ -33,3 +33,15 @@ Broadcast::channel('notification-bell', function ($user) {
     ];
 });
 
+
+Broadcast::channel('registered-event', function ($user) {
+    if ($user->role !== 'admin') {
+        return false;
+    }
+
+    return [
+        'id'   => $user->id,
+        'name' => $user->name,
+        'role' => $user->role,
+    ];
+});

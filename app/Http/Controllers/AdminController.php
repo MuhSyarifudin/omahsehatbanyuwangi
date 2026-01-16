@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Transaksi;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Request;
 
 class AdminController extends Controller
 {
@@ -43,7 +44,6 @@ class AdminController extends Controller
         ->join('layanan_terapi', 'transaksi.terapi_id', '=', 'layanan_terapi.id')
         ->join('jenis_terapi', 'layanan_terapi.jenis_terapi', '=', 'jenis_terapi.id')
         ->get();
-    
 
         return view('admin.data-reservasi',compact('transaksi'));
     }
@@ -53,4 +53,5 @@ class AdminController extends Controller
 
         return view('admin.data-users',compact('users'));
     }
+
 }

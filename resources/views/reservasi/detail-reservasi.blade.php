@@ -72,7 +72,7 @@
   
       
       <div class="form-control mt-6">
-        <button class="btn btn-primary w-full" id="pay-button">Konfirmasi Reservasi</button>
+        <button class="btn btn-primary w-full uppercase" id="pay-button">Konfirmasi Reservasi</button>
       </div>
     </div>
   </section>

@@ -17,7 +17,7 @@
           <h1 class="text-5xl font-bold font-display">Selamat datang di Website resmi </h1>
           <h1 class="text-5xl font-bold">Omah Sehat Banyuwangi </h1>
           <p class="py-6">Segera lakukan reservasi layanan terapi kami secara online untuk mendapatkan tubuh yang sehat dengan klik tombol reservasi</p>
-          <a href="{{ route('pesan.reservasi.terapi') }}" class="btn btn-primary">reservasi</a>
+          <a href="{{ route('pesan.reservasi.terapi') }}" class="btn btn-primary uppercase">reservasi</a>
       </div>
   </div>
 </section>
@@ -28,7 +28,7 @@
     <h2 class="text-3xl font-bold text-center mb-8">Layanan kami</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
         <!-- Layanan 1 -->
-        <div class="card bg-base-200 shadow-lg rounded-lg p-4" data-aos="fade-up" data-aos-delay="100" data-aos-duration="1000">
+        <div class="card bg-base-100 shadow-lg rounded-lg p-4" data-aos="fade-up" data-aos-delay="100" data-aos-duration="1000">
             <img src="{{ url(asset('assets/img/terapi-kesehatan.jpg')) }}" alt="Layanan 1" class="w-24 h-24 mx-auto mb-4 object-cover">
             <h3 class="text-xl font-semibold mb-2 text-center">Terapi Bekam</h3>
             <p class="text-gray-600 text-left">
@@ -41,7 +41,7 @@
             </p>
         </div>
         <!-- Layanan 2 -->
-        <div class="card bg-base-200 shadow-lg rounded-lg p-4 " data-aos="fade-up" data-aos-delay="200" data-aos-duration="1000">
+        <div class="card bg-base-100 shadow-lg rounded-lg p-4 " data-aos="fade-up" data-aos-delay="200" data-aos-duration="1000">
             <img src="{{ url(asset('assets/img/terapi-kecantikan.jpg')) }}" alt="Layanan 2" class="w-24 h-24 mx-auto mb-4 object-cover">
             <h3 class="text-xl font-semibold mb-2 text-center">Terapi Kecantikan</h3>
             <p class="text-gray-600 text-left">
@@ -62,7 +62,7 @@
             </p>
         </div>
         <!-- Layanan 3 -->
-        <div class="card bg-base-200 shadow-lg rounded-lg p-4" data-aos="fade-up" data-aos-delay="300" data-aos-duration="1000">
+        <div class="card bg-base-100 shadow-lg rounded-lg p-4" data-aos="fade-up" data-aos-delay="300" data-aos-duration="1000">
             <img src="{{ url(asset('assets/img/terapi-akupuntur.jpg')) }}" alt="Layanan 3" class="w-24 h-24 mx-auto mb-4 object-cover">
             <h3 class="text-xl font-semibold mb-2 text-center">Terapi Akupuntur</h3>
             <p class="text-gray-600 text-left">
@@ -78,7 +78,7 @@
             </p>
         </div>
         <!-- Layanan 4 -->
-        <div class="card bg-base-200 shadow-lg rounded-lg p-4" data-aos="fade-up" data-aos-delay="400" data-aos-duration="1000">
+        <div class="card bg-base-100 shadow-lg rounded-lg p-4" data-aos="fade-up" data-aos-delay="400" data-aos-duration="1000">
             <img src="{{ url(asset('assets/img/rawat-luka.jpg')) }}" alt="Layanan 4" class="w-24 h-24 mx-auto mb-4 object-cover">
             <h3 class="text-xl font-semibold mb-2 text-center">Perawatan Luka</h3>
             <p class="text-gray-600 text-left">
@@ -88,7 +88,7 @@
                 </ul>
             </p>
         </div>
-        <div class="card bg-base-200 shadow-lg rounded-lg p-4" data-aos="fade-up" data-aos-delay="500" data-aos-duration="1000">
+        <div class="card bg-base-100 shadow-lg rounded-lg p-4" data-aos="fade-up" data-aos-delay="500" data-aos-duration="1000">
             <img src="{{ url(asset('assets/img/cek-kesehatan.jpeg')) }}" alt="Layanan 4" class="w-24 h-24 mx-auto mb-4 object-cover">
             <h3 class="text-xl font-semibold mb-2  text-center">Cek Kesehatan</h3>
             <p class="text-gray-600 text-left">
@@ -99,7 +99,7 @@
                 </ul>
             </p>
         </div>
-        <div class="card bg-base-200 shadow-lg rounded-lg p-4" data-aos="fade-up" data-aos-delay="600" data-aos-duration="1000">
+        <div class="card bg-base-100 shadow-lg rounded-lg p-4" data-aos="fade-up" data-aos-delay="600" data-aos-duration="1000">
             <img src="{{ url(asset('assets/img/terapi-lainnya.jpg')) }}" alt="Layanan 4" class="w-24 h-24 mx-auto mb-4 object-cover">
             <h3 class="text-xl font-semibold mb-2  text-center">Add-on</h3>
             <p class="text-gray-600 text-left">
@@ -121,7 +121,7 @@
 </div>
 </section>
 
-<section class="py-12 bg-linear-to-r from-blue-500 via-teal-400 to-indigo-600" id="visi-misi">
+<section class="py-12 bg-gradient-to-r from-blue-500 via-indigo-400 to-indigo-600" id="visi-misi">
 <div class="container mx-auto px-6 lg:px-16 text-center">
     <h2 class="text-4xl font-bold mb-8 text-white">Visi & Misi</h2>
     <p class="text-gray-200 mb-12 max-w-2xl mx-auto" data-aos="fade-up" data-aos-duration="1000">
@@ -244,7 +244,7 @@
         </div>
       </div>
       <div class="mt-8">
-        <a href="{{ route('register.therapist') }}" class="btn btn-primary text-white" data-aos="zoom-in-up" data-aos="600" data-aos-duration="1000">Daftar Sekarang</a>
+        <a href="{{ route('register.therapist') }}" class="btn btn-primary text-white uppercase" data-aos="zoom-in-up" data-aos="600" data-aos-duration="1000">Daftar Sekarang</a>
       </div>
     </div>
   </section>
@@ -333,42 +333,6 @@
         document.getElementById('map').classList.remove('opacity-0');
         document.getElementById('map').classList.add('opacity-100');
       };
-
-    document.addEventListener("DOMContentLoaded", function () {
-    var adBlockDetected = false;
-    
-    // Coba menambahkan elemen iklan yang umum diblokir
-    var adTest = document.createElement('div');
-    adTest.innerHTML = '&nbsp;';
-    adTest.className = 'adsbox';  // Kelas yang umumnya diblokir oleh adblocker
-    document.body.appendChild(adTest);
-
-    // Cek apakah elemen iklan berhasil dimuat
-    setTimeout(function () {
-        if (adTest.offsetHeight === 0) {
-            adBlockDetected = true;
-        }
-        
-        // Jika adblocker terdeteksi, tampilkan notifikasi
-        if (adBlockDetected) {
-            var notification = document.createElement('div');
-            notification.innerHTML = 'Adblocker terdeteksi! Harap nonaktifkan untuk mendukung situs ini.';
-            notification.style.position = 'fixed';
-            notification.style.top = '20px';
-            notification.style.left = '50%';
-            notification.style.transform = 'translateX(-50%)';
-            notification.style.backgroundColor = '#f44336';
-            notification.style.color = 'white';
-            notification.style.padding = '10px 20px';
-            notification.style.borderRadius = '5px';
-            notification.style.zIndex = '9999';
-            notification.style.fontSize = '16px';
-            notification.style.fontWeight = 'bold';
-            document.body.appendChild(notification);
-        }
-    }, 100);
-});
-</script>
   </script>
   <script src="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.js"></script>
   <script src="https://unpkg.com/aos@next/dist/aos.js"></script>

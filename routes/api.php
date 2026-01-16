@@ -16,16 +16,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
+Route::middleware(['auth'])->get('/user', function (Request $request) {
     return $request->user();
 });
 
 Route::post('/midtrans-callback',[TransaksiController::class,'callback']);
 Route::get('/tes',[DashboardController::class,'tes']);
 
-
-Route::middleware(['auth:sanctum','throttle:120,1'])->group(function(){
-    Route::get('/get-count',[DashboardController::class,'jumlah_notifikasi']);
-    Route::get('/get-notifikasi',[DashboardController::class, 'get_notifikasi']);
-    Route::get('/get-reservasi-count',[DashboardController::class,'get_reservasi_count']);
-});
+// Route::middleware('auth:sanctum')->group(function () {
+// Route::get('/get-count', [DashboardController::class, 'jumlah_notifikasi']);
+// Route::get('/get-notifikasi', [DashboardController::class, 'get_notifikasi']);
+// Route::get('/get-reservasi-count', [DashboardController::class, 'get_reservasi_count']);
+// Route::get('/get-users-count', [DashboardController::class, 'get_users_count']);
+// Route::post('/notifikasi/{id}/read',[DashboardController::class,'markAsRead']);
+// });

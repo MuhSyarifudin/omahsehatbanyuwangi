@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "daisyui";
 @source "../views";
 
 @layer utilities {
@@ -25,12 +26,12 @@
 
 @font-face {
   font-family: open-sans;
-  src: url('../fonts/OpenSans-Italic-VariableFont_wdth\,wght.ttf');
+  src: url('../fonts/OpenSans-VariableFont_wdth\,wght.ttf');
 }
 
 @font-face {
   font-family: inter;
-  src: url('../fonts/Inter-Italic-VariableFont_opsz\,wght.ttf');
+  src: url('../fonts/Inter-VariableFont_opsz\,wght.ttf');
 }
 
 .font-open-sans {

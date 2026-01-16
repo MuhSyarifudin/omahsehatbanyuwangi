@@ -3,12 +3,19 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Transaksi;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Transaksi;
+use App\Models\User;
+use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
+
+    public function get_users_count(){
+        $users_count = User::all()->count();
+
+        return response()->json(['count_users'=>$users_count],200);
+    }
 
     public function get_reservasi_count(){
 
@@ -18,14 +25,28 @@ class DashboardController extends Controller
     }
 
     public function jumlah_notifikasi(){
-        $user = Auth::user();
-        $count_notifikasi = $user->unreadNotifications->count();
+    $user = Auth::user();
 
-        return response()->json(['count_notifikasi'=>$count_notifikasi],200);
+    if (!$user) {
+        return response()->json([
+            'message' => 'Unauthenticated'
+        ], 401);
+    }
+
+    return response()->json([
+        'count_notifikasi' => $user->unreadNotifications->count()
+    ], 200);
     }
 
     public function get_notifikasi(){
         $user = Auth::user();
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'Unauthenticated'
+            ], 401);
+        }
+
         return response()->json([
             'count_notifikasi' => $user->unreadNotifications->count(),
             'notifikasi' => $user->unreadNotifications->map(function ($notif) {
@@ -42,5 +63,27 @@ class DashboardController extends Controller
         $tes = "Hello world";
 
         return response()->json(['tes'=>$tes],200);
+    }
+
+    
+    public function markAsRead(Request $request, $id)
+    {
+
+        $user = $request->user();
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'Unauthenticated'
+            ], 401);
+        }
+
+        $notification = $user->notifications()->find($id);
+
+        $notification->markAsRead();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Notifikasi ditandai sebagai dibaca'
+        ]);
     }
 }

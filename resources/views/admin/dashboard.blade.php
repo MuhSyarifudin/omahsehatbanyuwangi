@@ -1,6 +1,5 @@
 @extends('layouts.DashboardLayout')
 @push('top')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pusher/8.4.0/pusher.min.js" integrity="sha512-p3rR75Is6DCK1r2D8mdxLQhe4IWVDSTUBdxqs0Veum0hHDSY+sH9M6U6Cesr1umlxbiEK9w/3IhXFlZcWT1AoA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 @endpush
 @section('content')
                  <!-- start::Stats -->
@@ -49,7 +48,7 @@
                             </div>
                             <div class="flex flex-col">
                                 <div class="flex items-end">
-                                    <span class="text-2xl 2xl:text-4xl font-bold">{{ $jumlahUser }}</span>
+                                    <span class="text-2xl 2xl:text-4xl font-bold" id="jumlah-user">{{ $jumlahUser }}</span>
                                     <div class="flex items-center ml-2 mb-1">
                                     </div>
                                 </div>
@@ -83,8 +82,9 @@
 @endsection
 
 @push('bottom')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+<script type="module" src="{{ url(asset('assets/js/dashboard.js')) }}"></script>
+<script type="module" src="{{ url(asset('assets/js/notification.js')) }}"></script>
 
 
 @endpush

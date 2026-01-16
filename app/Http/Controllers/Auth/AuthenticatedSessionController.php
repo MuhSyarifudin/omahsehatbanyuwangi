@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Illuminate\Support\Facades\Cookie;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Providers\RouteServiceProvider;
@@ -32,6 +33,7 @@ class AuthenticatedSessionController extends Controller
         $user = Auth::user(); 
 
         $token = $user->createToken($user->name)->plainTextToken;
+        Cookie::queue('api-token',$token);
 
         session(['token'=>$token]); 
 

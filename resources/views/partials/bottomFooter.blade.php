@@ -1,5 +1,5 @@
 <!-- Footer Section -->
-<footer class="footer p-10 bg-gray-800 text-white">
+<footer class="footer sm:footer-horizontal bg-gray-800 text-neutral-content p-10">
     <div>
         <span class="footer-title">Alamat</span>
         <p class="text-gray-400">Jl. Cemara No.20, Kebalenan,<br> Kec. Banyuwangi, Kabupaten Banyuwangi,<br> Jawa Timur 68417</p>

@@ -22,10 +22,7 @@ class NotifikasiReservasiEvent
 
     public function __construct($transaksi)
     {
-        $user = Auth::user();
         $this->transaksi = $transaksi;
-        $this->notifikasi = $user->unreadNotifications ?? null;
-        $this->count = $user->unreadNotifications->count() ?? 0;
         
     }
 }

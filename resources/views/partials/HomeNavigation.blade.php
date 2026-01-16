@@ -1,13 +1,13 @@
-<nav class="navbar bg-base-100 shadow-lg">
+<nav class="navbar bg-base-200">
     <div class="container mx-auto flex justify-end items-center h-full p-0">
         <ul class="flex space-x-4">
-            <li><a href="{{ route('login') }}" class="btn btn-ghost p-0 text-sm px-1">Login</a></li>
-            <li><a href="{{ route('register') }}" class="btn btn-ghost p-0 text-sm px-1">Daftar</a></li>
+            <li><a href="{{ route('login') }}" class="btn btn-ghost p-0 text-sm px-1 uppercase">Login</a></li>
+            <li><a href="{{ route('register') }}" class="btn btn-ghost p-0 text-sm px-1 uppercase">Daftar</a></li>
         </ul>
     </div>
 </nav>
 
-<header id="header" class="h-25 bg-base-200 transition-all duration-300 relative top-0 z-[1000]">
+<header id="header" class="h-25 bg-base-100 transition-all duration-300 relative top-0 z-[1000]">
     <div class="container mx-auto flex justify-between items-center p-3">
         <div class="flex items-center">
             <a href="{{ url('/') }}">
