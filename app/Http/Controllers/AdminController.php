@@ -54,4 +54,8 @@ class AdminController extends Controller
         return view('admin.data-users',compact('users'));
     }
 
+    public function data_notifikasi(){
+        return view('admin.data-notifikasi');
+    }
+
 }

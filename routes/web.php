@@ -40,6 +40,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/data-reservasi',[AdminController::class,'data_reservasi'])->name('data.reservasi');
     Route::get('/search-reservasi',[AdminController::class,'search_reservasi'])->name('search.reservasi');
     Route::get('/data-user',[AdminController::class,'data_user'])->name('data.user');
+    Route::get('/data-notifikasi',[AdminController::class,'data_notifikasi'])->name('data.notifikasi');
     Route::get('tes',function(){
         return view('tes');
     });

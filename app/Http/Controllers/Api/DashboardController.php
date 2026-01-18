@@ -49,11 +49,16 @@ class DashboardController extends Controller
 
         return response()->json([
             'count_notifikasi' => $user->unreadNotifications->count(),
-            'notifikasi' => $user->unreadNotifications->map(function ($notif) {
+            'notifikasi' => $user->notifications()
+            ->latest()
+            ->limit(30)
+            ->get()
+            ->map(function ($notif) {
                 return [
                     'id' => $notif->id,
                     'data' => $notif->data,
                     'created_at' => $notif->created_at->diffForHumans(),
+                    'read_at' => $notif->read_at
                 ];
             })
         ]);
@@ -86,4 +91,24 @@ class DashboardController extends Controller
             'message' => 'Notifikasi ditandai sebagai dibaca'
         ]);
     }
+
+        public function markAsReadAll()
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'Unauthenticated'
+            ], 401);
+        }
+
+        $user->unreadNotifications->markAsRead();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Semua notifikasi ditandai sebagai dibaca'
+        ], 200);
+    }
+
+    
 }

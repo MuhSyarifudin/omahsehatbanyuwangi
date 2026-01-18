@@ -86,5 +86,4 @@
 <script type="module" src="{{ url(asset('assets/js/dashboard.js')) }}"></script>
 <script type="module" src="{{ url(asset('assets/js/notification.js')) }}"></script>
 
-
 @endpush

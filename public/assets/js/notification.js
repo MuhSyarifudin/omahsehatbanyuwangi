@@ -6,6 +6,30 @@ const token = document.querySelector('meta[name="csrf-token"]').getAttribute('co
 
 // const token = window.APP?.apiToken;
 
+const btnTandaiBacaSemua = document.getElementById('tandai-baca-semua');
+
+btnTandaiBacaSemua.addEventListener('click', function(){
+    markAsReadAll();
+});
+
+function markAsReadAll() {
+    fetch('/api/notifikasi/read-all', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'X-CSRF-TOKEN': token
+        }
+    })
+    .then(res => {
+        if (!res.ok) throw res.status;
+        return res.json();
+    })
+    .then(() => {
+        loadNotifikasi();
+        loadNotifikasiList();
+    })
+    .catch(console.error);
+}
 
 function markAsRead(id) {
     fetch(`/api/notifikasi/${id}/read`, {
@@ -59,13 +83,12 @@ function loadNotifikasi() {
 
 loadNotifikasi()
 
-
 function loadNotifikasiList() {
     fetch('/api/get-notifikasi', {
         method: 'GET',
         headers: {
-        'Accept': 'application/json',
-        'X-CSRF-TOKEN': token
+            'Accept': 'application/json',
+            'X-CSRF-TOKEN': token
         }
     })
     .then(res => {
@@ -77,10 +100,8 @@ function loadNotifikasiList() {
         const list  = document.getElementById('notif-list');
         const empty = document.getElementById('no-notif-message');
 
-        // Bersihkan list
         list.innerHTML = '';
 
-        // Tidak ada notifikasi
         if (!data.notifikasi || data.notifikasi.length === 0) {
             empty.classList.remove('hidden');
             return;
@@ -90,19 +111,27 @@ function loadNotifikasiList() {
 
         data.notifikasi.forEach(notif => {
 
-            // ===== Anchor =====
+            const isUnread = notif.read_at === null;
+
             const a = document.createElement('a');
             a.href = '#';
             a.className =
-                'flex items-center justify-between py-4 px-3 ' +
-                'hover:bg-gray-100 bg-opacity-20';
+                'flex items-center justify-between py-4 px-3 transition cursor-pointer ' +
+                (isUnread
+                    ? 'bg-blue-50 hover:bg-blue-100'
+                    : 'bg-white hover:bg-gray-100 opacity-70');
 
-            // ===== Kiri =====
             const left = document.createElement('div');
             left.className = 'flex items-center';
 
             const icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-            icon.setAttribute('class', 'w-8 h-8 bg-primary bg-opacity-20 text-primary px-1.5 py-0.5 rounded-full');
+            icon.setAttribute(
+                'class',
+                'w-8 h-8 px-1.5 py-0.5 rounded-full ' +
+                (isUnread
+                    ? 'bg-blue-100 text-blue-600'
+                    : 'bg-gray-200 text-gray-400')
+            );
             icon.setAttribute('fill', 'none');
             icon.setAttribute('stroke', 'currentColor');
             icon.setAttribute('viewBox', '0 0 24 24');
@@ -113,7 +142,7 @@ function loadNotifikasiList() {
             path.setAttribute('stroke-width', '2');
             path.setAttribute(
                 'd',
-                'M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z'
+                'M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 0 014 0z'
             );
 
             icon.appendChild(path);
@@ -122,11 +151,12 @@ function loadNotifikasiList() {
             textWrap.className = 'text-sm ml-3';
 
             const title = document.createElement('p');
-            title.className = 'text-gray-600 font-bold capitalize';
+            title.className =
+                'capitalize ' + (isUnread ? 'font-bold text-gray-800' : 'text-gray-500');
             title.textContent = notif.data?.status ?? '-';
 
             const message = document.createElement('p');
-            message.className = 'text-xs';
+            message.className = 'text-xs text-gray-500';
             message.textContent = notif.data?.message ?? '-';
 
             textWrap.appendChild(title);
@@ -135,28 +165,35 @@ function loadNotifikasiList() {
             left.appendChild(icon);
             left.appendChild(textWrap);
 
-            // ===== Kanan =====
             const right = document.createElement('div');
             right.className = 'flex flex-col items-end gap-1';
 
             const time = document.createElement('span');
-            time.className = 'text-xs font-bold';
+            time.className = 'text-xs font-bold text-gray-500';
             time.textContent = notif.created_at ?? '';
 
-            const btn = document.createElement('button');
-            btn.type = 'button';
-            btn.className = 'text-xs text-primary hover:underline cursor-pointer';
-            btn.textContent = 'Tandai dibaca';
+            right.appendChild(time);
 
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                markAsRead(notif.id);
+            if (isUnread) {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'text-xs text-blue-600 hover:underline hover:cursor-pointer cursor-pointer';
+                btn.textContent = 'Tandai dibaca';
+
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    markAsRead(notif.id);
+                });
+
+                right.appendChild(btn);
+            }
+
+            a.addEventListener('click', () => {
+                if (isUnread) {
+                    markAsRead(notif.id);
+                }
             });
 
-            right.appendChild(time);
-            right.appendChild(btn);
-
-            // ===== Gabung =====
             a.appendChild(left);
             a.appendChild(right);
             list.appendChild(a);
@@ -166,6 +203,7 @@ function loadNotifikasiList() {
         console.error(err);
     });
 }
+
 
 
 loadNotifikasiList()

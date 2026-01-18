@@ -72,6 +72,17 @@
                             </center>
                             <!-- end::Submenu link -->
                         </div>
+                        <div class="bg-grey-200">
+                            <div class="bg-white border-t px-4 py-2">
+                                <button 
+                                    id="tandai-baca-semua"
+                                    class="w-full text-sm font-medium text-blue-600 
+                                           hover:text-blue-800 hover:bg-blue-50 
+                                           py-2 rounded transition duration-200">
+                                    Tandai semua dibaca
+                                </button>
+                            </div>
+                        </div>
                         <!-- end::Submenu content -->
                     </div>
                     
