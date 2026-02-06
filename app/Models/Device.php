@@ -8,6 +8,12 @@ class Device extends Model
 {
     public $table = 'device';
     protected $fillable = [
-        'name', 'token', 'device', 'is_active'
+        'name', 
+        'token', 
+        'device',
+        'is_active',
+        'qr_url',
+        'qr_requested_at',
+        'is_activated'
     ];
 }

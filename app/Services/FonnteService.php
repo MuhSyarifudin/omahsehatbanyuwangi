@@ -26,36 +26,68 @@ class FonnteService
         $this->account_token = env('ACCOUNT_TOKEN');
     }
 
-    protected function makeRequest($endpoint, $params = [], $useAccountToken = true, $deviceToken = null)
+        protected function makeRequest($endpoint, $deviceToken)
     {
-        $token = $useAccountToken
-            ? $this->account_token
-            : ($deviceToken ?? null);
-
-        if (!$token) {
-            return ['status' => false, 'error' => 'API token or device token is required.'];
-        }
-
-        // Gunakan JSON format dan pastikan Content-Type header benar
-        $response = Http::withHeaders([
-            'Authorization' => $token,
-            'Content-Type'  => 'application/json', // Tambahkan header
-        ])->post($endpoint, $params);
-
-        // Log respons untuk memudahkan debugging
-        Log::info('Fonnte API Response', ['endpoint' => $endpoint, 'response' => $response->json()]);
-
-        if ($response->failed()) {
+        if (!$deviceToken) {
             return [
                 'status' => false,
-                'error'  => $response->json()['reason'] ?? 'Unknown error occurred',
+                'error'  => 'Device token is required',
             ];
         }
 
-        return [
-            'status' => true,
-            'data'   => $response->json(),
-        ];
+        Log::info('Fonnte Delete Device Request', [
+            'endpoint' => $endpoint,
+            'params'   => ['otp' => ''],
+            'token'    => substr($deviceToken, 0, 6) . '***',
+        ]);
+
+        try {
+            $response = Http::asForm() // ⬅️ INI YANG PENTING
+                ->withHeaders([
+                    'Authorization' => $deviceToken,
+                ])
+                ->post($endpoint, [
+                    'otp' => '',
+                ]);
+
+            Log::info('Fonnte Delete Device Response', [
+                'status_code' => $response->status(),
+                'body'        => $response->body(),
+                'json'        => $response->json(),
+            ]);
+
+            if ($response->failed()) {
+                return [
+                    'status' => false,
+                    'error'  => $response->json()['reason']
+                        ?? $response->body()
+                        ?? 'Unknown error',
+                ];
+            }
+
+            return [
+                'status' => true,
+                'data'   => $response->json(),
+            ];
+
+        } catch (\Throwable $e) {
+            Log::error('Fonnte Delete Device Exception', [
+                'message' => $e->getMessage(),
+            ]);
+
+            return [
+                'status' => false,
+                'error'  => $e->getMessage(),
+            ];
+        }
+    }
+
+    public function deleteDevice($deviceToken)
+    {
+        return $this->makeRequest(
+            self::ENDPOINTS['delete_device'],
+            $deviceToken
+        );
     }
 
     public function sendWhatsAppMessage($phoneNumber, $message, $deviceToken)

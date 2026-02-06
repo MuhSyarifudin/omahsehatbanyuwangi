@@ -6,6 +6,7 @@ use App\Models\WaToken;
 use App\Models\Transaksi;
 use App\Http\Controllers\Controller;
 use App\Events\NotifikasiPaymentBerhasilEvent;
+use App\Models\Device;
 
 class TransaksiController extends Controller
 { 
@@ -53,7 +54,7 @@ class TransaksiController extends Controller
 
         
 
-$token = WaToken::where('active',true)->first();
+$device = Device::where('is_activated',true)->first();
 
 if ($transaksi->tempat == "Center") {
     $pesan = [
@@ -76,7 +77,7 @@ if ($transaksi->tempat == "Center") {
                 "];
 
 kirimPesan($token->token,$pesan);
-} else if($transaksi->tempat == "Homecare") {
+} else if($device->tempat == "Homecare") {
 $pesan = [
     'target'=>$transaksi->nohp,
     'message'=>"
@@ -87,7 +88,7 @@ $pesan = [
 📍 *Alamat*: ".$transaksi->alamat."  
 🗓 *Tanggal:* ".dateid('l, j F Y', $transaksi->tanggal)."  
 ⏰ *Jam:* ".$transaksi->jam."  
-💆‍♂️ *Jenis Terapi:* ".$transaksi->nama_layanan." - ".$transaksi->nama_jenis_terapi."  
+💆‍♂️ *Jenis Terapi:* ".$transaksi->nama_jenis_terapi." - ".$transaksi->nama_layanan."
 👥 *Jumlah:* ".$transaksi->jumlah." Orang  
 💰 *Total Harga:* ".rupiah($transaksi->total_harga)."  
 
@@ -99,7 +100,7 @@ $pesan = [
 Terima kasih telah mempercayai layanan kami! 😊✨ 
                 "];
 
-            kirimPesan($token->token,$pesan);
+            kirimPesan($device->token,$pesan);
 
         }
 

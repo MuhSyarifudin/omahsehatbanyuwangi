@@ -12,6 +12,10 @@ class CheckoutController extends Controller
     public function checkout(StoreReservationRequest $request){
 
         $request->validated();
+
+        if ($request->filled('website')) {
+            abort(403);
+        }
         
         $terapi = DB::table('layanan_terapi')
         ->where('id', $request->terapi)
@@ -36,6 +40,7 @@ class CheckoutController extends Controller
             $trx->total_harga = $totalHarga;
             $trx->terapi_id = $terapi->id;
             $trx->order_id = 'ORDER_' . time();
+            $trx->expired_at = now()->addDay();
             $trx->save();
         
             return $trx;
@@ -72,11 +77,11 @@ class CheckoutController extends Controller
     
         event(new NotifikasiReservasiEvent($transaksi));
 
-        if ($transaksi->tempat == "Center") {
+        if ($transaksi->tempat == "center") {
 
             return redirect()->route('detail.reservasi.terapi');
 
-        } else if ($transaksi->tempat == "Homecare"){
+        } else if ($transaksi->tempat == "homecare"){
 
             return redirect()->route('waiting.page');
 

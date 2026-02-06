@@ -157,7 +157,7 @@
       <!-- Team Member 1 -->
       <div class="card bg-base-200 shadow-xl w-64 mx-auto" data-aos="flip-right" data-aos-duration="2000">
         <figure class="h-64 overflow-hidden">
-          <img src="{{ url(asset('assets/img/alin.jpg')) }}" alt="Team Member 1" class="w-full h-full object-cover object-top rounded-t-lg" onclick="openLightbox(this)" />
+          <img src="{{ url(asset('assets/img/alin.jpg')) }}" alt="Team Member 1" class="w-full h-full object-cover object-top rounded-t-lg" />
         </figure>
         <div class="card-body">
           <h3 class="text-xl font-semibold">Alin</h3>
@@ -170,7 +170,7 @@
       <!-- Team Member 2 -->
       <div class="card bg-base-200 shadow-xl w-64 mx-auto" data-aos="flip-right" data-aos-duration="2000">
         <figure class="h-64 overflow-hidden">
-          <img src="{{ url(asset('assets/img/asnawi.jpg')) }}" alt="Team Member 2" class="w-full h-full object-cover object-top rounded-t-lg" onclick="openLightbox(this)" />
+          <img src="{{ url(asset('assets/img/asnawi.jpg')) }}" alt="Team Member 2" class="w-full h-full object-cover object-top rounded-t-lg" />
         </figure>
         <div class="card-body">
           <h3 class="text-xl font-semibold">Asnawi</h3>
@@ -183,7 +183,7 @@
       <!-- Team Member 3 -->
       <div class="card bg-base-200 shadow-xl w-64 mx-auto" data-aos="flip-right" data-aos-duration="2000">
         <figure class="h-64 overflow-hidden">
-          <img src="{{ url(asset('assets/img/asty.jpg')) }}" alt="Team Member 3" class="w-full h-full object-cover object-top rounded-t-lg" onclick="openLightbox(this)" />
+          <img src="{{ url(asset('assets/img/asty.jpg')) }}" alt="Team Member 3" class="w-full h-full object-cover object-top rounded-t-lg" />
         </figure>
         <div class="card-body">
           <h3 class="text-xl font-semibold">Asty</h3>
@@ -196,7 +196,7 @@
       <!-- Team Member 4 -->
       <div class="card bg-base-200 shadow-xl w-64 mx-auto" data-aos="flip-right" data-aos-duration="2000">
         <figure class="h-64 overflow-hidden">
-          <img src="{{ url(asset('assets/img/niken.jpg')) }}" alt="Team Member 4" class="w-full h-full object-cover object-top rounded-t-lg" onclick="openLightbox(this)" />
+          <img src="{{ url(asset('assets/img/niken.jpg')) }}" alt="Team Member 4" class="w-full h-full object-cover object-top rounded-t-lg"/>
         </figure>
         <div class="card-body">
           <h3 class="text-xl font-semibold">Niken</h3>
@@ -209,7 +209,7 @@
       <!-- Team Member 5 -->
       <div class="card bg-base-200 shadow-xl w-64 mx-auto" data-aos="flip-right" data-aos-duration="2000">
         <figure class="h-64 overflow-hidden">
-          <img src="{{ url(asset('assets/img/putriyani.jpg')) }}" alt="Team Member 5" class="w-full h-full object-cover object-top rounded-t-lg" onclick="openLightbox(this)" />
+          <img src="{{ url(asset('assets/img/putriyani.jpg')) }}" alt="Team Member 5" class="w-full h-full object-cover object-top rounded-t-lg" />
         </figure>
         <div class="card-body">
           <h3 class="text-xl font-semibold">Putriyani</h3>
@@ -248,14 +248,6 @@
       </div>
     </div>
   </section>
-  
-  <!-- Lightbox Modal -->
-  <div id="lightbox" 
-       class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center hidden z-[2000]" 
-       onclick="closeLightbox()">
-    <img id="lightbox-img" src="" alt="Full Image" class="max-w-full max-h-full z-[2000]" />
-  </div>
-  
 
   <section class="py-12 bg-gray-100" id="lokasi-kami">
     <h2 class="text-3xl font-bold text-center mb-8">Lokasi Kami</h2>
@@ -282,7 +274,7 @@
             <!-- Item 1 -->
             <div class="carousel-item snap-start w-full sm:w-1/2 md:w-1/3 lg:w-1/4 flex-shrink-0 flex justify-center">
                 <div class="bg-white shadow-lg rounded-lg overflow-hidden">
-                    <img src="{{ url(asset('assets/img/produk-1.jpg')) }}" alt="Produk 1" class="w-full h-48 object-cover" onclick="openLightbox(this)">
+                    <img src="{{ url(asset('assets/img/produk-1.jpg')) }}" alt="Produk 1" class="w-full h-48 object-cover">
                     <div class="p-4 text-center">
                         <h3 class="text-lg font-semibold text-black">Trace Mineral Impro</h3>
                         <p class="text-gray-600"></p>
@@ -293,7 +285,7 @@
             <!-- Item 2 -->
             <div class="carousel-item snap-start w-full sm:w-1/2 md:w-1/3 lg:w-1/4 flex-shrink-0 flex justify-center">
                 <div class="bg-white shadow-lg rounded-lg overflow-hidden">
-                    <img src="{{ url(asset('assets/img/produk-2.jpeg')) }}" alt="Produk 2" class="w-full h-48 object-cover" onclick="openLightbox(this)">
+                    <img src="{{ url(asset('assets/img/produk-2.jpeg')) }}" alt="Produk 2" class="w-full h-48 object-cover">
                     <div class="p-4 text-center">
                         <h3 class="text-lg font-semibold text-black">Minyak Waras</h3>
                         <p class="text-gray-600"></p>
@@ -334,7 +326,6 @@
         document.getElementById('map').classList.add('opacity-100');
       };
   </script>
-  <script src="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.js"></script>
   <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
   <script src="{{ url(asset('assets/js/nav.js')) }}"></script>
   <script src="{{ url(asset('assets/js/home.js')) }}"></script>

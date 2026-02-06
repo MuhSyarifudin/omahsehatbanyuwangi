@@ -1,3 +1,19 @@
+        document.addEventListener('DOMContentLoaded', function () {
+
+        const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+        fetch('/track-visitor', {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': token,
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        });
+        });
+        
         AOS.init();
 
         // Get the button

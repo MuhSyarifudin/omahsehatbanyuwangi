@@ -28,10 +28,6 @@ class NotifikasiPaymentBerhasilListener
         $admins = User::where('role','admin')->get();
         Notification::send($admins,new NotifikasiPaymentDone($event->transaksi));
 
-        // foreach ($admins as $admin) {
-        //     event(new NotificationBellEvent($admin));
-        // }
-
         event(new NotificationBellEvent());
         
     }

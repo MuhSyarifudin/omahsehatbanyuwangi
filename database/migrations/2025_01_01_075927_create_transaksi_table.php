@@ -28,6 +28,7 @@ return new class extends Migration
             $table->unsignedBigInteger('total_harga');
             $table->string('status')->default('pending');
             $table->timestamps();
+            $table->timestamp('expired_at')->nullable()->after('created_at');
         });
     }
 

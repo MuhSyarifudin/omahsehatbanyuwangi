@@ -32,11 +32,6 @@ class AuthenticatedSessionController extends Controller
 
         $user = Auth::user(); 
 
-        $token = $user->createToken($user->name)->plainTextToken;
-        Cookie::queue('api-token',$token);
-
-        session(['token'=>$token]); 
-
         if ($user->role === 'admin') {
             return redirect()->route('admin.dashboard');
         }

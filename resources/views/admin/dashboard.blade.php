@@ -13,7 +13,7 @@
                             
                             <div class="flex flex-col">
                                 <div class="flex items-end">
-                                    <span class="text-2xl 2xl:text-4xl font-bold">{{ rupiah($totalKeuntungan) }}</span>
+                                    <span class="text-2xl 2xl:text-4xl font-bold" id="jumlah-keuntungan">{{ rupiah($totalKeuntungan) }}</span>
                                     {{-- <div class="flex items-center ml-2 mb-1">
                                         <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
                                         <span class="font-bold text-sm text-gray-500 ml-0.5">3%</span>
@@ -66,17 +66,58 @@
                             </div>
                             <div class="flex flex-col">
                                 <div class="flex items-end">
-                                    <span class="text-2xl 2xl:text-4xl font-bold">10,644</span>
-                                    <div class="flex items-center ml-2 mb-1">
-                                        <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path></svg>
-                                        <span class="font-bold text-sm text-gray-500 ml-0.5">-1%</span>
-                                    </div>
+                                    <span class="text-2xl 2xl:text-4xl font-bold" id="jumlah-visitor">{{ $jumlahVisitor }}</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <!-- end::Stats -->
+
+                    <div class="w-full flex flex-col lg:flex-row items-center justify-between
+                    bg-white my-16 px-2 py-4 rounded-lg shadow-lg">
+                        <div class="w-full lg:w-2/3">
+                        <h4 class="text-center text-xl font-semibold mb-4">Statistik Keuntungan</h4>
+
+                        <div class="flex items-center gap-3">
+                            <label for="tahunSelect"
+                                class="text-sm font-medium text-gray-600 ml-7">
+                                Pilih Tahun
+                            </label>
+                        
+                            <div class="relative">
+                                <select id="tahunSelect"
+                                    class="appearance-none bg-white
+                                           border border-blue-500
+                                           text-gray-700 text-sm
+                                           rounded-xl
+                                           pl-4 pr-10 py-1
+                                           shadow-sm
+                                           focus:outline-none
+                                           focus:ring-2 focus:ring-blue-500
+                                           focus:border-blue-500
+                                           hover:border-blue-600
+                                           transition">
+                                    @for ($i = now()->year; $i >= now()->year - 5; $i--)
+                                        <option value="{{ $i }}">{{ $i }}</option>
+                                    @endfor
+                                </select>
+                        
+                                <svg class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2
+                                            h-4 w-4 text-blue-500"
+                                    fill="none" stroke="currentColor" stroke-width="2"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                          d="M19 9l-7 7-7-7"/>
+                                </svg>
+                            </div>
+                        </div>
+
+                            <div>
+                                <canvas id="profitChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
                 
             </div>
 @endsection
@@ -84,6 +125,9 @@
 @push('bottom')
 
 <script type="module" src="{{ url(asset('assets/js/dashboard.js')) }}"></script>
-<script type="module" src="{{ url(asset('assets/js/notification.js')) }}"></script>
+<script>
+let chart;
 
+
+</script>
 @endpush

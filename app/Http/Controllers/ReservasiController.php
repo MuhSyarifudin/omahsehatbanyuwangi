@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\JenisTerapi;
+use App\Models\Transaksi;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ReservasiController extends Controller
 {
@@ -12,6 +14,7 @@ class ReservasiController extends Controller
         ->join('jenis_terapi', 'layanan_terapi.jenis_terapi', '=', 'jenis_terapi.id')
         ->select('layanan_terapi.id','layanan_terapi.nama AS nama_terapi', 'jenis_terapi.nama AS jenis_terapi')
         ->get();
+
 
         return view('reservasi.reservasi',['marginBottom' => true],compact('layanan_terapi'));
     }

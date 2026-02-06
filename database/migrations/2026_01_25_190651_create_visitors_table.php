@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('device', function (Blueprint $table) {
+        Schema::create('visitors', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('token');
-            $table->boolean('is_active');
+            $table->string('ip_address');
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->string('role')->nullable();
+            $table->date('visit_date');
             $table->timestamps();
+            $table->unique(['ip_address', 'visit_date']);
         });
     }
 
@@ -25,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('device');
+        Schema::dropIfExists('visitors');
     }
 };

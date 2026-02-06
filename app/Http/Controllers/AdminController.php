@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Events\NotificationBellEvent;
+use App\Models\JenisTerapi;
+use App\Models\Layanan;
+use App\Models\Notification;
 use App\Models\User;
 use App\Models\Transaksi;
+use App\Models\Visitor;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request;
@@ -13,49 +17,34 @@ class AdminController extends Controller
 {
     public function index(){
 
+        $now = now();
+
         $keuntunganPerBulan = DB::table('transaksi')
-        ->select(DB::raw('YEAR(created_at) as year'), DB::raw('MONTH(created_at) as month'), DB::raw('SUM(total_harga) as total_keuntungan'))
-        ->where('status','paid')
-        ->groupBy(DB::raw('YEAR(created_at)'), DB::raw('MONTH(created_at)'))
-        ->orderByDesc(DB::raw('YEAR(created_at)'))
-        ->orderByDesc(DB::raw('MONTH(created_at)'))
-        ->first();
+            ->selectRaw('? as year, ? as month, COALESCE(SUM(total_harga),0) as total_keuntungan', [
+                $now->year,
+                $now->month
+            ])
+            ->whereYear('created_at', $now->year)
+            ->whereMonth('created_at', $now->month)
+            ->first();
 
         $totalKeuntungan = $keuntunganPerBulan->total_keuntungan ?? 0;
 
         $jumlahReservasi = DB::table('transaksi')
-        ->select(DB::raw('YEAR(created_at) as year'), DB::raw('MONTH(created_at) as month'), DB::raw('SUM(total_harga) as total_keuntungan'))
-        ->groupBy(DB::raw('YEAR(created_at)'), DB::raw('MONTH(created_at)'))
-        ->orderByDesc(DB::raw('YEAR(created_at)'))
-        ->orderByDesc(DB::raw('MONTH(created_at)'))
+        ->whereYear('created_at', now()->year)
+        ->whereMonth('created_at', now()->month)
         ->count();
 
         $jumlahUser = User::count();
 
-        return view('admin.dashboard',compact('totalKeuntungan','jumlahReservasi','jumlahUser'));
-    }
+        $today = now()->toDateString();
 
-    public function data_reservasi(){
-        $transaksi = Transaksi::select(
-            'transaksi.*',
-            'layanan_terapi.nama as nama_layanan',
-            'jenis_terapi.nama as nama_jenis_terapi'
-        )
-        ->join('layanan_terapi', 'transaksi.terapi_id', '=', 'layanan_terapi.id')
-        ->join('jenis_terapi', 'layanan_terapi.jenis_terapi', '=', 'jenis_terapi.id')
-        ->get();
+        $startDate = now()->subDays(29)->toDateString();
+        $endDate   = now()->toDateString();
 
-        return view('admin.data-reservasi',compact('transaksi'));
-    }
+        $jumlahVisitor = Visitor::whereBetween('visit_date', [$startDate, $endDate])->whereNull('user_id')->count();
 
-    public function data_user(){
-        $users = User::all();
-
-        return view('admin.data-users',compact('users'));
-    }
-
-    public function data_notifikasi(){
-        return view('admin.data-notifikasi');
+        return view('admin.dashboard',compact('totalKeuntungan','jumlahReservasi','jumlahUser','jumlahVisitor'));
     }
 
 }

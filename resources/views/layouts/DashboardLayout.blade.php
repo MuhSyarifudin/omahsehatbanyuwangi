@@ -14,12 +14,6 @@
 
         <link rel="icon" type="image/x-icon" href="{{ url(asset('assets/img/logo.jpg')) }}">
       
-
-
-        <!-- Scripts -->
-        <script defer src="https://unpkg.com/alpinejs@3.4.2/dist/cdn.min.js"></script>
-        <script defer src="https://unpkg.com/@alpinejs/collapse@3.4.2/dist/cdn.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"></script>
         @stack('top')
     </head>
     <body>
@@ -73,8 +67,10 @@
                 <!-- end:Page content -->
             </div>
         </div>
-        <script>
-         </script>
+        
+        
+        <script type="module" src="{{ url(asset('assets/js/notification.js')) }}"></script>
+
         @stack('bottom')
     </body>
 </html>

@@ -1,26 +1,41 @@
 <!-- Modal untuk menampilkan QR Code -->
-<div x-show="isOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-500 bg-opacity-75">
-    <div class="w-full max-w-lg p-6 bg-white rounded-lg shadow-xl">
-        <!-- Keterangan di bagian atas modal -->
-        <div class="mb-4">
-            <p class="text-lg font-bold text-center mb-7">To use WhatsApp on your computer:</p>
-            <ol class="ml-4 text-sm text-gray-700 list-decimal list-inside">
-                <li>Open WhatsApp on your phone</li>
-                <li>Tap Menu or Settings and select Linked Devices</li>
-                <li>Point your phone to this screen to capture the code</li>
-                <li>After your smartphone show success message, you can try to refresh this page and voila the device already can send message now</li>
-            </ol>
+<div x-show="isOpen" x-cloak 
+     x-transition.opacity.duration.300
+     class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-md">
+    
+    <div x-show="isOpen" 
+         x-transition.scale.origin.top.duration.300
+         class="w-full max-w-lg p-6 bg-white rounded-2xl shadow-2xl border border-gray-200">
+
+        <!-- Header -->
+        <div class="mb-6 text-center">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-3">Use WhatsApp on your computer</h2>
+            <p class="text-sm text-gray-500">Follow the steps below to link your device:</p>
         </div>
 
-        <!-- QR Code atau loading message -->
-        <div x-text="loading ? 'Loading...' : ''"></div>
-        <div x-show="qrCode" x-html="qrCode" class="flex items-center justify-center p-4"></div>
+        <!-- Steps -->
+        <ol class="space-y-2 text-sm text-gray-700 list-decimal list-inside mb-6">
+            <li>Open WhatsApp on your phone.</li>
+            <li>Tap <span class="font-medium">Menu</span> or <span class="font-medium">Settings</span> and select <span class="font-medium">Linked Devices</span>.</li>
+            <li>Point your phone to this screen to capture the QR code.</li>
+            <li>After your smartphone shows a success message, refresh this page and your device can send messages.</li>
+        </ol>
 
-        <!-- Container tombol close dengan posisi kanan bawah -->
-        <div class="flex justify-end mt-4">
-            <button @click="isOpen = false; qrCode = '';" class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600">
+        <!-- QR Code or Loading -->
+        <div class="flex justify-center items-center mb-6">
+            <template x-if="loading">
+                <div class="text-gray-400 text-lg font-medium animate-pulse">Loading...</div>
+            </template>
+            <img x-show="qrCode && !loading" :src="qrCode" class="w-48 h-48 rounded-lg border border-gray-200 shadow-lg mx-auto">
+        </div>
+
+        <!-- Footer: Close Button -->
+        <div class="flex justify-center">
+            <button @click="isOpen = false; qrCode = '';" 
+                    class="px-6 py-2 bg-white text-gray-600 font-semibold rounded-lg shadow transition duration-200">
                 Close
             </button>
         </div>
+        
     </div>
 </div>

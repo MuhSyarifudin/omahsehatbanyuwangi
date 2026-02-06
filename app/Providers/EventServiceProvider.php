@@ -33,7 +33,10 @@ class EventServiceProvider extends ServiceProvider
         ],
         NotifikasiPaymentBerhasilEvent::class =>[
             NotifikasiPaymentBerhasilListener::class,
-        ]
+        ],
+        \Illuminate\Auth\Events\Login::class => [
+            \App\Listeners\UpdateVisitorAfterLogin::class,
+        ],
     ];
 
     /**

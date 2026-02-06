@@ -1,5 +1,5 @@
 <!-- Modal for Confirmation -->
-<div id="confirmDeleteModal" class="fixed inset-0 z-50 hidden bg-gray-500 bg-opacity-75" role="dialog"
+<div id="confirmDeleteModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm" role="dialog"
 aria-modal="true">
 <div class="flex items-center justify-center min-h-screen p-4">
     <div class="w-full max-w-lg p-6 bg-white rounded-lg shadow-xl">

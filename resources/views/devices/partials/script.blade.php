@@ -1,37 +1,42 @@
 <script>
     let deviceIdToDelete = null;
 
-    function activateDevice(deviceToken, buttonElement) {
-        // Mendapatkan konteks Alpine.js untuk mengakses variabel state
-        const alpineContext = Alpine.$data(buttonElement.closest('[x-data]'));
+    function activateDevice(device, token, el) {
+    const alpine = Alpine.$data(el.closest('[x-data]'));
 
-        alpineContext.loading = true; // Tampilkan loading
-        alpineContext.isOpen = true; // Buka modal
+    alpine.isOpen = true;
+    alpine.loading = true;
+    alpine.qrCode = null;
 
-        // Fetch request untuk mengaktifkan perangkat dan mendapatkan QR code
-        fetch('{{ route('devices.activate') }}', {
+
+        fetch('/devices/activate', {
             method: 'POST',
             headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
                 'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
             },
-            body: JSON.stringify({ token: deviceToken }),
+            body: JSON.stringify({
+                device: device,
+                token: token
+            })
         })
-        .then(response => response.json())
+        .then(res => res.json())
         .then(data => {
-            if (data.status) {
-                const qrImage = `<img src="data:image/png;base64,${data.url}" alt="QR Code" style="width: 200px; height: 200px;">`;
-                alpineContext.qrCode = qrImage; // Atur QR Code ke variabel Alpine
+            console.log('RESPONSE →', data);
+
+            if (data.status === true && data.qr) {
+                alpine.qrCode = data.qr;
             } else {
-                alert('Error: ' + data.error);
+                alert(data.error ?? 'QR tidak tersedia');
             }
         })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred while activating the device.');
+        .catch(err => {
+            console.error(err);
+            alert('Terjadi kesalahan');
         })
         .finally(() => {
-            alpineContext.loading = false; // Sembunyikan loading
+            alpine.loading = false;
         });
     }
 
@@ -91,59 +96,52 @@
         deviceIdToDelete = null; // Reset the device ID
     }
 
-    function deleteDevice(otp = null) {
-        const errorContainer = document.getElementById('errorContainerOTP');
-        const errorMessage = document.getElementById('errorMessageOTP');
+    function deleteDevice() {
+    if (!deviceIdToDelete) return;
 
+    const errorContainer = document.getElementById('errorContainerOTP');
+    const errorMessage = document.getElementById('errorMessageOTP');
+
+    errorContainer.classList.add('hidden');
+    errorMessage.textContent = '';
+
+    let formData = new FormData();
+    formData.append('_token', "{{ csrf_token() }}");
+    formData.append('_method', 'DELETE');
+
+    fetch('/devices/' + deviceIdToDelete, {
+        method: 'POST',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: formData
+    })
+    .then(async response => {
+        const result = await response.json();
+
+        if (response.status === 403 && result.is_premium) {
+            alert('Device premium tidak dapat dihapus.');
+            throw 'PREMIUM_DEVICE';
+        }
+
+        if (!response.ok) {
+            throw result.message || result.error || 'Gagal menghapus device';
+        }
+
+        return result;
+    })
+    .then(() => {
+        deviceIdToDelete = null;
+        window.location.reload();
+    })
+    .catch(error => {
+        if (error === 'PREMIUM_DEVICE') return;
+
+        errorMessage.textContent = error;
         errorContainer.classList.remove('hidden');
-        if (otp) {
-
-            axios.post('/devices/' + deviceIdToDelete, {
-                    '_token': "{{ csrf_token() }}",
-                    '_method': "DELETE",
-                    'otp': otp
-                }).then((response) => {
-                    document.getElementById('otpDeleteAuthorization').classList.add('hidden');
-                    deviceIdToDelete = null
-                    window.location.reload()
-                    return;
-                })
-                .catch((error) => {
-                    errorMessage.textContent = error.response.data.error;
-                    errorContainer.classList.remove('hidden');
-                    return;
-                })
-        }
-
-        if (deviceIdToDelete) {
-            document.getElementById('otpDeleteAuthorization').classList.remove('hidden');
-            document.getElementById('confirmDeleteModal').classList.add('hidden'); // Hide confirmation modal
-
-            let formData = new FormData();
-
-            formData.append('_token', "{{ csrf_token() }}")
-            formData.append('_method', "DELETE")
-
-            try {
-                const response = fetch('/devices/' + deviceIdToDelete, {
-                    method: 'POST',
-                    headers: {
-                        'X-Requested-with': 'XMLHttpRequest'
-                    },
-                    body: formData
-                });
-
-                const result = response.json();
-
-                console.log(result)
-            } catch (error) {
-                console.error('Error:', error);
-            }
-
-            return;
-        }
-    }
-
+    });
+}
+    
     function openSendMessageModal(deviceToken) {
         document.getElementById('deviceToken').value = deviceToken;
         document.getElementById('sendMessageModal').classList.remove('hidden');

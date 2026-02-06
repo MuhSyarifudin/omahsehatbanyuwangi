@@ -27,10 +27,6 @@ class NotifikasiReservasiListener
         $admins = User::where('role','admin')->get();
         Notification::send($admins,new NotifikasiReservasi($event->transaksi));
 
-        // foreach ($admins as $admin) {
-        //     event(new NotificationBellEvent($admin));
-        // }
-
         event(new NotificationBellEvent());
     }
 }

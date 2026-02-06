@@ -1,5 +1,5 @@
 <!-- Modal Send Message -->
-<div id="sendMessageModal" class="fixed inset-0 z-50 hidden bg-gray-500 bg-opacity-75">
+<div id="sendMessageModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm">
     <div class="flex items-center justify-center min-h-screen p-4">
         <div class="w-full max-w-lg p-6 bg-white rounded-lg shadow-xl">
             <h2 class="mb-4 text-lg font-semibold">Send Message</h2>

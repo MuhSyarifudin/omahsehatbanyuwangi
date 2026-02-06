@@ -67,4 +67,8 @@ class Kernel extends HttpKernel
         'role' => \App\Http\Middleware\RoleMiddleware::class,
         'prevent-back-history' => \App\Http\Middleware\PreventBackHistory::class,  
     ];
+
+    protected $routeMiddleware = [
+        'track.visitor' => \App\Http\Middleware\TrackVisitor::class,
+    ];
 }

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Services\FonnteService;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 
 class DeviceController extends Controller
@@ -104,27 +105,80 @@ class DeviceController extends Controller
         return redirect()->route('devices.index')->with('success', 'Device added successfully!');
     }
 
+
     public function activateDevice(Request $request)
     {
-        $phoneNumber = $request->input('device');
-        $deviceToken = $request->input('token');
 
-        // Call the FonnteService to activate the device using its WhatsApp number
-        $response = $this->fonnteService->requestQRActivation($phoneNumber, $deviceToken);
+        Device::query()->update(['is_activated' => 0]);
 
-        if ($response['status']) {
-            // Assuming the QR code is returned in the 'url' key
+        $device = Device::where('device', $request->device)->first();
+        
+
+        if ($device && $device->is_activated) {
             return response()->json([
                 'status' => true,
-                'url' => $response['data']['url'], // Kembali ke URL dari respons
+                'connected' => true,
+                'message' => 'Device sudah terhubung'
             ]);
         }
+    
+        $expired = true;
+
+        if ($device && $device->qr_requested_at) {
+            $expired = now()->diffInSeconds($device->qr_requested_at) > 60;
+        }
+        
+        // kalau QR masih fresh → pakai
+        if ($device && !$expired && $device->qr_url) {
+            return response()->json([
+                'status' => true,
+                'qr' => $device->qr_url
+            ]);
+        }
+    
+        // REQUEST QR BARU
+        $response = $this->fonnteService->requestQRActivation(
+            $request->device,
+            $request->token
+        );
+    
+        if (
+            !$response['status'] ||
+            empty($response['data']['url'])
+        ) {
+            return response()->json([
+                'status' => false,
+                'connected' => false,
+                'message' => 'QR tidak tersedia, device mungkin sudah terhubung'
+            ], 400);
+        }
+    
+        $qr = 'data:image/png;base64,' . $response['data']['url'];
+    
+        Device::updateOrCreate(
+            ['device' => $request->device],
+            [
+                'token' => $request->token,
+                'qr_url' => $qr,
+                'qr_requested_at' => now(),
+                'is_activated' => true
+            ]
+        );
+    
+        // Log::info('QR DEBUG', [
+        //     'device_exists' => (bool) $device,
+        //     'qr_url' => $device->qr_url ?? null,
+        //     'qr_requested_at' => $device->qr_requested_at ?? null,
+        //     'expired' => $expired ?? null,
+        // ]);
 
         return response()->json([
-            'status' => false,
-            'error' => $response['error'] ?? 'Failed to activate the device.'
-        ], 500);
+            'status' => true,
+            'qr' => $qr
+        ]);
     }
+    
+
 
     // Mengecek profil perangkat melalui Fonnte API berdasarkan token
     public function show($id)
@@ -147,6 +201,8 @@ class DeviceController extends Controller
     public function disconnect(Request $request)
     {
         try {
+            Device::query()->update(['is_activated' => 0]);
+
             $deviceToken = $request->input('token');
             $response = $this->fonnteService->disconnectDevice($deviceToken);
 
@@ -164,26 +220,21 @@ class DeviceController extends Controller
     }
 
     // Menghapus perangkat
-    public function destroy($deviceId, Request $request)
-    {
-        if ($request->otp) {
-            $delete = $this->fonnteService->submitOTPForDeleteDevice($request->otp, $deviceId);
+    public function destroy($deviceToken)
+{
+    $delete = $this->fonnteService->deleteDevice($deviceToken);
 
-            if ($delete['status'] == false) {
-                return response()->json(['message' => 'Terjadi kesalahan', 'error' => $delete['error']], 501);
-            }
-
-            return response()->json(['message' => 'Device berhasil dihapus']);
-        }
-
-        $requestToken               = $this->fonnteService->requestOTPForDeleteDevice($deviceId);
-
-        if ($requestToken['status'] == true) {
-            return response()->json(['message' => 'Berhasil mengirim token']);
-        }
-
-        return response()->json(['message' => 'Gagal mengirim token', 'error' => $requestToken['error']], 500);
+    if (!$delete['status']) {
+        return response()->json([
+            'message' => 'Gagal menghapus device',
+            'error'   => $delete['error'],
+        ], 500);
     }
+
+    return response()->json([
+        'message' => 'Device berhasil dihapus',
+    ]);
+}
 
     // Mengirim request OTP untuk penghapusan perangkat
     protected function requestOTPForDeleteDevice($notificationId, $deviceId)

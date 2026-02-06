@@ -1,7 +1,6 @@
 @extends('layouts.HomeLayout')
 
 @push('top')
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 @endpush
 
 @section('content')
@@ -28,105 +27,139 @@
 
       <form action="{{ route('checkout') }}" method="POST" class="space-y-6">
         @csrf
-
+      
         {{-- Nama & WA --}}
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="form-control">
-            <label class="label">
-              <span class="label-text">Nama Lengkap</span>
-            </label>
+            <label class="label"><span class="label-text">Nama Lengkap</span></label>
             <input type="text" name="nama_lengkap"
               value="{{ old('nama_lengkap') }}"
-              class="input input-bordered w-full"
+              class="@error('nama_lengkap')
+                border border-red-500
+              @enderror input input-bordered w-full"
               placeholder="Masukkan nama lengkap">
-            @error('nama_lengkap') <span class="text-error text-sm">{{ $message }}</span> @enderror
+            @error('nama_lengkap') <span class="text-error text-xs">ⓘ {{ $message }}</span> @enderror
           </div>
-
+      
           <div class="form-control">
-            <label class="label">
-              <span class="label-text">Nomor WhatsApp</span>
-            </label>
+            <label class="label"><span class="label-text">Nomor WhatsApp</span></label>
             <input type="tel" name="nohp"
               value="{{ old('nohp') }}"
-              class="input input-bordered w-full"
-              placeholder="08xxxxxxxxxx">
-            @error('nohp') <span class="text-error text-sm">{{ $message }}</span> @enderror
+              class="@error('nohp')
+              border border-red-500
+            @enderror input input-bordered w-full"
+              placeholder="081xxx / +6281xxxxx / +44xxxxx">
+            @error('nohp') <span class="text-error text-xs">ⓘ {{ $message }}</span> @enderror
           </div>
         </div>
-
+      
         {{-- Gender & Layanan --}}
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="form-control">
             <label class="label"><span class="label-text">Jenis Kelamin</span></label>
-            <select name="jenis_kelamin" class="select select-bordered w-full">
-              <option disabled selected>Pilih</option>
-              <option value="L">Laki-laki</option>
-              <option value="P">Perempuan</option>
+            <select name="jenis_kelamin" class="@error('jenis_kelamin')
+            border border-red-500
+          @enderror select select-bordered w-full">
+              <option disabled {{ old('jenis_kelamin') ? '' : 'selected' }}>Pilih</option>
+              <option value="L" {{ old('jenis_kelamin') == 'L' ? 'selected' : '' }}>Laki-laki</option>
+              <option value="P" {{ old('jenis_kelamin') == 'P' ? 'selected' : '' }}>Perempuan</option>
             </select>
-            @error('jenis_kelamin') <span class="text-error text-sm">{{ $message }}</span> @enderror
+            @error('jenis_kelamin') <span class="text-error text-xs">ⓘ {{ $message }}</span> @enderror
           </div>
-
+      
           <div class="form-control">
             <label class="label"><span class="label-text">Jenis Layanan</span></label>
-            <select id="jenisLayanan" name="layanan" class="select select-bordered w-full">
-              <option disabled selected>Pilih</option>
-              <option value="Center">Datang ke Center</option>
-              <option value="Homecare">Homecare</option>
+            <select id="jenisLayanan" name="layanan" class="@error('layanan')
+            border border-red-500
+          @enderror select select-bordered w-full">
+              <option disabled {{ old('layanan') ? '' : 'selected' }}>Pilih</option>
+              <option value="center" {{ old('layanan') == 'Center' ? 'selected' : '' }}>
+                Datang ke Center
+              </option>
+              <option value="homecare" {{ old('layanan') == 'Homecare' ? 'selected' : '' }}>
+                Homecare
+              </option>
             </select>
-            @error('layanan') <span class="text-error text-sm">{{ $message }}</span> @enderror
+            @error('layanan') <span class="text-error text-xs">ⓘ {{ $message }}</span> @enderror
           </div>
         </div>
-
+      
         {{-- Tanggal & Jam --}}
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="form-control">
             <label class="label"><span class="label-text">Tanggal</span></label>
             <input id="tanggalPicker" type="text" name="tanggal"
-              class="input input-bordered w-full"
+              value="{{ old('tanggal') }}"
+              class="@error('tanggal')
+              border border-red-500
+            @enderror input input-bordered w-full"
               placeholder="Pilih tanggal">
-            @error('tanggal') <span class="text-error text-sm">{{ $message }}</span> @enderror
+            @error('tanggal') <span class="text-error text-xs">ⓘ {{ $message }}</span> @enderror
+            <small id="tanggalHelp" class="text-slate-500 text-xs mt-1 block">
+              Pilih jenis layanan terlebih dahulu
+          </small>
           </div>
-
-          <input type="text" name="hari" id="hari" style="display: none">
-          
+      
+          <input type="hidden" name="hari" id="hari" value="{{ old('hari') }}">
+          <input type="text" name="website" style="display:none">
+      
           <div class="form-control">
             <label class="label"><span class="label-text">Jam</span></label>
-            <select id="jam" name="jam" class="select select-bordered w-full">
-              <option disabled selected>Pilih Jam</option>
+            <select id="jam" name="jam" class="@error('jam')
+            border border-red-500
+          @enderror select select-bordered w-full">
+              <option disabled {{ old('jam') ? '' : 'selected' }}>Pilih Jam</option>
+              @if(old('jam'))
+                <option value="{{ old('jam') }}" selected>{{ old('jam') }}</option>
+              @endif
             </select>
-            @error('jam') <span class="text-error text-sm">{{ $message }}</span> @enderror
+            @error('jam') <span class="text-error text-xs">ⓘ {{ $message }}</span> @enderror
+            <small id="jamHelp" class="text-slate-500 text-xs mt-1 block">
+              Pilih tanggal untuk melihat jam tersedia
+          </small>
           </div>
         </div>
-
+      
         {{-- Terapi --}}
         <div class="form-control">
           <label class="label"><span class="label-text">Jenis Terapi</span></label>
-          <select name="terapi" class="select select-bordered w-full">
-            <option disabled selected>Pilih Terapi</option>
+          <select name="terapi" class="@error('terapi')
+          border border-red-500
+        @enderror select select-bordered w-full">
+            <option disabled {{ old('terapi') ? '' : 'selected' }}>Pilih Terapi</option>
             @foreach ($layanan_terapi as $item)
-              <option value="{{ $item->id }}">
+              <option value="{{ $item->id }}"
+                {{ old('terapi') == $item->id ? 'selected' : '' }}>
                 {{ $item->nama_terapi }} - {{ $item->jenis_terapi }}
               </option>
             @endforeach
           </select>
-          @error('terapi') <span class="text-error text-sm">{{ $message }}</span> @enderror
+          @error('terapi') <span class="text-error text-xs">ⓘ {{ $message }}</span> @enderror
         </div>
-
-        {{-- Alamat (Homecare) --}}
-        <div id="alamatSection" class="form-control hidden">
+      
+        {{-- Alamat Homecare --}}
+        <div id="alamatSection"
+          class="form-control {{ old('layanan') == 'Homecare' ? '' : 'hidden' }}">
           <label class="label"><span class="label-text">Alamat</span></label>
           <textarea name="alamat"
-            class="textarea textarea-bordered w-full"
-            placeholder="Alamat lengkap di Banyuwangi"></textarea>
+            class="@error('alamat')
+            border border-red-500
+          @enderror textarea textarea-bordered w-full"
+            placeholder="Alamat lengkap di Banyuwangi">{{ old('alamat') }}</textarea>
+          @error('alamat') <span class="text-error text-xs">ⓘ {{ $message }}</span> @enderror
         </div>
-
+      
         {{-- Jumlah --}}
         <div class="form-control w-32">
           <label class="label"><span class="label-text">Jumlah Orang</span></label>
-          <input type="number" name="jumlah" min="1" value="1"
-            class="input input-bordered">
+          <input type="number" name="jumlah" min="1"
+            value="{{ old('jumlah', 1) }}"
+            class="@error('jumlah')
+            border border-red-500
+          @enderror input input-bordered">
+          @error('jumlah') <span class="text-error text-xs">ⓘ {{ $message }}</span> @enderror
         </div>
-
+      
         {{-- Submit --}}
         <div class="pt-4">
           <button class="btn btn-primary w-full uppercase" type="submit">
@@ -134,6 +167,7 @@
           </button>
         </div>
       </form>
+      
     </div>
   </div>
 </section>
@@ -142,7 +176,6 @@
 @endsection
 
 @push('bottom')
-  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script src="{{ url(asset('assets/js/nav.js')) }}"></script>
   <script type="module" src="{{ url(asset('assets/js/reservasi.js')) }}"></script>
 @endpush

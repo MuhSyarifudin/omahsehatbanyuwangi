@@ -45,3 +45,15 @@ Broadcast::channel('registered-event', function ($user) {
         'role' => $user->role,
     ];
 });
+
+Broadcast::channel('visitor-event', function ($user) {
+    if ($user->role !== 'admin') {
+        return false;
+    }
+
+    return [
+        'id'   => $user->id,
+        'name' => $user->name,
+        'role' => $user->role,
+    ];
+});

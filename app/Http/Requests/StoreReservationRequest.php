@@ -27,7 +27,7 @@ class StoreReservationRequest extends FormRequest
             'nohp' => 'required|numeric',
             'jenis_kelamin' => 'required',
             'layanan' => 'required',
-            'alamat' => ['nullable', 'string', 'max:255', Rule::requiredIf($this->layanan === 'Homecare')],
+            'alamat' => ['nullable', 'string', 'max:255', Rule::requiredIf($this->layanan === 'homecare')],
             'tanggal' => 'required|date',
             'hari' => 'required',
             'jam' => 'required',

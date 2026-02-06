@@ -39,7 +39,7 @@
                     >
                         <svg class="w-6 h-6 cursor-pointer hover:text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
                         <sub>
-                            <span id="notif-badge-luar-1" class="bg-red-600 text-gray-100 px-1.5 py-0.5 rounded-full -ml-1">0</span>
+                            <span id="notif-badge-luar-1" class="bg-red-600 text-gray-100 px-1.5 py-0.5 rounded-full -ml-1 animate-pulse hidden">0</span>
                         </sub>
                     </div>
                     <!-- end::Main link -->
@@ -58,7 +58,7 @@
                             <div class="flex items-center justify-between px-4 py-2">
                                     <span class="font-bold">Notifications</span>
     
-                                    <span  id="notif-badge-luar-2" class="bg-red-600 text-gray-100 px-1.5 py-0.5 rounded-full -ml-1">0</span>
+                                    <span  id="notif-badge-luar-2" class="text-xs px-1.5 py-0.5 bg-red-600 text-gray-100 rounded">0</span>
                             </div>
                             <hr>
                             <!-- end::Submenu header -->
@@ -152,7 +152,6 @@
                                             :class=" linkHover ? 'text-primary' : ''"
                                         >
                                             Inbox
-                                            <span class="bg-red-600 text-gray-100 text-xs px-1.5 py-0.5 ml-2 rounded">3</span>
                                         </p>
                                     </div>
                                 </div>
