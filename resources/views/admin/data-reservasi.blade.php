@@ -120,7 +120,11 @@
             <div class="mt-6 flex justify-end gap-3">
                 <a id="btnPayment"
                    class="px-4 py-2 text-sm text-white bg-purple-600 rounded-lg hidden">
-                   Loading...
+                   <svg class="animate-spin -ml-1 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                   Loading
                 </a>                    
                 <button class="closeModal px-4 py-2 text-sm bg-gray-500 text-white rounded-lg">
                     Tutup
@@ -156,7 +160,7 @@ $(document).ready(function () {
             { data: 'nama', name: 'nama' },
             { data: 'nama_jenis_terapi', name: 'jenis_terapi.nama' },
             { data: 'tempat', name: 'tempat' },
-            { data: 'status_badge', name: 'status' },
+            { data: 'status_badge', name: 'status', className: 'text-center' },
             { data: 'tanggal', name: 'created_at' },
             { data: 'aksi', orderable:false, searchable:false }
         ],
@@ -200,23 +204,33 @@ $(document).ready(function () {
                 $('#m_jumlah').text(res.jumlah + ' Orang');
                 $('#m_total').text(res.total);
 
+                const btnLoading = `
+                    <span class="flex items-center gap-2 justify-center">
+                        <svg class="animate-spin -ml-1 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Loading
+                    </span>
+                `;
+
                 if (res.status == 'expired') {
-                    $('#btnPayment').removeClass('hidden');
-                    $('#btnPayment').removeClass('bg-purple-600');
-                    $('#btnPayment').addClass('bg-gray-400');
-                    $('#btnPayment').attr('disabled', true);
-                    $('#btnPayment').attr('href', null);
-                    $('#btnPayment').text('Loading...');
+                    $('#btnPayment')
+                    .removeClass('hidden bg-purple-600')
+                    .addClass('bg-gray-400')
+                    .attr('disabled', true)
+                    .attr('href', null)
+                    .html(btnLoading);
                     setTimeout(() => {
                         $('#btnPayment').text('Expired');
                     }, 1000);
                 } else if(res.status == 'pending') {
-                    $('#btnPayment').removeClass('hidden');
-                    $('#btnPayment').removeClass('bg-gray-400');
-                    $('#btnPayment').addClass('bg-purple-600');
-                    $('#btnPayment').attr('disabled', false);
-                    $('#btnPayment').attr('href', null);
-                    $('#btnPayment').text('Loading...');
+                    $('#btnPayment')
+                    .removeClass('hidden bg-gray-400')
+                    .addClass('bg-purple-600')
+                    .attr('disabled', false)
+                    .attr('href', null)
+                    .html(btnLoading);
                     setTimeout(() => {
                         $('#btnPayment').text('Send Payment');
                         $('#btnPayment').attr('href', res.payment_url);

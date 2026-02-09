@@ -53,47 +53,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 })
 
-document.addEventListener('DOMContentLoaded', () => {
-  const nohpInput = document.querySelector('input[name="nohp"]')
-
-  const regexHP = /^(?:\+?[1-9]\d{7,14}|0\d{9,13})$/
-
-  nohpInput.addEventListener('input', () => {
-    const value = nohpInput.value.trim()
-    const formControl = nohpInput.closest('.form-control')
-
-    clearError(formControl, nohpInput)
-
-    if (value === '') return
-
-    if (!regexHP.test(value)) {
-      showError(
-        formControl,
-        nohpInput,
-        'Nomor WhatsApp tidak valid. format nomor internasional atau indonesia (maks. 15 digit)'
-      )
-    }
-  })
-
-  function showError(wrapper, input, message) {
-    input.classList.add('border', 'border-red-500')
-
-    if (wrapper.querySelector('.text-error')) return
-
-    const error = document.createElement('span')
-    error.className = 'text-error text-xs'
-    error.innerHTML = `ⓘ ${message}`
-    wrapper.appendChild(error)
-  }
-
-  function clearError(wrapper, input) {
-    input.classList.remove('border', 'border-red-500')
-
-    const error = wrapper.querySelector('.text-error')
-    if (error) error.remove()
-  }
-})
-
 function toggleAlamatSection() {
     if (jenisLayananSelect.value === 'homecare') {
         alamatSection.style.display = 'block';

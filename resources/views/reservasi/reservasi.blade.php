@@ -17,6 +17,44 @@
   </div>
 </section> --}}
 
+<div class="max-w-4xl mx-auto mt-8 px-4">
+  <div class="relative overflow-hidden bg-gradient-to-br from-blue-700 via-indigo-600 to-violet-700 rounded-3xl p-6 text-white shadow-2xl mb-[-1.5rem] z-10 border-b-4 border-indigo-900">
+      
+      <div class="absolute right-0 top-0 opacity-10 translate-x-1/4 -translate-y-1/4">
+          <svg width="200" height="200" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+          </svg>
+      </div>
+
+      <div class="flex flex-col md:flex-row items-center gap-6 relative z-20">
+          <div class="flex-shrink-0">
+              <div class="w-20 h-20 bg-yellow-400 rounded-full flex items-center justify-center shadow-inner border-4 border-white/30">
+                  <span class="text-3xl font-black text-blue-900 leading-none">20%</span>
+              </div>
+          </div>
+
+          <div class="text-center md:text-left flex-grow">
+              <div class="inline-block bg-white/20 px-3 py-1 rounded-full text-xs font-bold tracking-widest uppercase mb-2">
+                  🔥 Special In-Store Promo
+              </div>
+              <h3 class="text-2xl md:text-3xl font-black italic tracking-tight uppercase">
+                  CASHBACK LANGSUNG!
+              </h3>
+              <p class="text-indigo-50 font-medium">
+                  Tanpa kode ribet, cukup pilih layanan <span class="text-yellow-300 underline font-bold text-lg px-1">"Datang ke Center"</span> dan dapatkan potongan 20% di tempat.
+              </p>
+          </div>
+
+          <div class="hidden lg:block">
+              <div class="flex flex-col items-center rotate-3 bg-white text-blue-800 p-3 rounded-xl shadow-xl">
+                  <span class="text-[10px] font-bold uppercase leading-none">Status</span>
+                  <span class="text-lg font-black leading-none">AKTIF</span>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
 <!-- Form Layout Section -->
 <section class="max-w-4xl mx-auto my-12 px-4">
   <div class="card bg-base-100 shadow-xl">
@@ -24,6 +62,14 @@
       <h2 class="card-title justify-center text-2xl">
         Formulir Reservasi
       </h2>
+
+      {{-- <div class="alert alert-info shadow-sm mb-6 bg-blue-50 border-none">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6 text-blue-600"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <div class="text-sm">
+            <span class="font-bold text-blue-800 italic">Diskon Homecare!</span> 
+            <span class="text-blue-700">Dapatkan potongan Rp20.000 untuk layanan pertama Anda hari ini.</span>
+        </div>
+    </div> --}}
 
       <form action="{{ route('checkout') }}" method="POST" class="space-y-6">
         @csrf

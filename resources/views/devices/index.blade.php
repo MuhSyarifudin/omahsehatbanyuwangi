@@ -9,8 +9,11 @@
             <div class="flex items-center justify-between mb-6">
                 <h1 class="text-2xl font-bold">All Devices</h1>
                 <a href="{{ route('devices.create') }}"
-                    class="px-4 py-2 font-semibold text-white rounded bg-slate-500 hover:bg-slate-600">
-                    Add New Device
+                    class="flex space-x-2 items-center justify-center bg-green-500 hover:bg-green-600 rounded-sm px-6 py-1.5 text-gray-100 hover:shadow-xl transition duration-150">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+                    </svg>
+                    <span>Add New Device</span>
                 </a>
             </div>
 

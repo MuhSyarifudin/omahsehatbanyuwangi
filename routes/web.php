@@ -15,9 +15,12 @@ use App\Http\Controllers\NotificationsAdminController;
 use App\Http\Controllers\ReservasiController;
 use App\Http\Controllers\TherapistController;
 use App\Http\Controllers\PaymentPageController;
+use App\Http\Controllers\PendaftaranTerapisAdminController;
+use App\Http\Controllers\PromoAdminController;
 use App\Http\Controllers\ReservasiAdminController;
 use App\Http\Controllers\SendPaymentController;
 use App\Http\Controllers\ShowPaymentController;
+use App\Http\Controllers\TerapisAdminController;
 use App\Http\Controllers\UsersAdminController;
 
 /*
@@ -62,6 +65,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/data-users',[UsersAdminController::class,'data_users'])->name('data.users');
     Route::get('/admin/data-users/datatables',[UsersAdminController::class,'data_users_datatables'])->name('data-users.datatables');
     Route::get('/dashboard/chart/tahunan', [ChartController::class, 'chartTahunan']);
+    Route::get('/admin/data-promo',[PromoAdminController::class,'index'])->name('data.promo');
+    Route::get('/admin/data-terapis',[TerapisAdminController::class,'index'])->name('data.terapis');
+    Route::get('/admin/data-pendaftaran-terapis',[PendaftaranTerapisAdminController::class,'index'])->name('data.pendaftaran.terapis');
 
     Route::resource('messages', MessageController::class);
     Route::resource('devices', DeviceController::class);

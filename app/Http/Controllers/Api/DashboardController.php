@@ -26,6 +26,7 @@ class DashboardController extends Controller
             ])
             ->whereYear('created_at', $now->year)
             ->whereMonth('created_at', $now->month)
+            ->where('status','paid')
             ->first();
 
         $total_keuntungan = $keuntungan->total_keuntungan ?? 0;

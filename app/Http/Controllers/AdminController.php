@@ -26,6 +26,7 @@ class AdminController extends Controller
             ])
             ->whereYear('created_at', $now->year)
             ->whereMonth('created_at', $now->month)
+            ->where('status','paid')
             ->first();
 
         $totalKeuntungan = $keuntunganPerBulan->total_keuntungan ?? 0;

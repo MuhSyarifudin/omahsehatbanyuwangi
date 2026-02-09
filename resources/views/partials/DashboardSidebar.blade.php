@@ -61,6 +61,40 @@
             <span class="ml-3">Users</span>
         </a>
 
+        <!-- Terapis -->
+        <a href="{{ route('data.terapis') }}"
+        class="flex items-center px-6 py-3 transition
+        {{ request()->routeIs('data.terapis*')
+            ? 'bg-black bg-opacity-40 text-white border-l-4 border-blue-500'
+            : 'hover:bg-black hover:bg-opacity-30 hover:text-white' }}">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M15.75 7.5a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"/>
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M4.5 20.25a7.5 7.5 0 0115 0"/>
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M17 11l1.5 1.5L21 10"/>
+        </svg>        
+        <span class="ml-3">Terapis</span>
+        </a>
+
+        <!-- Pendaftaran Terapis -->
+        <a href="{{ route('data.pendaftaran.terapis') }}"
+        class="flex items-center px-6 py-3 transition
+        {{ request()->routeIs('data.pendaftaran.terapis*')
+            ? 'bg-black bg-opacity-40 text-white border-l-4 border-blue-500'
+            : 'hover:bg-black hover:bg-opacity-30 hover:text-white' }}">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M15.75 7.5a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"/>
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M4.5 20.25a7.5 7.5 0 0115 0"/>
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M19 8v6M16 11h6"/>
+        </svg>
+        <span class="ml-3">Pendaftaran</span>
+        </a>
+
         <!-- Notifikasi -->
         <a href="{{ route('data.notifikasi') }}"
            class="flex items-center px-6 py-3 transition
@@ -104,9 +138,27 @@
             <!-- Heart Icon -->
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round"
-                      d="M21 8.5c0-2.5-2-4.5-4.5-4.5-2 0-3.7 1.2-4.5 3-0.8-1.8-2.5-3-4.5-3C5 4 3 6 3 8.5 3 15 12 20 12 20s9-5 9-11.5z"/>
+                      d="M8 7V6a2 2 0 012-2h4a2 2 0 012 2v1"/>
+                <rect x="4" y="7" width="16" height="13" rx="2"/>
             </svg>
             <span class="ml-3">Jenis Terapi</span>
+        </a>
+
+        <!-- Promo -->
+        <a href="{{ route('data.promo') }}"
+        class="flex items-center px-6 py-3 transition
+        {{ request()->routeIs('data.promo*')
+            ? 'bg-black bg-opacity-40 text-white border-l-4 border-blue-500'
+            : 'hover:bg-black hover:bg-opacity-30 hover:text-white' }}">
+        <!-- Tag / Discount Icon -->
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M17 7l-10 10"/>
+            <circle cx="7" cy="7" r="2"/>
+            <circle cx="17" cy="17" r="2"/>
+        </svg>
+        
+        <span class="ml-3">Promo</span>
         </a>
 
         <!-- Connections -->
