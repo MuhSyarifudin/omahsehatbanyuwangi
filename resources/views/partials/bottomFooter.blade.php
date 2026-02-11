@@ -21,7 +21,7 @@
            <a class="link link-hover">Terapi Bekam</a>
            <a class="link link-hover">Terapi Kecantikan</a>
            <a class="link link-hover">Terapi Akupuntur</a>
-           <a class="link link-hover">Add-on</a>
+           <a class="link link-hover">Terapi Tambahan</a>
            <a class="link link-hover">Perawatan Luka</a>
            <a class="link link-hover">Cek Kesehatan</a>
        </div>
