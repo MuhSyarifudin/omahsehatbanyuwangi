@@ -1,6 +1,6 @@
 <aside 
-    :class="menuOpen ? 'translate-x-0 ease-out' : '-translate-x-full ease-in'" 
-    class="fixed z-30 inset-y-0 left-0 w-64 transition duration-300 overflow-y-auto lg:translate-x-0 lg:inset-0 bg-[#182430]"
+    :class="menuOpen ? 'translate-x-0 ease-out custom-scrollbar' : '-translate-x-full ease-in'" 
+    class="fixed z-30 inset-y-0 left-0 w-64 transition duration-300 overflow-y-auto custom-scrollbar lg:translate-x-0 lg:inset-0 bg-[#182430]"
 >
     <!-- Logo -->
     <div class="flex items-center justify-center bg-black bg-opacity-30 h-16">
@@ -144,6 +144,20 @@
             <span class="ml-3">Jenis Terapi</span>
         </a>
 
+        <!-- Keahlian -->
+        <a href="{{ route('data.keahlian') }}"
+        class="flex items-center px-6 py-3 transition
+        {{ request()->routeIs('data.keahlian*')
+            ? 'bg-black bg-opacity-40 text-white border-l-4 border-blue-500'
+            : 'hover:bg-black hover:bg-opacity-30 hover:text-white' }}">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+            <circle cx="12" cy="8" r="4"/>
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M8.5 12.5l-2.5 8 6-3 6 3-2.5-8"/>
+        </svg>        
+        <span class="ml-3">Keahlian</span>
+        </a>
+
         <!-- Promo -->
         <a href="{{ route('data.promo') }}"
         class="flex items-center px-6 py-3 transition
@@ -180,11 +194,25 @@
             <span class="ml-3">WA Devices</span>
         </a>
 
+        <!-- Inbox -->
+        <a href="{{ route('inbox.index') }}"
+        class="flex items-center px-6 py-3 transition
+        {{ request()->routeIs('inbox.*')
+            ? 'bg-black bg-opacity-40 text-white border-l-4 border-blue-500'
+            : 'hover:bg-black hover:bg-opacity-30 hover:text-white' }}">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M3 7.5l9 6 9-6"/>
+            <rect x="3" y="6" width="18" height="12" rx="2"/>
+        </svg>
+        <span class="ml-3">Inbox</span>
+        </a>
+
         <!-- Settings -->
         <p class="text-xs text-gray-600 mt-8 mb-2 px-6 uppercase">Settings</p>
 
         <!-- Profil -->
-        <a href="{{ route('profile.edit') }}"
+        <a href="{{ route('profile.index') }}"
            class="flex items-center px-6 py-3 transition
            {{ request()->routeIs('profile.*')
                 ? 'bg-black bg-opacity-40 text-white border-l-4 border-blue-500'
@@ -197,6 +225,20 @@
                       d="M4.5 20.25a7.5 7.5 0 0115 0"/>
             </svg>
             <span class="ml-3">Profil</span>
+        </a>
+
+        <!-- Settings -->
+        <a href="{{ route('settings.edit') }}"
+        class="flex items-center px-6 py-3 transition
+        {{ request()->routeIs('settings.*')
+            ? 'bg-black bg-opacity-40 text-white border-l-4 border-blue-500'
+            : 'hover:bg-black hover:bg-opacity-30 hover:text-white' }}">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="3"/>
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5h.1a1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9c0 .7.5 1.3 1.2 1.5H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/>
+        </svg>
+        <span class="ml-3">Settings</span>
         </a>
 
     </nav>

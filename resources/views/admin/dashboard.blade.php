@@ -117,6 +117,33 @@
                                 <canvas id="profitChart"></canvas>
                             </div>
                         </div>
+                        <div class="w-full max-w-md rounded-xl border border-gray-200 bg-white shadow-sm">
+                            <div class="px-4 py-2 border-b border-gray-100">
+                                <h3 class="text-sm font-semibold text-gray-700">
+                                    Recently Active Users
+                                </h3>
+                            </div>
+                        
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-sm">
+                                    <thead class="bg-gray-50 text-gray-500">
+                                        <tr>
+                                            <th class="px-4 py-2 text-left font-medium">User</th>
+                                            <th class="px-2 py-2 text-left font-medium">Status</th>
+                                            <th class="px-4 py-2 text-right font-medium">Last Active</th>
+                                        </tr>
+                                    </thead>
+                                    <tr>
+                                        <td colspan="3"
+                                            class="px-4 py-3 text-center text-xs text-gray-400">
+                                            Loading...
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        
                     </div>
                 
             </div>
@@ -126,8 +153,78 @@
 
 <script type="module" src="{{ url(asset('assets/js/dashboard.js')) }}"></script>
 <script>
-let chart;
 
+const tableBody = document.getElementById('recentActiveUsers')
 
+function statusBadge(status) {
+    if (status === 'online') {
+        return `
+            <span class="inline-flex items-center gap-1 rounded-full
+                         bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700">
+                ● Online
+            </span>
+        `
+    }
+
+    if (status === 'idle') {
+        return `
+            <span class="inline-flex items-center gap-1 rounded-full
+                         bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-700">
+                ● Idle
+            </span>
+        `
+    }
+
+    return `
+        <span class="inline-flex items-center gap-1 rounded-full
+                     bg-gray-200 px-2 py-0.5 text-xs font-medium text-gray-700">
+            ● Offline
+        </span>
+    `
+}
+
+function loadRecentlyActiveUsers() {
+    fetch("{{ route('admin.realtime.active-users') }}")
+        .then(response => response.json())
+        .then(users => {
+            if (!users.length) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="3"
+                            class="px-4 py-3 text-center text-xs text-gray-400">
+                            No recent activity
+                        </td>
+                    </tr>
+                `
+                return
+            }
+
+            tableBody.innerHTML = users.map(user => `
+                <tr class="hover:bg-gray-50">
+                    <td class="px-4 py-2 flex items-center gap-2">
+                        <img
+                            src="${user.avatar ?? 'https://ui-avatars.com/api/?name=' + user.name}"
+                            class="h-7 w-7 rounded-full"
+                            alt="avatar">
+
+                        <span class="text-gray-700 font-medium">
+                            ${user.name}
+                        </span>
+                    </td>
+
+                    <td class="px-2 py-2">
+                        ${statusBadge(user.status)}
+                    </td>
+
+                    <td class="px-4 py-2 text-right text-gray-500 text-xs">
+                        ${user.last_activity}
+                    </td>
+                </tr>
+            `).join('')
+        })
+}
+
+loadRecentlyActiveUsers()
+setInterval(loadRecentlyActiveUsers, 10000)
 </script>
 @endpush

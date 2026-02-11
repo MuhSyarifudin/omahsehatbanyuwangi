@@ -32,7 +32,7 @@
                         type="email" 
                         name="email" 
                         id="email" 
-                        class="mt-2 py-2 border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded text-sm text-gray-900" 
+                        class="border mt-2 p-2 border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded text-sm text-gray-900" 
                         placeholder="Enter your email"
                     >
                     @error('email')
@@ -50,7 +50,7 @@
                             :type=" show ? 'text': 'password' " 
                             name="password" 
                             id="password" 
-                            class="flex-1 py-2 pr-10 border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded text-sm text-gray-900" 
+                            class="border flex-1 p-2 pr-10 border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded text-sm text-gray-900" 
                             placeholder="Enter your password"
                         >
                         <button 

@@ -27,7 +27,7 @@
                     >
                     <div>
                         <!-- start::Submenu content -->
-                        <div class="bg-white rounded max-h-96 overflow-y-scroll custom-scrollbar">
+                        <div class="bg-white rounded max-h-96 overflow-y-scroll">
                             <!-- start::Submenu header -->
                             <div class="flex items-center justify-between px-4 py-2">
                                 <span class="font-bold">Notifications</span>

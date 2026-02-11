@@ -21,7 +21,7 @@
                         type="text" 
                         name="name" 
                         id="name" 
-                        class="mt-2 py-2 border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded text-sm text-gray-900" 
+                        class="mt-2 p-2 border border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded text-sm text-gray-900" 
                         placeholder="Enter your name" value="{{ old('name') }}"
                     >
                     @error('name')
@@ -35,7 +35,7 @@
                         type="email" 
                         name="email" 
                         id="email" 
-                        class="mt-2 py-2 border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded text-sm text-gray-900" 
+                        class="mt-2 p-2 border border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded text-sm text-gray-900" 
                         placeholder="Enter your email"
                         value="{{ old('email') }}"
                         >
@@ -54,7 +54,7 @@
                             :type=" show ? 'text': 'password' " 
                             name="password" 
                             id="password" 
-                            class="flex-1 py-2 pr-10 border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded text-sm text-gray-900" 
+                            class="flex-1 p-2 border pr-10 border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded text-sm text-gray-900" 
                             placeholder="Enter your password"
                         >
                         <button 
@@ -82,7 +82,7 @@
                             :type=" show ? 'text': 'password' " 
                             name="password_confirmation" 
                             id="password_confirmation" 
-                            class="flex-1 py-2 pr-10 border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded text-sm text-gray-900" 
+                            class="flex-1 p-2 border pr-10 border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded text-sm text-gray-900" 
                             placeholder="Enter your password again"
                             >
                             <button 

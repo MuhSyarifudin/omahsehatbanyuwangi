@@ -5,23 +5,22 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 use Illuminate\View\View;
 
-class ProfileController extends Controller
+class SettingProfilController extends Controller
 {
-
-    public function index(){
-        $user = Auth::user();
-        return view('profile.index',compact('user'));
-    }
     /**
      * Display the user's profile form.
      */
     public function edit(Request $request): View
     {
-        return view('profile.edit', [
+        return view('settings.index', [
             'user' => $request->user(),
         ]);
     }
@@ -39,7 +38,7 @@ class ProfileController extends Controller
 
         $request->user()->save();
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        return Redirect::route('settings.edit')->with('status', 'profile-updated');
     }
 
     /**
@@ -62,4 +61,37 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
+
+    public function updatePhoto(Request $request)
+    {
+        $request->validate([
+            'photo' => 'required|image|max:2048'
+        ]);
+    
+        $manager = new ImageManager(new Driver());
+    
+        $image = $manager
+            ->read($request->file('photo'))
+            ->cover(500, 500)
+            ->toJpeg(90);
+    
+        $filename = 'profile_' . Str::random(20) . '.jpg';
+        $path = 'profiles/' . $filename;
+    
+        Storage::disk('public')->put($path, (string) $image);
+    
+        $user = $request->user();
+    
+        if ($user->avatars) {
+            Storage::disk('public')->delete($user->avatars);
+        }
+    
+        $user->avatars = $path;
+        $user->save();
+    
+        return response()->json([
+            'url' => Storage::url($path)
+        ]);
+    }
+
 }

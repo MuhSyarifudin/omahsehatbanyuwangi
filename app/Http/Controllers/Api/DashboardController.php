@@ -199,5 +199,28 @@ class DashboardController extends Controller
         return response()->json($result);
     }
 
+    public function activeUsers()
+    {
+        $users = User::where('last_activity', '>=', now()->subHour())
+            ->orderByDesc('last_activity')
+            ->limit(10)
+            ->get()
+            ->map(function ($user) {
+                $minutes = now()->diffInMinutes($user->last_activity);
+
+                return [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'avatars' => $user->avatars ?? null,
+                    'last_activity' => $user->last_activity->diffForHumans(),
+                    'status' => $minutes <= 5
+                        ? 'online'
+                        : ($minutes <= 15 ? 'idle' : 'offline'),
+                ];
+            });
+
+        return response()->json($users);
+    }
+
     
 }

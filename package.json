@@ -32,6 +32,7 @@
     "color-name": "^1.1.4",
     "combined-stream": "^1.0.8",
     "commander": "^4.1.1",
+    "cropperjs": "^1.5.13",
     "cross-spawn": "^7.0.6",
     "cssesc": "^3.0.0",
     "delayed-stream": "^1.0.0",

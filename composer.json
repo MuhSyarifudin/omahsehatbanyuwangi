@@ -1,5 +1,5 @@
 {
-    "name": "Omah Sehat Banyuwangi",
+    "name": "omahsehat/omahsehatbanyuwangi",
     "type": "project",
     "description": "Website reservasi terapi online Omah Sehat Banyuwangi.",
     "keywords": ["laravel", "framework"],
@@ -8,6 +8,7 @@
         "php": "^8.1",
         "akaunting/laravel-money": "^5.2",
         "guzzlehttp/guzzle": "^7.2",
+        "intervention/image": "^3.11",
         "laravel/breeze": "^1.29",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",

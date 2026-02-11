@@ -2,14 +2,14 @@
     
 
 @section('content')
-<div class="bg-white rounded-lg px-8 py-6 overflow-x-scroll custom-scrollbar mb-12 min-h-20">
+<div class="bg-white rounded-lg px-8 py-6 overflow-x-scroll mb-12 min-h-20">
     <div class="py-5">
         <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
             <!-- Header Section -->
             <div class="flex items-center justify-between mb-6">
                 <h1 class="text-2xl font-bold">All Devices</h1>
                 <a href="{{ route('devices.create') }}"
-                    class="flex space-x-2 items-center justify-center bg-green-500 hover:bg-green-600 rounded-sm px-6 py-1.5 text-gray-100 hover:shadow-xl transition duration-150">
+                    class="flex space-x-2 items-center justify-center bg-blue-500 hover:bg-blue-600 rounded-sm px-6 py-1.5 text-gray-100 hover:shadow-xl transition duration-150">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
                     </svg>

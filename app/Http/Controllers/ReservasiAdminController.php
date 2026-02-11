@@ -27,43 +27,46 @@ class ReservasiAdminController extends Controller
 if ($request->bulan) {
     $query->whereMonth('transaksi.created_at', $request->bulan);
 }
+
 if ($request->tahun) {
     $query->whereYear('transaksi.created_at', $request->tahun);
 }
 
+if ($request->status) {
+    $query->where('transaksi.status', $request->status);
+}
+
+if ($request->tempat) {
+    $query->where('transaksi.tempat', $request->tempat);
+}
+
 return DataTables::of($query)
-->addIndexColumn()
+    ->addIndexColumn()
+    ->addColumn('status_badge', function ($row) {
+        $color = match ($row->status) {
+            'pending'  => 'bg-orange-500',
+            'paid'     => 'bg-green-500',
+            'canceled' => 'bg-red-500',
+            'expired'  => 'bg-gray-500',
+            default    => 'bg-gray-400',
+        };
 
-->addColumn('status_badge', function ($row) {
-
-    $color = match ($row->status) {
-        'pending'  => 'bg-orange-500',
-        'paid'     => 'bg-green-500',
-        'canceled' => 'bg-red-500',
-        default    => 'bg-gray-500',
-    };
-
-    return '<span class="'.$color.' px-1.5 py-0.5 rounded-md text-white capitalize">'
-            .$row->status.
-           '</span>';
-})
-
-->addColumn('tanggal', function ($row) {
-    return dateid('l, j F Y', strtotime($row->created_at));
-})
-
-->addColumn('aksi', function ($row) {
-
-    return '
-        <a
-            class="openModal bg-primary hover:bg-opacity-90 px-2 py-1 text-gray-100 rounded-md cursor-pointer hover:cursor-pointer"
-            data-id="'.$row->id.'">
-            View Details
-        </a>';
-})
-
-->rawColumns(['status_badge', 'aksi'])
-->make(true);
+        return '<span class="'.$color.' px-2 py-0.5 rounded-md text-white capitalize">'
+                .$row->status.
+               '</span>';
+    })
+    ->addColumn('tanggal', fn ($row) =>
+        dateid('l, j F Y', strtotime($row->created_at))
+    )
+    ->addColumn('aksi', function ($row) {
+        return '
+            <a class="openModal bg-primary px-2 py-1 rounded-md text-white cursor-pointer"
+               data-id="'.$row->id.'">
+               View Details
+            </a>';
+    })
+    ->rawColumns(['status_badge', 'aksi'])
+    ->make(true);
 
 }
 

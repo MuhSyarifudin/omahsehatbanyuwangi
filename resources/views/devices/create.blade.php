@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="bg-white rounded-lg px-8 py-6 overflow-x-scroll custom-scrollbar mb-12">
+<div class="bg-white rounded-lg px-8 py-6 overflow-x-scroll mb-12">
 
     <h2 class="text-xl font-semibold leading-tight text-gray-800 mb-2">Add New Device</h2>
 

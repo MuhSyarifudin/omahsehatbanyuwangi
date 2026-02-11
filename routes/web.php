@@ -9,7 +9,9 @@ use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\InboxController;
 use App\Http\Controllers\JenisTerapiAdminController;
+use App\Http\Controllers\KeahlianAdminController;
 use App\Http\Controllers\LayananTerapiAdminController;
 use App\Http\Controllers\NotificationsAdminController;
 use App\Http\Controllers\ReservasiController;
@@ -19,6 +21,7 @@ use App\Http\Controllers\PendaftaranTerapisAdminController;
 use App\Http\Controllers\PromoAdminController;
 use App\Http\Controllers\ReservasiAdminController;
 use App\Http\Controllers\SendPaymentController;
+use App\Http\Controllers\SettingProfilController;
 use App\Http\Controllers\ShowPaymentController;
 use App\Http\Controllers\TerapisAdminController;
 use App\Http\Controllers\UsersAdminController;
@@ -44,7 +47,7 @@ Route::get('/send-payment/{id}',[SendPaymentController::class,'sendPaymentPage']
 Route::get('/payment-success',[PaymentPageController::class,'success'])->name('payment.success.page');
 Route::get('/payment-failed',[PaymentPageController::class,'failed'])->name('payment.failed.page');
 
-Route::middleware(['auth', 'role:admin'])->group(function () {
+Route::middleware(['auth', 'role:admin', 'last.activity'])->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
     Route::get('/data-reservasi', [ReservasiAdminController::class, 'data_reservasi'])->name('data.reservasi');
     Route::get('/admin/data-reservasi/datatables', [ReservasiAdminController::class, 'data_reservasi_datatables'])->name('data-reservasi.datatables');
@@ -65,9 +68,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/data-users',[UsersAdminController::class,'data_users'])->name('data.users');
     Route::get('/admin/data-users/datatables',[UsersAdminController::class,'data_users_datatables'])->name('data-users.datatables');
     Route::get('/dashboard/chart/tahunan', [ChartController::class, 'chartTahunan']);
-    Route::get('/admin/data-promo',[PromoAdminController::class,'index'])->name('data.promo');
+    Route::get('/admin/promo',[PromoAdminController::class,'index'])->name('data.promo');
     Route::get('/admin/data-terapis',[TerapisAdminController::class,'index'])->name('data.terapis');
-    Route::get('/admin/data-pendaftaran-terapis',[PendaftaranTerapisAdminController::class,'index'])->name('data.pendaftaran.terapis');
+    Route::get('/admin/pendaftaran-terapis',[PendaftaranTerapisAdminController::class,'index'])->name('data.pendaftaran.terapis');
+    Route::get('/admin/inbox',[InboxController::class,'index'])->name('inbox.index');
+    Route::get('/admin/keahlian',[KeahlianAdminController::class,'index'])->name('data.keahlian');
+    
 
     Route::resource('messages', MessageController::class);
     Route::resource('devices', DeviceController::class);
@@ -91,9 +97,14 @@ Route::post('/register-therapist', [TherapistController::class, 'store'])->name(
 
 
 Route::middleware('auth')->group(function () {
+    Route::get('/profile/detail',[ProfileController::class,'index'])->name('profile.index');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/settings',[SettingProfilController::class,'edit'])->name('settings.edit');
+    Route::patch('/settings', [SettingProfilController::class, 'update'])->name('settings.update');
+    Route::delete('/settings', [SettingProfilController::class, 'destroy'])->name('settings.destroy');
+
 });
 
 Route::post('/track-visitor',[DashboardController::class,'trackVisitor'])->middleware(['track.visitor','throttle:10,1']);
@@ -107,6 +118,10 @@ Route::middleware(['auth'])->prefix('api')->group(function () {
     Route::get('/get-visitors-count',[DashboardController::class, 'get_visitor_count']);
     Route::post('/notifikasi/{id}/read',[DashboardController::class,'markAsRead']);
     Route::post('/notifikasi/read-all', [DashboardController::class, 'markAsReadAll']);
+    Route::get('/realtime/active-users', [DashboardController::class, 'activeUsers'])
+    ->name('admin.realtime.active-users');
+    Route::post('/profile/photo', [SettingProfilController::class, 'updatePhoto'])
+    ->name('profile.photo.update');
 });
 
 

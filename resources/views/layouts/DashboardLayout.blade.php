@@ -19,7 +19,7 @@
     <body>
                 {{-- <div 
         x-data="{ menuOpen: false }" 
-        class="flex min-h-screen custom-scrollbar bg-gray-200"
+        class="flex min-h-screen bg-gray-200"
         >
             <!-- start::Black overlay -->
             <div :class="menuOpen ? 'block' : 'hidden'" @click="menuOpen = false" class="fixed z-20 inset-0 bg-black opacity-50 transition-opacity lg:hidden"></div>
@@ -43,7 +43,7 @@
                 </div> --}}
                 <div 
             x-data="{ menuOpen: false }" 
-            class="flex min-h-screen custom-scrollbar"
+            class="flex min-h-screen"
         >
             <!-- start::Black overlay -->
             <div :class="menuOpen ? 'block' : 'hidden'" @click="menuOpen = false" class="fixed z-20 inset-0 bg-black opacity-50 transition-opacity lg:hidden"></div>

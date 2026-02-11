@@ -1,4 +1,8 @@
 
+        @php
+            $user = Auth::user();
+        @endphp
+
         <header class="flex justify-between items-center h-16 py-4 px-6 bg-white">
             <!-- start::Mobile menu button -->
             <div class="flex items-center">
@@ -18,7 +22,7 @@
                     <input 
                         type="text" 
                         placeholder="Search..."
-                        class="w-48 lg:w-72 bg-gray-200 text-sm py-2 pl-4 rounded-lg focus:ring-0 focus:outline-none"
+                        class="border border-black w-48 lg:w-72 bg-gray-200 text-sm py-2 pl-4 rounded-lg focus:ring-0 focus:outline-none search-input"
                     >
                     <button class="absolute right-2 top-2.5">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
@@ -53,7 +57,7 @@
                     >
                     <div>
                         <!-- start::Submenu content -->
-                        <div class="bg-white rounded max-h-96 overflow-y-scroll custom-scrollbar">
+                        <div class="bg-white rounded max-h-96 overflow-y-scroll">
                             <!-- start::Submenu header -->
                             <div class="flex items-center justify-between px-4 py-2">
                                     <span class="font-bold">Notifications</span>
@@ -102,7 +106,7 @@
                         class="cursor-pointer"
                     >
                         <img 
-                            src="{{ url(asset('assets/img/blank-profile.png')) }}"
+                            src="{{ url($user->avatars ? asset('storage/'.$user->avatars) : asset('assets/img/blank-profile.png')) }}"
                             class="w-10 rounded-full"
                         >
                     </div>
@@ -120,7 +124,7 @@
                             <!-- start::Submenu link -->
                             <a 
                                 x-data="{ linkHover: false }"
-                                href="{{ route('profile.edit') }}"
+                                href="{{ route('profile.index') }}"
                                 class="flex items-center justify-between py-2 px-3 hover:bg-gray-100 bg-opacity-20"
                                 @mouseover="linkHover = true"
                                 @mouseleave="linkHover = false"
@@ -139,7 +143,7 @@
                             <!-- start::Submenu link -->
                             <a 
                                 x-data="{ linkHover: false }"
-                                href="./pages/email/inbox.html"
+                                href="{{ route('inbox.index') }}"
                                 class="flex items-center justify-between py-2 px-3 hover:bg-gray-100 bg-opacity-20"
                                 @mouseover="linkHover = true"
                                 @mouseleave="linkHover = false"
@@ -160,7 +164,7 @@
                             <!-- start::Submenu link -->
                             <a 
                                 x-data="{ linkHover: false }"
-                                href="./pages/settings.html"
+                                href="{{ route('settings.edit') }}"
                                 class="flex items-center justify-between py-2 px-3 hover:bg-gray-100 bg-opacity-20"
                                 @mouseover="linkHover = true"
                                 @mouseleave="linkHover = false"

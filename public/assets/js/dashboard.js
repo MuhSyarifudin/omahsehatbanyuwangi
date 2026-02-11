@@ -111,6 +111,7 @@ addEventListener("DOMContentLoaded", () => {
 
 
 //PROFIT CHART
+let chart;
 
 function loadChart(tahun) {
     fetch(`/dashboard/chart/tahunan?tahun=${tahun}`)

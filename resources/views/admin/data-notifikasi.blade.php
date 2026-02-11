@@ -15,7 +15,7 @@
 @endpush
 @section('content')
     
-<div class="bg-white rounded-lg px-8 py-6 overflow-x-scroll custom-scrollbar mb-12">
+<div class="bg-white rounded-lg px-8 py-6 overflow-x-scroll mb-12">
     <h4 class="text-xl font-semibold mb-5">Notifikasi Table</h4>
     <table class="w-full my-8 whitespace-nowrap" id="tabel_notifikasi">
         <thead class="">

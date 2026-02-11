@@ -15,7 +15,7 @@
 @endpush
 @section('content')
     
-<div class="bg-white rounded-lg px-8 py-6 overflow-x-scroll custom-scrollbar mb-12">
+<div class="bg-white rounded-lg px-8 py-6 overflow-x-scroll mb-12">
     <h4 class="text-xl font-semibold mb-5">Jenis Terapi Table</h4>
 
     <a id="btnTambahLayanan"

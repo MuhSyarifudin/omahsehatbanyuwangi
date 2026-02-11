@@ -17,15 +17,14 @@
 
 @section('content')
     
-<div class="bg-white rounded-lg px-8 py-6 overflow-x-scroll custom-scrollbar mb-12">
+<div class="bg-white rounded-lg px-8 py-6 overflow-x-scroll mb-12">
     <h4 class="text-xl font-semibold mb-5">Reservasi Table</h4>
 
-    <div class="flex flex-wrap items-center gap-3 mb-4">
+    <div class="flex flex-wrap justify-center items-center gap-3 mb-6 text-center border py-4 rounded-xl bg-gray-50">
         <!-- Filter Bulan -->
         <select id="filterBulan"
             class="min-w-[160px] rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700
-                   shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30
-                   transition duration-200">
+                   shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 transition duration-200">
             <option value="">Semua Bulan</option>
             <option value="1">Januari</option>
             <option value="2">Februari</option>
@@ -44,30 +43,69 @@
         <!-- Filter Tahun -->
         <select id="filterTahun"
             class="min-w-[140px] rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700
-                   shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30
-                   transition duration-200">
+                   shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 transition duration-200">
             <option value="">Semua Tahun</option>
             @for($i = date('Y'); $i >= 2020; $i--)
                 <option value="{{ $i }}">{{ $i }}</option>
             @endfor
         </select>
     
+        <!-- Filter Tempat -->
+        <select id="filterTempat"
+            class="min-w-[150px] rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700
+                   shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 transition duration-200">
+            <option value="">Semua Tempat</option>
+            <option value="homecare">Homecare</option>
+            <option value="center">Center</option>
+        </select>
+
+        <!-- Filter Status -->
+        <select id="filterStatus"
+            class="min-w-[150px] rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700
+                   shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 transition duration-200">
+            <option value="">Semua Status</option>
+            <option value="paid">Paid</option>
+            <option value="pending">Pending</option>
+            <option value="canceled">Canceled</option>
+            <option value="expired">Expired</option>
+        </select>
+    
+    
         <!-- Button Filter -->
         <button id="btnFilter"
             class="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2 text-sm font-medium text-white
-                   shadow hover:bg-blue-700 focus:ring-2 focus:ring-blue-500/40
-                   transition duration-200">
-            🔍 Filter
+                shadow hover:bg-blue-700 focus:ring-2 focus:ring-blue-500/40 transition duration-200">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                class="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L15 12.414V19a1 1 0 01-.553.894l-4 2A1 1 0 019 21v-8.586L3.293 6.707A1 1 0 013 6V4z"/>
+            </svg>
+            Filter
         </button>
     
         <!-- Button Reset -->
         <button id="btnReset"
-            class="inline-flex items-center gap-2 rounded-xl bg-gray-200 px-5 py-2 text-sm font-medium text-gray-700
-                   hover:bg-gray-300 focus:ring-2 focus:ring-gray-400/40
-                   transition duration-200">
-            ♻ Reset
+        class="inline-flex items-center gap-2 rounded-xl bg-gray-200 px-5 py-2 text-sm font-medium text-gray-700
+            hover:bg-gray-300 focus:ring-2 focus:ring-gray-400/40 transition duration-200">
+        <svg xmlns="http://www.w3.org/2000/svg"
+            class="h-4 w-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M4 4v6h6M20 20v-6h-6M20 8a8 8 0 00-14.828-2M4 16a8 8 0 0014.828 2"/>
+        </svg>
+        Reset
         </button>
+
     </div>
+    
+    
     
 
     <table id="tabel_reservasi" class="display" style="width:100%">
@@ -145,38 +183,40 @@
 
 $(document).ready(function () {
 
-    let table = $('#tabel_reservasi').DataTable({
+        let table = $('#tabel_reservasi').DataTable({
         processing: true,
         serverSide: true,
         ajax: {
             url: "{{ route('data-reservasi.datatables') }}",
-            data: function(d) {
-                d.bulan = $('#filterBulan').val();
-                d.tahun = $('#filterTahun').val();
+            data: function (d) {
+                d.bulan  = $('#filterBulan').val();
+                d.tahun  = $('#filterTahun').val();
+                d.status = $('#filterStatus').val();
+                d.tempat = $('#filterTempat').val();
             }
         },
         columns: [
-            { data: 'DT_RowIndex', orderable:false, searchable:false },
+            { data: 'DT_RowIndex', orderable: false, searchable: false },
             { data: 'nama', name: 'nama' },
             { data: 'nama_jenis_terapi', name: 'jenis_terapi.nama' },
             { data: 'tempat', name: 'tempat' },
             { data: 'status_badge', name: 'status', className: 'text-center' },
             { data: 'tanggal', name: 'created_at' },
-            { data: 'aksi', orderable:false, searchable:false }
+            { data: 'aksi', orderable: false, searchable: false }
         ],
         order: [[5, 'desc']]
     });
 
-    $('#btnFilter').on('click', function() {
-        table.draw();
-        table.ajax.reload(null, false);
+    $('#btnFilter').on('click', function () {
+        table.ajax.reload();
     });
 
-    $('#btnReset').on('click', function() {
+    $('#btnReset').on('click', function () {
         $('#filterBulan').val('');
         $('#filterTahun').val('');
-        table.draw();
-        table.ajax.reload(null, false);
+        $('#filterStatus').val('');
+        $('#filterTempat').val('');
+        table.ajax.reload();
     });
 
     $(document).on('click', '.openModal', function () {
