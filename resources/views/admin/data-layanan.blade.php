@@ -19,7 +19,7 @@
     <h4 class="text-xl font-semibold mb-5">Layanan Terapi Table</h4>
 
     <a id="btnTambahLayanan"
-       class="inline-flex cursor-pointer hover:cursor-pointer items-center gap-2 bg-primary hover:bg-opacity-90 text-white text-sm font-medium px-4 py-2 mb-4 rounded-lg shadow transition duration-200">
+       class="inline-flex cursor-pointer hover:cursor-pointer items-center gap-2 bg-blue-600 hover:bg-opacity-90 text-white text-sm font-medium px-4 py-2 mb-4 rounded-lg shadow transition duration-200">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
              viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

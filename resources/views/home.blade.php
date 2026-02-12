@@ -140,7 +140,7 @@
   </div>
 </section>
 
-<section class="py-20 bg-blue-500" id="visi-misi"> <div class="container mx-auto px-6 lg:px-16">
+<section class="py-20 bg-[#1e40af]" id="visi-misi"> <div class="container mx-auto px-6 lg:px-16">
   <div class="text-center mb-16">
       <h2 class="text-4xl font-extrabold text-white mb-4 tracking-tight">Visi & Misi</h2>
       <div class="w-20 h-1.5 bg-yellow-400 mx-auto rounded-full mb-6"></div>
@@ -153,7 +153,7 @@
       <div class="group h-full" data-aos="fade-right" data-aos-duration="1000">
           <div class="bg-white p-8 rounded-2xl shadow-2xl border-b-8 border-yellow-400 flex flex-col h-full transform transition-transform duration-300 group-hover:-translate-y-2">
               <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-6 text-blue-700">
-                  <i class="fa-solid fa-eye text-3xl"></i>
+                <i class="fa-solid fa-lightbulb text-2xl"></i>
               </div>
               <h3 class="text-2xl font-bold mb-4 text-slate-800">Visi Kami</h3>
               <p class="text-slate-600 leading-relaxed text-lg italic">
@@ -381,9 +381,10 @@
 
 
 <!-- Scroll to Top Button -->
-<button id="scrollToTop" class="fixed bottom-5 right-5 p-3 bg-blue-500 text-white rounded-full shadow-lg hover:bg-blue-600 transition duration-300 z-[1000]">
-    <i class="fa-solid fa-arrow-up"></i>
+<button id="scrollToTop" class="fixed bottom-8 right-8 w-14 h-14 flex items-center justify-center bg-white text-blue-600 rounded-full shadow-[0_10px_25px_-5px_rgba(0,0,0,0.1),0_8px_10px_-6px_rgba(0,0,0,0.1)] hover:shadow-[0_20px_25px_-5px_rgba(0,0,0,0.1),0_10px_10px_-5px_rgba(0,0,0,0.04)] hover:-translate-y-2 transition-all duration-300 z-[1000] border border-gray-100 group">
+    <i class="fa-solid fa-arrow-up text-xl group-hover:animate-bounce"></i>
 </button>
+
 @endsection
 
 @push('bottom')

@@ -92,6 +92,7 @@ addEventListener("DOMContentLoaded", () => {
         Echo.join('notification-bell')
         .listen('.notification-update', () => {
             loadKeuntungan();
+            loadReservasiCount()
         });
 
         Echo.join('registered-event')
