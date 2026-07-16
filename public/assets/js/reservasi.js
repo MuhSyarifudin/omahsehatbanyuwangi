@@ -91,6 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const jamHelp = document.getElementById('jamHelp')
 
   tanggalPicker.disabled = true
+  tanggalPicker.classList.add('cursor-not-allowed');
   jamSelect.disabled = true
 
   tanggalHelp.textContent = 'Pilih jenis layanan terlebih dahulu'

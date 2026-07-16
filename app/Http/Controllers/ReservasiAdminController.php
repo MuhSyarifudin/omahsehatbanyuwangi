@@ -44,14 +44,14 @@ return DataTables::of($query)
     ->addIndexColumn()
     ->addColumn('status_badge', function ($row) {
         $color = match ($row->status) {
-            'pending'  => 'bg-orange-500',
-            'paid'     => 'bg-green-500',
-            'canceled' => 'bg-red-500',
-            'expired'  => 'bg-gray-500',
-            default    => 'bg-gray-400',
+            'pending'  => 'bg-orange-200 text-orange-600',
+            'paid'     => 'bg-green-200 text-green-600',
+            'canceled' => 'bg-red-200 text-red-600',
+            'expired'  => 'bg-slate-200 text-slate-600',
+            default    => 'bg-gray-200 text-gray-600',
         };
 
-        return '<span class="'.$color.' px-2 py-0.5 rounded-md text-white capitalize">'
+        return '<span class="'.$color.' px-2 py-1 text-xs rounded uppercase">'
                 .$row->status.
                '</span>';
     })

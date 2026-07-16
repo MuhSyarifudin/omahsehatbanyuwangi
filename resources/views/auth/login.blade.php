@@ -16,14 +16,34 @@
             <form class="my-8 text-sm" method="POST" action="{{ route('login') }}">
                 @csrf
                 @if (session('error'))
-                    <div class="bg-red-400 text-white text-sm p-2 rounded mb-4">
-                        {{ session('error') }}
+                    <div id="alert-error" class="bg-red-400 text-white text-sm p-2 rounded mb-4 flex items-center justify-between">
+                        <span>
+                            {{ session('error') }}
+                        </span>
+
+                        <button 
+                            type="button"
+                            onclick="document.getElementById('alert-error').style.display='none'"
+                            class="ml-4 text-white hover:text-gray-200 text-lg font-bold"
+                        >
+                            &times;
+                        </button>
                     </div>
                 @endif
                 @if (session('success'))
-                <div x-data="{ show: true }" x-show="show" x-transition class="bg-green-400 text-white p-3 rounded-md mb-4 flex justify-between items-center">
-                    <span>{{ session('success') }}</span>
-                </div>
+                <div id="alert-success" class="bg-green-400 text-white text-sm p-2 rounded mb-4 flex items-center justify-between">
+                        <span>
+                            {{ session('success') }}
+                        </span>
+
+                        <button 
+                            type="button"
+                            onclick="document.getElementById('alert-success').style.display='none'"
+                            class="ml-4 text-white hover:text-gray-200 text-lg font-bold"
+                        >
+                            &times;
+                        </button>
+                    </div>
                 @endif
             
                 <div class="flex flex-col my-4">

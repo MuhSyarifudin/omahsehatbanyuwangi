@@ -6,25 +6,20 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::create('wa_token', function (Blueprint $table) {
+        Schema::create('user_profile_photos', function (Blueprint $table) {
             $table->id();
-            $table->string('nohp');
-            $table->boolean('active')->default(false);
-            $table->string('token');
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->string('path');
             $table->timestamps();
+
+            $table->unique(['user_id', 'path']);
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('wa_token');
+        Schema::dropIfExists('user_profile_photos');
     }
 };

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Support\Facades\URL;
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Notifications\VerifyEmailNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -24,7 +25,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
-        'role'
+        'role',
+        'last_seen',
+        'background',
     ];
 
     /**
@@ -46,6 +49,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
         'last_activity' => 'datetime',
+        'last_seen' => 'datetime',
     ];
 
     public function sendEmailVerificationNotification()
@@ -57,5 +61,10 @@ class User extends Authenticatable implements MustVerifyEmail
         );
 
         $this->notify(new VerifyEmailNotification($verificationUrl));
+    }
+
+    public function profilePhotos(): HasMany
+    {
+        return $this->hasMany(UserProfilePhoto::class);
     }
 }

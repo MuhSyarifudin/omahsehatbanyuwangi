@@ -6,9 +6,9 @@ use App\Events\VisitorCountEvent;
 use App\Models\Visitor;
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 
 class TrackVisitor
@@ -20,24 +20,68 @@ class TrackVisitor
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $ip     = $request->ip();
+        $ip = $request->ip();
 
-        $exists = Visitor::where('ip_address', $request->ip())
-        ->whereBetween('visit_date', [
-            now()->startOfDay(),
-            now()->endOfDay()
-        ])
-        ->exists();
+        $user_agent = $request->userAgent();
 
-            Visitor::firstOrCreate([
-                'ip_address' => $ip,
-                'visit_date' => now()->toDateString(),
-            ]);    
+        /*
+        |--------------------------------------------------------------------------
+        | Visitor ID dari Cookie
+        |--------------------------------------------------------------------------
+        */
 
-        if (!$exists) {
+        $visitor_id = Cookie::get('visitor_id');
+
+        if (!$visitor_id) {
+
+            $visitor_id = (string) Str::uuid();
+
+            // simpan cookie selama 1 tahun
+            Cookie::queue(
+                'visitor_id',
+                $visitor_id,
+                60 * 24 * 365
+            );
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Simpan visitor
+        |--------------------------------------------------------------------------
+        */
+
+        $visitor = Visitor::firstOrCreate([
+            'visitor_id' => $visitor_id,
+            'visit_date' => now()->toDateString(),
+        ], [
+            'ip_address' => $ip,
+            'user_agent' => $user_agent,
+        ]);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Logging
+        |--------------------------------------------------------------------------
+        */
+
+        // Log::info('MIDDLEWARE JALAN', [
+        //     'visitor_id' => $visitor_id,
+        //     'ip' => $ip,
+        //     'user_agent' => $user_agent,
+        //     'url' => $request->fullUrl(),
+        //     'method' => $request->method(),
+        // ]);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Event visitor baru
+        |--------------------------------------------------------------------------
+        */
+
+        if ($visitor->wasRecentlyCreated) {
             event(new VisitorCountEvent);
         }
-    
+
         return $next($request);
     }
 }

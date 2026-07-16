@@ -34,15 +34,15 @@ class LayananTerapiAdminController extends Controller
             data-nama="'.$row->nama.'"
             data-jenis="'.$row->jenis_terapi.'"
             data-harga="'.$row->harga.'"
-            class="btnEditLayanan bg-yellow-500 cursor-pointer hover:bg-opacity-90 px-1 py-1 mr-2 text-gray-100 rounded-lg">
-            <i class="fa-solid fa-pen"></i>
+            class="btnEditLayanan bg-blue-600 cursor-pointer hover:bg-opacity-90 px-2 py-1 text-gray-100 rounded-lg">
+            Edit
             </a>
 
             <a 
             data-id="'.$row->id.'"
             data-nama="'.$row->nama.'"
-            class="btnDeleteLayanan bg-red-600 cursor-pointer hover:bg-opacity-90 px-1 py-1 mr-2 text-gray-100 rounded-lg">
-            <i class="fa-regular fa-trash-can"></i>
+            class="btnDeleteLayanan bg-red-600 cursor-pointer hover:bg-opacity-90 px-2 py-1 ml-2 text-gray-100 rounded-lg">
+            Hapus
             </a>
             ';
         })

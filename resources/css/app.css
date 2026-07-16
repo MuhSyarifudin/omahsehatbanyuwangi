@@ -2,6 +2,23 @@
 @import "@fortawesome/fontawesome-free/css/all.css";
 @plugin "daisyui";
 @source "../views";
+@source "../js/**/*.js";
+@source inline("profile-photo-item");
+@source inline("is-active");
+@source inline("show-delete");
+
+/* Foto profil: tombol hapus mobile */
+@media (max-width: 1023px) {
+    .profile-photo-item.is-active.show-delete .delete-profile-photo {
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        transform: scale(1) !important;
+    }
+
+    .profile-photo-item.is-active.show-delete .profile-photo-active-badge {
+        opacity: 0 !important;
+    }
+}
 
 @layer utilities {
     .custom-scrollbar {
@@ -44,6 +61,10 @@
   font-family: open-sans, inter;
 }
 
+.font-helvetica-neue {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
 select {
   font-family: open-sans, inter;
 }
@@ -81,3 +102,7 @@ cropper-canvas {
   width: 100% !important;
   height: 100% !important;
 }
+
+/* * {
+    outline: 1px solid red;
+}    */

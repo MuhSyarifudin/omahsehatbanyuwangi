@@ -26,7 +26,7 @@ class FonnteService
         $this->account_token = env('ACCOUNT_TOKEN');
     }
 
-        protected function makeRequest($endpoint, $deviceToken)
+    protected function makeRequest($endpoint, $deviceToken, $params = [])
     {
         if (!$deviceToken) {
             return [
@@ -35,26 +35,10 @@ class FonnteService
             ];
         }
 
-        Log::info('Fonnte Delete Device Request', [
-            'endpoint' => $endpoint,
-            'params'   => ['otp' => ''],
-            'token'    => substr($deviceToken, 0, 6) . '***',
-        ]);
-
         try {
-            $response = Http::asForm() // ⬅️ INI YANG PENTING
-                ->withHeaders([
-                    'Authorization' => $deviceToken,
-                ])
-                ->post($endpoint, [
-                    'otp' => '',
-                ]);
-
-            Log::info('Fonnte Delete Device Response', [
-                'status_code' => $response->status(),
-                'body'        => $response->body(),
-                'json'        => $response->json(),
-            ]);
+            $response = Http::withHeaders([
+                'Authorization' => $deviceToken,
+            ])->post($endpoint, $params);
 
             if ($response->failed()) {
                 return [
@@ -71,7 +55,7 @@ class FonnteService
             ];
 
         } catch (\Throwable $e) {
-            Log::error('Fonnte Delete Device Exception', [
+            Log::error('Fonnte Exception', [
                 'message' => $e->getMessage(),
             ]);
 
@@ -92,10 +76,14 @@ class FonnteService
 
     public function sendWhatsAppMessage($phoneNumber, $message, $deviceToken)
     {
-        return $this->makeRequest(self::ENDPOINTS['send_message'], [
-            'target'  => $phoneNumber,
-            'message' => $message,
-        ], '', $deviceToken);
+        return $this->makeRequest(
+            self::ENDPOINTS['send_message'],
+            $deviceToken,
+            [
+                'target' => $phoneNumber,
+                'message' => $message,
+            ]
+        );
     }
 
     public function getAllDevices()
@@ -162,12 +150,15 @@ class FonnteService
 
     public function getDeviceProfile($deviceToken)
     {
-        return $this->makeRequest(self::ENDPOINTS['device_profile'], [], false, $deviceToken);
+        return $this->makeRequest(self::ENDPOINTS['device_profile'], $deviceToken);
     }
 
     public function disconnectDevice($deviceToken)
     {
-        return $this->makeRequest(self::ENDPOINTS['disconnect'], [], false, $deviceToken);
+        return $this->makeRequest(
+            self::ENDPOINTS['disconnect'],
+            $deviceToken
+        );
     }
 
     // Method untuk request OTP menggunakan token perangkat

@@ -3,7 +3,7 @@
  <div class="flex flex-col min-h-screen">
   
     <!-- Konten Halaman -->
-    <main class="flex-grow">
+    <main class="flex-grow bg-slate-200">
       <!-- Konten utama halaman di sini -->
     </main>
   

@@ -57,3 +57,15 @@ Broadcast::channel('visitor-event', function ($user) {
         'role' => $user->role,
     ];
 });
+
+Broadcast::channel('device-gateway', function ($user) {
+    if ($user->role !== 'admin') {
+        return false;
+    }
+
+    return [
+        'id'   => $user->id,
+        'name' => $user->name,
+        'role' => $user->role,
+    ];
+});

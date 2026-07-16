@@ -18,7 +18,7 @@
 @section('content')
     
 <div class="bg-white rounded-lg px-8 py-6 overflow-x-scroll mb-12">
-    <h4 class="text-xl font-semibold mb-5">Reservasi Table</h4>
+    <h4 class="text-xl font-semibold mb-5">Data Reservasi</h4>
 
     <div class="flex flex-wrap justify-center items-center gap-3 mb-6 text-center border py-4 rounded-xl bg-gray-50">
         <!-- Filter Bulan -->
@@ -136,24 +136,121 @@
                 Detail Reservasi
             </h2>
 
-            <div class="space-y-2 text-sm">
-                <p><b>Nama Customer:</b> <span id="m_nama"></span></p>
-                <p><b>Tanggal Booking:</b> <span id="m_tanggal_booking"></span></p>
-                <p><b>Jam Booking:</b> <span id="m_jam_booking"></span></p>
-                <p><b>No. Whatsapp:</b> <span id="m_nohp"></span></p>
-                <p><b>Jenis Kelamin:</b> <span id="m_jk"></span></p>
-                <p><b>Jenis Layanan:</b> <span id="m_tempat"></span></p>
-                <p><b>Alamat:</b> <span id="m_alamat"></span></p>
-                <p><b>Tanggal Reservasi:</b> <span id="m_tanggal_reservasi"></span></p>
-                <p><b>Jam:</b> <span id="m_jam_reservasi"></span></p>
-                <p><b>Jenis Terapi:</b> <span id="m_terapi"></span></p>
-                <p><b>Jumlah:</b> <span id="m_jumlah"></span></p>
+            <div class="overflow-hidden rounded-xl border border-gray-200 bg-white">
+            <table class="w-full text-sm border-collapse leading-tight">
+                <tbody class="divide-y divide-gray-100">
 
-                <p class="pt-2 border-t">
-                    <b>Total Harga:</b>
-                    <span id="m_total" class="text-green-600 font-bold"></span>
-                </p>
-            </div>
+                    <tr>
+                        <td class="px-2 py-1 font-medium text-gray-700 bg-gray-50 w-40">
+                            Nama Customer
+                        </td>
+                        <td class="px-2 py-1 text-gray-800">
+                            <span id="m_nama"></span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="px-2 py-1 font-medium text-gray-700 bg-gray-50">
+                            Tanggal Booking
+                        </td>
+                        <td class="px-2 py-1 text-gray-800">
+                            <span id="m_tanggal_booking"></span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="px-2 py-1 font-medium text-gray-700 bg-gray-50">
+                            Jam Booking
+                        </td>
+                        <td class="px-2 py-1 text-gray-800">
+                            <span id="m_jam_booking"></span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="px-2 py-1 font-medium text-gray-700 bg-gray-50">
+                            No. Whatsapp
+                        </td>
+                        <td class="px-2 py-1 text-gray-800">
+                            <span id="m_nohp"></span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="px-2 py-1 font-medium text-gray-700 bg-gray-50">
+                            Jenis Kelamin
+                        </td>
+                        <td class="px-2 py-1 text-gray-800">
+                            <span id="m_jk"></span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="px-2 py-1 font-medium text-gray-700 bg-gray-50">
+                            Jenis Layanan
+                        </td>
+                        <td class="px-2 py-1 text-gray-800">
+                            <span id="m_tempat"></span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="px-2 py-1 font-medium text-gray-700 bg-gray-50">
+                            Alamat
+                        </td>
+                        <td class="px-2 py-1 text-gray-800">
+                            <span id="m_alamat"></span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="px-2 py-1 font-medium text-gray-700 bg-gray-50">
+                            Tanggal Reservasi
+                        </td>
+                        <td class="px-2 py-1 text-gray-800">
+                            <span id="m_tanggal_reservasi"></span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="px-2 py-1 font-medium text-gray-700 bg-gray-50">
+                            Jam
+                        </td>
+                        <td class="px-2 py-1 text-gray-800">
+                            <span id="m_jam_reservasi"></span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="px-2 py-1 font-medium text-gray-700 bg-gray-50">
+                            Jenis Terapi
+                        </td>
+                        <td class="px-2 py-1 text-gray-800">
+                            <span id="m_terapi"></span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="px-2 py-1 font-medium text-gray-700 bg-gray-50">
+                            Jumlah
+                        </td>
+                        <td class="px-2 py-1 text-gray-800">
+                            <span id="m_jumlah"></span>
+                        </td>
+                    </tr>
+
+                    <tr class="bg-green-50">
+                        <td class="px-2 py-1 font-bold text-green-700">
+                            Total Harga
+                        </td>
+                        <td class="px-2 py-1">
+                            <span id="m_total" class="text-green-600 font-bold"></span>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
 
             <div class="mt-6 flex justify-end gap-3">
                 <a id="btnPayment"
@@ -228,7 +325,53 @@ $(document).ready(function () {
             type: 'GET',
             beforeSend: function () {
                 $('#modalDetail').removeClass('hidden');
-                $('#modalDetail span').text('Loading...');
+                    $('#m_nama').html(`
+                        <div class="h-4 w-36 bg-gray-200 rounded animate-pulse"></div>
+                    `);
+
+                    $('#m_tanggal_booking').html(`
+                        <div class="h-4 w-28 bg-gray-200 rounded animate-pulse"></div>
+                    `);
+
+                    $('#m_jam_booking').html(`
+                        <div class="h-4 w-20 bg-gray-200 rounded animate-pulse"></div>
+                    `);
+
+                    $('#m_nohp').html(`
+                        <div class="h-4 w-32 bg-gray-200 rounded animate-pulse"></div>
+                    `);
+
+                    $('#m_jk').html(`
+                        <div class="h-4 w-24 bg-gray-200 rounded animate-pulse"></div>
+                    `);
+
+                    $('#m_tempat').html(`
+                        <div class="h-4 w-40 bg-gray-200 rounded animate-pulse"></div>
+                    `);
+
+                    $('#m_alamat').html(`
+                        <div class="h-4 w-full max-w-xs bg-gray-200 rounded animate-pulse"></div>
+                    `);
+
+                    $('#m_tanggal_reservasi').html(`
+                        <div class="h-4 w-28 bg-gray-200 rounded animate-pulse"></div>
+                    `);
+
+                    $('#m_jam_reservasi').html(`
+                        <div class="h-4 w-20 bg-gray-200 rounded animate-pulse"></div>
+                    `);
+
+                    $('#m_terapi').html(`
+                        <div class="h-4 w-44 bg-gray-200 rounded animate-pulse"></div>
+                    `);
+
+                    $('#m_jumlah').html(`
+                        <div class="h-4 w-16 bg-gray-200 rounded animate-pulse"></div>
+                    `);
+
+                    $('#m_total').html(`
+                        <div class="h-5 w-28 bg-green-200 rounded animate-pulse"></div>
+                    `);
             },
             success: function (res) {
                 $('#m_nama').text(res.nama);

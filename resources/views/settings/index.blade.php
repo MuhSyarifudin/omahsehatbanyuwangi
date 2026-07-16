@@ -47,81 +47,217 @@
             </button>
         </div>
         <div class="w-full md:w-2/3 xl:w-3/4 py-8 px-16 flex flex-col items-start justify-start border-t border-r border-b border-gray-300 md:rounded-tr-lg rounded-br-lg">
-            <div 
-                x-show="activeTab === 'profile'" 
-                class="w-full md:w-3/4 xl:w-1/2"
-            >
-                <form class="flex flex-col space-y-8" method="post" action="{{ route('settings.update') }}">
-                    @csrf
-                    @method('patch')
-                    <div class="flex flex-col space-y-2">
-                        <label class="text-sm text-gray-500">Photo</label>
+            
+            <!-- PROFILE TAB -->
+    <div 
+        x-show="activeTab === 'profile'" 
+        class="w-full max-w-3xl"
+    >
+        <form class="space-y-10" method="post" action="{{ route('settings.update') }}">
+            @csrf
+            @method('patch')
 
-                            <!-- Trigger -->
-                            <div class="flex items-center gap-4">
-                            <img id="avatarPreview" 
-                                src="{{ url($user->avatars ? asset('storage/'.$user->avatars) : asset('assets/img/blank-profile.png')) }}"
-                                class="w-24 rounded-full"
-                            >
-
-                        </div>
-
-                        <label for="photoInput" class="w-48 text-sm text-gray-700 text-center px-3 py-2 uppercase mt-4 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-200 transition duration-150">Select a New Photo</label>
-
-                        <input type="file" id="photoInput" accept="image/*" class="hidden">
-
-                        <input type="hidden" name="cropped_photo" id="croppedPhoto">
-
-                         <!-- Modal -->
-                        <div id="cropModal"
-                            class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4 transition-opacity duration-200">
-
-                            <div class="bg-white w-full max-w-lg max-h-[90vh] rounded-2xl shadow-xl flex flex-col">
-
-                                <!-- Header -->
-                                <div class="p-6 pb-3">
-                                    <h3 class="text-lg font-semibold text-gray-800">
-                                        Sesuaikan Foto Profil
-                                    </h3>
-                                </div>
-
-                                <!-- Image Area (Scrollable) -->
-                                <div class="px-6 overflow-auto flex-1">
-                                    <div class="rounded-xl overflow-hidden">
-                                        <img id="imagePreview" class="max-w-full">
-                                    </div>
-                                </div>
-
-                                <!-- Footer (Always Visible) -->
-                                <div class="p-6 pt-4 flex justify-end gap-3 border-t border-gray-100">
-                                    <button type="button" id="cancelCrop"
-                                        class="px-4 py-2 rounded-xl text-sm font-medium border border-gray-300 text-gray-700 hover:bg-gray-100 transition">
-                                        Batal
-                                    </button>
-
-                                    <button type="button" id="saveCrop"
-                                        class="px-4 py-2 rounded-xl text-sm font-medium bg-gray-900 text-white hover:bg-black transition">
-                                        Simpan
-                                    </button>
-                                </div>
-
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="flex flex-col space-y-2">
-                        <label for="name" class="text-sm text-gray-500">Name</label>
-                        <input type="text" name="name" id="name" class="p-2 text-gray-900 border border-gray-300 focus:border-primary focus:outline-none focus:ring-0 rounded-lg" autocomplete="off" value="{{ $user->name }}">
-                    </div>
-                    <div class="flex flex-col space-y-2">
-                        <label for="name" class="text-sm text-gray-500">Email</label>
-                        <input type="email" name="email" id="name" class="p-2 text-gray-900 border border-gray-300 focus:border-primary focus:outline-none focus:ring-0 rounded-lg" autocomplete="off" value="{{ $user->email }}">
-                    </div>
+            <!-- PHOTO -->
+            <div class="rounded-3xl border border-gray-100 bg-gradient-to-br from-white to-gray-50 p-6 shadow-sm">
+                
+                <div class="flex items-center justify-between mb-6">
                     <div>
-                        <button class="w-32 bg-primary hover:bg-primary-dark rounded-lg py-1.5 text-gray-200 text-sm uppercase hover:shadow-xl transition duration-150">Save</button>
+                        <h3 class="text-lg font-semibold text-gray-900">
+                            Profile Photo
+                        </h3>
+                        <p class="text-sm text-gray-500 mt-1">
+                            Upload foto profile baru untuk akun anda
+                        </p>
                     </div>
-                </form>
+                </div>
+
+                <div class="flex flex-col md:flex-row md:items-center gap-6">
+
+                    <!-- Preview -->
+                    <div class="relative group">
+                        <img 
+                            id="avatarPreview" 
+                            src="{{ url($user->avatar ? asset('storage/'.$user->avatar) : asset('assets/img/blank-profile.png')) }}"
+                            class="w-28 h-28 rounded-full object-cover ring-4 ring-white shadow-xl border border-gray-100"
+                        >
+
+                        <div class="absolute inset-0 rounded-full bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                            <span class="text-white text-xs font-medium">
+                                Change
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Action -->
+                    <div class="space-y-3">
+                        <label 
+                            for="photoInput" 
+                            class="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-gray-900 text-white text-sm font-medium cursor-pointer hover:scale-[1.02] hover:shadow-xl transition duration-200"
+                        >
+                            Upload Photo
+                        </label>
+
+                        <p class="text-xs text-gray-400">
+                            JPG, PNG atau WEBP
+                        </p>
+                    </div>
+
+                </div>
+
+                <input type="file" id="photoInput" accept="image/*" class="hidden">
+                <input type="hidden" name="cropped_photo" id="croppedPhoto">
+
+                @if (($profilePhotos ?? collect())->isNotEmpty())
+                    <div class="mt-8">
+                        
+                        <div class="flex items-center justify-between mb-4">
+                            <h4 class="text-sm font-semibold text-gray-700">
+                                Previous Photos
+                            </h4>
+
+                            <span class="text-xs text-gray-400">
+                                {{ count($profilePhotos) }} photos
+                            </span>
+                        </div>
+
+                        <div id="previousProfilePhotosGrid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4">
+
+                            @foreach ($profilePhotos as $profilePhoto)
+
+                                <div
+                                    class="profile-photo-item group relative overflow-visible {{ $user->avatar === $profilePhoto->path ? 'is-active' : '' }}"
+                                    data-photo-path="{{ $profilePhoto->path }}"
+                                >
+
+                                    <button
+                                        type="button"
+                                        class="previous-profile-photo relative overflow-hidden rounded-2xl border-2 transition duration-300 w-full aspect-square
+                                        {{ $user->avatar === $profilePhoto->path 
+                                            ? 'border-primary shadow-lg shadow-primary/20' 
+                                            : 'border-gray-100 hover:border-gray-300' }}"
+                                    >
+
+                                        <img
+                                            src="{{ url(asset('storage/'.$profilePhoto->path)) }}"
+                                            class="h-full w-full object-cover transition duration-500 group-hover:scale-110"
+                                            alt="Foto profile sebelumnya"
+                                        >
+
+                                        <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition pointer-events-none"></div>
+
+                                        @if ($user->avatar === $profilePhoto->path)
+                                            <span class="profile-photo-active-badge absolute bottom-2 left-1/2 -translate-x-1/2 z-10 px-2.5 py-1 rounded-full bg-primary text-white text-[10px] font-semibold shadow-lg transition-opacity duration-200 group-hover:opacity-0">
+                                                Aktif
+                                            </span>
+                                        @endif
+
+                                    </button>
+
+                                    <!-- DELETE: desktop = hover, mobile = tap foto aktif -->
+                                    <button
+                                        type="button"
+                                        class="delete-profile-photo absolute -top-2 -right-2 z-30 flex h-8 w-8 items-center justify-center rounded-full bg-white shadow-lg border border-gray-200 text-gray-600 hover:bg-red-500 hover:text-white transition duration-200 opacity-0 pointer-events-none max-lg:scale-90 lg:group-hover:opacity-100 lg:group-hover:pointer-events-auto lg:group-hover:scale-110"
+                                        title="Hapus foto"
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+
+                                </div>
+
+                            @endforeach
+
+                        </div>
+                    </div>
+                @endif
             </div>
+
+            <!-- BACKGROUND -->
+            <div class="rounded-3xl border border-gray-100 bg-gradient-to-br from-white to-gray-50 p-6 shadow-sm">
+
+                <div class="mb-5">
+                    <h3 class="text-lg font-semibold text-gray-900">
+                        Profile Background
+                    </h3>
+
+                    <p class="text-sm text-gray-500 mt-1">
+                        Sesuaikan tampilan halaman profile anda
+                    </p>
+                </div>
+
+                <div class="relative overflow-hidden rounded-3xl border border-gray-100 shadow-lg">
+
+                    <img
+                        id="backgroundPreview"
+                        src="{{ url($user->background ? asset('storage/'.$user->background) : asset('assets/img/team-background.jpg')) }}"
+                        class="h-56 w-full object-cover hover:scale-105 transition duration-700"
+                    >
+
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+
+                    <div class="absolute bottom-4 left-4">
+                        <label 
+                            for="backgroundInput"
+                            class="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-white/90 backdrop-blur-md text-gray-800 text-sm font-medium cursor-pointer hover:bg-white transition"
+                        >
+                            Change Background
+                        </label>
+                    </div>
+
+                </div>
+
+                <input type="file" id="backgroundInput" accept="image/*" class="hidden">
+
+            </div>
+
+            <!-- FORM -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <div class="space-y-2">
+                    <label for="name" class="text-sm font-medium text-gray-600">
+                        Full Name
+                    </label>
+
+                    <input 
+                        type="text" 
+                        name="name" 
+                        id="name"
+                        value="{{ $user->name }}"
+                        autocomplete="off"
+                        class="w-full px-4 py-3 rounded-2xl border border-gray-200 bg-white/70 backdrop-blur-sm text-gray-900 focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition"
+                    >
+                </div>
+
+                <div class="space-y-2">
+                    <label for="email" class="text-sm font-medium text-gray-600">
+                        Email Address
+                    </label>
+
+                    <input 
+                        type="email" 
+                        name="email" 
+                        id="email"
+                        value="{{ $user->email }}"
+                        autocomplete="off"
+                        class="w-full px-4 py-3 rounded-2xl border border-gray-200 bg-white/70 backdrop-blur-sm text-gray-900 focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition"
+                    >
+                </div>
+
+            </div>
+
+            <!-- SAVE -->
+            <div class="pt-2">
+                <button 
+                    class="inline-flex items-center justify-center gap-2 px-7 py-3 rounded-2xl bg-gradient-to-r from-primary to-primary-dark text-white font-semibold shadow-lg shadow-primary/20 hover:scale-[1.02] hover:shadow-2xl transition duration-300"
+                >
+                    Save Changes
+                </button>
+            </div>
+
+        </form>
+    </div>
+
             <div 
                 x-show="activeTab === 'password'" 
                 class="w-full md:w-3/4 xl:w-1/2"
@@ -260,5 +396,105 @@
             </div>
         </div>
     </div>
+    <!-- Modal crop foto profil -->
+    <div id="cropModal"
+        class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4 transition-opacity duration-200">
+        <div class="bg-white w-full max-w-lg max-h-[90vh] rounded-2xl shadow-xl flex flex-col">
+            <div class="p-6 pb-3">
+                <h3 class="text-lg font-semibold text-gray-800">Sesuaikan Foto Profil</h3>
+            </div>
+            <div class="px-6 overflow-auto flex-1">
+                <div class="rounded-xl overflow-hidden bg-gray-100">
+                    <img id="imagePreview" class="max-w-full block">
+                </div>
+            </div>
+            <div class="px-6 py-4 space-y-4 border-t border-gray-100">
+                <div class="flex items-center justify-center gap-3">
+                    <button type="button" id="rotateLeft"
+                        class="px-3 py-2 rounded-xl border border-gray-300 text-gray-700 hover:bg-gray-100 transition">
+                        ⟲ Putar Kiri
+                    </button>
+                    <button type="button" id="rotateRight"
+                        class="px-3 py-2 rounded-xl border border-gray-300 text-gray-700 hover:bg-gray-100 transition">
+                        Putar Kanan ⟳
+                    </button>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-500 mb-2">Zoom</label>
+                    <input type="range" id="zoomSlider" min="0" max="1" step="0.01" value="0"
+                        class="w-full accent-gray-900">
+                </div>
+            </div>
+            <div class="p-6 pt-4 flex justify-end gap-3 border-t border-gray-100">
+                <button type="button" id="cancelCrop"
+                    class="px-4 py-2 rounded-xl text-sm font-medium border border-gray-300 text-gray-700 hover:bg-gray-100 transition">
+                    Batal
+                </button>
+                <button type="button" id="saveCrop"
+                    class="px-4 py-2 rounded-xl text-sm font-medium bg-gray-900 text-white hover:bg-black transition">
+                    Simpan
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal crop background -->
+    <div id="backgroundCropModal"
+        class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4 transition-opacity duration-200">
+        <div class="bg-white w-full max-w-3xl max-h-[90vh] rounded-2xl shadow-xl flex flex-col">
+            <div class="p-6 pb-3">
+                <h3 class="text-lg font-semibold text-gray-800">Sesuaikan Background Profil</h3>
+            </div>
+            <div class="px-6 overflow-auto flex-1">
+                <div class="rounded-xl overflow-hidden bg-gray-100">
+                    <img id="backgroundImagePreview" class="max-w-full block">
+                </div>
+            </div>
+            <div class="px-6 py-4 space-y-4 border-t border-gray-100">
+                <div class="flex items-center justify-center gap-3">
+                    <button type="button" id="backgroundRotateLeft"
+                        class="px-3 py-2 rounded-xl border border-gray-300 text-gray-700 hover:bg-gray-100 transition">
+                        ⟲ Putar Kiri
+                    </button>
+                    <button type="button" id="backgroundRotateRight"
+                        class="px-3 py-2 rounded-xl border border-gray-300 text-gray-700 hover:bg-gray-100 transition">
+                        Putar Kanan ⟳
+                    </button>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-500 mb-2">Zoom</label>
+                    <input type="range" id="backgroundZoomSlider" min="0" max="1" step="0.01" value="0"
+                        class="w-full accent-gray-900">
+                </div>
+            </div>
+            <div class="p-6 pt-4 flex justify-end gap-3 border-t border-gray-100">
+                <button type="button" id="backgroundCancelCrop"
+                    class="px-4 py-2 rounded-xl text-sm font-medium border border-gray-300 text-gray-700 hover:bg-gray-100 transition">
+                    Batal
+                </button>
+                <button type="button" id="backgroundSaveCrop"
+                    class="px-4 py-2 rounded-xl text-sm font-medium bg-gray-900 text-white hover:bg-black transition">
+                    Simpan
+                </button>
+            </div>
+        </div>
+    </div>
+
 <!-- end:Page content -->
 @endsection
+
+@push('bottom')
+<style>
+    @media (max-width: 1023px) {
+        .profile-photo-item.is-active.show-delete .delete-profile-photo {
+            opacity: 1 !important;
+            pointer-events: auto !important;
+            transform: scale(1) !important;
+        }
+
+        .profile-photo-item.is-active.show-delete .profile-photo-active-badge {
+            opacity: 0 !important;
+        }
+    }
+</style>
+@endpush

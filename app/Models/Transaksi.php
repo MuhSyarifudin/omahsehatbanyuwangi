@@ -10,5 +10,13 @@ class Transaksi extends Model
     use HasFactory;
     public $timestamps = true;
     public $table = 'Transaksi';
-    protected $fillable = ['nama','phone','qty','total_price'];
-}
+    protected $fillable = ['nama','phone','qty','total_price','snap_token','invoice_token'];
+
+    public function whatsappMessages()
+    {
+        return $this->hasMany(WhatsappMessage::class);
+    }
+
+    }
+
+

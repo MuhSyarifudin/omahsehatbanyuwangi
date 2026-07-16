@@ -28,9 +28,10 @@ class RedirectIfAuthenticated
                     return redirect()->route('admin.dashboard');
                 }
     
-                if ($user->role === 'therapist') {
+                if ($user->role === 'user') {
                     if (!$user->hasVerifiedEmail()) {
-                        return redirect()->route('verification.notice');
+                        Auth::logout();
+                        return redirect()->route('login')->with('error','Email belum diverifikasi.');
                     }
                     return redirect()->route('therapist.dashboard');
                 }

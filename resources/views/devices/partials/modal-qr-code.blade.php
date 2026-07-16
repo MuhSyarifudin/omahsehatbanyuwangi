@@ -18,7 +18,7 @@
             <li>Open WhatsApp on your phone.</li>
             <li>Tap <span class="font-medium">Menu</span> or <span class="font-medium">Settings</span> and select <span class="font-medium">Linked Devices</span>.</li>
             <li>Point your phone to this screen to capture the QR code.</li>
-            <li>After your smartphone shows a success message, refresh this page and your device can send messages.</li>
+            <li>After your smartphone shows a success message, this page will update automatically.</li>
         </ol>
 
         <!-- QR Code or Loading -->
@@ -31,7 +31,7 @@
 
         <!-- Footer: Close Button -->
         <div class="flex justify-center">
-            <button @click="isOpen = false; qrCode = '';" 
+            <button @click="isOpen = false; qrCode = ''; stopDeviceStatusPolling();"
                     class="px-6 py-2 bg-white text-gray-600 font-semibold rounded-lg shadow transition duration-200">
                 Close
             </button>

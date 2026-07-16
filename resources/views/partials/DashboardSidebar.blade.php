@@ -111,6 +111,22 @@
             <span class="ml-3">Notifikasi</span>
         </a>
 
+        <!-- Notifikasi -->
+        <a href="{{ route('data.whatsapp.log') }}"
+           class="flex items-center px-6 py-3 transition
+           {{ request()->routeIs('data.whatsapp.*')
+                ? 'bg-black bg-opacity-40 text-white border-l-4 border-blue-500'
+                : 'hover:bg-black hover:bg-opacity-30 hover:text-white' }}">
+            <!-- Bell Icon -->
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M15 17h5l-1.4-1.4A2 2 0 0118 14.2V11a6 6 0 10-12 0v3.2a2 2 0 01-.6 1.4L4 17h5"/>
+                <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M9 21a3 3 0 006 0"/>
+            </svg>
+            <span class="ml-3">WhatsApp Logs</span>
+        </a>
+
         <!-- Services -->
         <p class="text-xs text-gray-600 mt-8 mb-2 px-6 uppercase">Services</p>
 
@@ -185,12 +201,13 @@
                 ? 'bg-black bg-opacity-40 text-white border-l-4 border-blue-500'
                 : 'hover:bg-black hover:bg-opacity-30 hover:text-white' }}">
             <!-- WA Icon -->
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                      d="M4 6.75A2.25 2.25 0 016.25 4.5h11.5A2.25 2.25 0 0120 6.75v6.5A2.25 2.25 0 0117.75 15.5H6.25A2.25 2.25 0 014 13.25v-6.5z"/>
-                <path stroke-linecap="round" stroke-linejoin="round"
-                      d="M9 18.5h6"/>
+            <svg xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                class="w-4 h-4">
+            <path d="M20.52 3.48A11.91 11.91 0 0012.01 0C5.38 0 .02 5.36.02 11.99c0 2.11.55 4.17 1.6 5.99L0 24l6.18-1.61a11.96 11.96 0 005.83 1.49h.01c6.63 0 11.99-5.36 11.99-11.99 0-3.2-1.25-6.2-3.49-8.41zM12.02 21.7h-.01a9.76 9.76 0 01-4.98-1.37l-.36-.21-3.67.96.98-3.58-.23-.37a9.74 9.74 0 01-1.5-5.14c0-5.39 4.38-9.77 9.77-9.77 2.61 0 5.06 1.02 6.9 2.86a9.7 9.7 0 012.87 6.91c0 5.39-4.38 9.77-9.77 9.77zm5.36-7.33c-.29-.14-1.72-.85-1.99-.94-.27-.1-.47-.14-.67.14-.2.29-.76.94-.94 1.13-.17.2-.35.22-.64.07-.29-.14-1.22-.45-2.32-1.42-.86-.77-1.44-1.72-1.61-2.01-.17-.29-.02-.45.13-.59.14-.14.29-.35.43-.52.14-.17.19-.29.29-.49.1-.2.05-.37-.02-.52-.07-.14-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.29-1.04 1.02-1.04 2.49s1.07 2.89 1.22 3.09c.14.2 2.1 3.2 5.08 4.49.71.31 1.27.49 1.7.63.71.23 1.35.2 1.86.12.57-.09 1.72-.7 1.96-1.38.24-.69.24-1.27.17-1.38-.07-.12-.27-.2-.56-.34z"/>
             </svg>
+
             <span class="ml-3">WA Devices</span>
         </a>
 

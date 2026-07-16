@@ -7,6 +7,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Schema;
 
 class UserSeeder extends Seeder
 {
@@ -15,6 +16,8 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
+        Schema::disableForeignKeyConstraints();
+
         DB::table('users')->truncate();
 
         $daftar_user = [
@@ -26,5 +29,7 @@ class UserSeeder extends Seeder
         foreach ($daftar_user as $du) {
             User::create($du);
         };
+
+        Schema::enableForeignKeyConstraints();
     }
 }

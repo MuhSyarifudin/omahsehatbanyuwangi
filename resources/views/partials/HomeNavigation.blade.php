@@ -16,7 +16,7 @@
     </div>
 </nav>
 
-<header id="header" class="sticky top-0 z-[1000] bg-white/95 backdrop-blur-md shadow-sm transition-all duration-300">
+<header id="header" class="sticky top-0 z-[9999] bg-white/95 backdrop-blur-md shadow-sm transition-all duration-300">
     <div class="container mx-auto flex justify-between items-center py-4 px-6">
         <div class="flex items-center">
             <a href="{{ url('/') }}" class="transition-transform duration-300 hover:scale-105">

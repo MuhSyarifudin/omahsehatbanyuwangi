@@ -6,6 +6,7 @@ use App\Models\Transaksi;
 use Illuminate\Support\Facades\DB;
 use App\Events\NotifikasiReservasiEvent;
 use App\Http\Requests\StoreReservationRequest;
+use Illuminate\Support\Str;
 
 class CheckoutController extends Controller
 {
@@ -23,6 +24,14 @@ class CheckoutController extends Controller
 
         $transaksi = DB::transaction(function () use ($request,$terapi) {
 
+            do {
+                $reservationId =
+                    'RSV-' .Str::upper(Str::ulid());
+
+            } while (Transaksi::where('order_id', $reservationId)->exists());
+
+            $invoice_token = Str::random(64);
+
             $totalHarga = $request->jumlah * $terapi->harga;
 
             $trx =  new Transaksi();
@@ -39,8 +48,8 @@ class CheckoutController extends Controller
             $trx->jumlah = $request->jumlah;
             $trx->total_harga = $totalHarga;
             $trx->terapi_id = $terapi->id;
-            $trx->order_id = 'ORDER_' . time();
-            $trx->expired_at = now()->addDay();
+            $trx->order_id = $reservationId;
+            $trx->invoice_token = $invoice_token;
             $trx->save();
         
             return $trx;
@@ -66,11 +75,18 @@ class CheckoutController extends Controller
                 'nama' => $transaksi->nama,
                 'phone' => $transaksi->nohp,
             ),
+            'callbacks' => [
+                'finish' => route('invoice.index',['order_id'=>$transaksi->order_id,'token'=>$transaksi->invoice_token]),
+            ],
             'custom_field1' => $transaksi->id,
         );
 
         $snapToken = \Midtrans\Snap::getSnapToken($params);
         
+        $transaksi->update([
+        'snap_token' => $snapToken
+        ]);
+
         session()->put('transaksi',$transaksi);
         session()->put('snapToken',$snapToken);
         session()->put('harga_terapi',$harga_terapi);

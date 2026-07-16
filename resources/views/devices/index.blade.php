@@ -42,9 +42,9 @@
                                 <th class="p-2 text-center rounded-tr-lg rounded-br-lg">Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="deviceTableBody">
                             @foreach ($devices as $index => $device)
-                                <tr class="border-b border-gray-200">
+                                <tr class="border-b border-gray-200" data-device-token="{{ $device['token'] }}">
                                     <td class="p-2 text-center">{{ $index + 1 }}</td>
                                     <td class="p-2 text-center">{{ $device['name'] }}</td>
                                     <td class="p-2 text-center">{{ $device['device'] }}</td>

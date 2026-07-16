@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\DeviceRealtimeEvent;
 use App\Models\Device;
 use Illuminate\Http\Request;
 use App\Services\FonnteService;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 
 class DeviceController extends Controller
@@ -70,6 +70,14 @@ class DeviceController extends Controller
             'device' => 'required|string|max:255',
         ]);
 
+        $existingDevice = Device::where('device', $validated['device'])->first();
+
+        if ($existingDevice) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Nomor/device sudah terdaftar di sistem.');
+        }
+
         // Ambil token dari .env
         $accountToken = config('services.fonnte.account_token');
 
@@ -96,11 +104,13 @@ class DeviceController extends Controller
         }
 
         // Jika berhasil, simpan ke database lokal (jika perlu)
-        Device::create([
+        $device = Device::create([
             'name' => $validated['name'],
             'device' => $validated['device'],
             'token' => $response['token'] ?? null, // Pastikan untuk mendapatkan token jika ada
         ]);
+
+        event(new DeviceRealtimeEvent('created', $this->deviceRealtimePayload($device, 'disconnect')));
 
         return redirect()->route('devices.index')->with('success', 'Device added successfully!');
     }
@@ -108,77 +118,69 @@ class DeviceController extends Controller
 
     public function activateDevice(Request $request)
     {
-
-        Device::query()->update(['is_activated' => 0]);
-
         $device = Device::where('device', $request->device)->first();
-        
 
-        if ($device && $device->is_activated) {
-            return response()->json([
-                'status' => true,
-                'connected' => true,
-                'message' => 'Device sudah terhubung'
-            ]);
-        }
-    
+        // ✅ cek apakah QR lama masih bisa dipakai
         $expired = true;
 
         if ($device && $device->qr_requested_at) {
             $expired = now()->diffInSeconds($device->qr_requested_at) > 60;
         }
-        
-        // kalau QR masih fresh → pakai
+
+        // ✅ kalau QR masih fresh → kirim ulang QR lama
         if ($device && !$expired && $device->qr_url) {
             return response()->json([
                 'status' => true,
+                'connected' => false,
                 'qr' => $device->qr_url
             ]);
         }
-    
-        // REQUEST QR BARU
+
+        // ✅ request QR baru dari service
         $response = $this->fonnteService->requestQRActivation(
             $request->device,
             $request->token
         );
-    
+
+        // ✅ kalau gagal → reset QR lama biar bisa retry
         if (
-            !$response['status'] ||
+            !$response ||
+            empty($response['status']) ||
             empty($response['data']['url'])
         ) {
+            Device::where('device', $request->device)->update([
+                'qr_url' => null,
+                'qr_requested_at' => null,
+                'is_activated' => false
+            ]);
+
             return response()->json([
                 'status' => false,
                 'connected' => false,
-                'message' => 'QR tidak tersedia, device mungkin sudah terhubung'
+                'message' => 'QR gagal dibuat, coba lagi nanti'
             ], 400);
         }
-    
+
         $qr = 'data:image/png;base64,' . $response['data']['url'];
-    
-        Device::updateOrCreate(
+
+        $device = Device::updateOrCreate(
             ['device' => $request->device],
             [
                 'token' => $request->token,
                 'qr_url' => $qr,
                 'qr_requested_at' => now(),
-                'is_activated' => true
+                'is_activated' => false
             ]
         );
-    
-        // Log::info('QR DEBUG', [
-        //     'device_exists' => (bool) $device,
-        //     'qr_url' => $device->qr_url ?? null,
-        //     'qr_requested_at' => $device->qr_requested_at ?? null,
-        //     'expired' => $expired ?? null,
-        // ]);
+
+        event(new DeviceRealtimeEvent('qr_requested', $this->deviceRealtimePayload($device, 'disconnect')));
 
         return response()->json([
             'status' => true,
+            'connected' => false,
             'qr' => $qr
         ]);
     }
-    
-
 
     // Mengecek profil perangkat melalui Fonnte API berdasarkan token
     public function show($id)
@@ -201,40 +203,95 @@ class DeviceController extends Controller
     public function disconnect(Request $request)
     {
         try {
-            Device::query()->update(['is_activated' => 0]);
-
             $deviceToken = $request->input('token');
-            $response = $this->fonnteService->disconnectDevice($deviceToken);
 
-            // Jika API mengembalikan status sukses
-            if ($response['status'] === true) {
-                return response()->json(['message' => 'Device disconnected successfully'], 200); // Status 200 untuk sukses
+            if (!$deviceToken) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Token tidak ditemukan'
+                ], 400);
             }
 
-            // Jika terjadi kesalahan pada respons dari API
-            return response()->json(['error' => $response['error'] ?? 'Failed to disconnect device'], 500);
-        } catch (\Exception $e) {
-            Log::error($e->getMessage());
-            return response()->json(['error' => 'Internal Server Error'], 500);
+            $device = Device::where('token', $deviceToken)->first();
+
+            if (!$device) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Device tidak ditemukan'
+                ], 404);
+            }
+
+            // logout dari WhatsApp gateway DULU
+            $response = $this->fonnteService->disconnectDevice($deviceToken);
+
+            if (
+                !$response ||
+                empty($response['status']) ||
+                $response['status'] !== true
+            ) {
+                return response()->json([
+                    'status' => false,
+                    'message' => $response['error'] ?? 'Gagal disconnect dari server WhatsApp'
+                ], 500);
+            }
+
+            // reset total device di database
+            $device->update([
+                'is_activated' => false,
+                'qr_url' => null,
+                'qr_requested_at' => null
+            ]);
+
+            event(new DeviceRealtimeEvent('disconnect', $this->deviceRealtimePayload($device->fresh(), 'disconnect')));
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Device berhasil disconnect'
+            ], 200);
+
+        } catch (\Throwable $e) {
+            Log::error('DISCONNECT ERROR: ' . $e->getMessage());
+
+            return response()->json([
+                'status' => false,
+                'message' => 'Terjadi kesalahan server'
+            ], 500);
         }
     }
 
-    // Menghapus perangkat
-    public function destroy($deviceToken)
-{
-    $delete = $this->fonnteService->deleteDevice($deviceToken);
+        // Menghapus perangkat
+        public function destroy($deviceToken)
+    {
+        // Cari device di database berdasarkan token
+        $device = Device::where('token', $deviceToken)->first();
 
-    if (!$delete['status']) {
+        if (!$device) {
+            return response()->json([
+                'message' => 'Device tidak ditemukan di database',
+            ], 404);
+        }
+
+        // Hapus device di Fonnte
+        $delete = $this->fonnteService->deleteDevice($deviceToken);
+
+        if (!$delete['status']) {
+            return response()->json([
+                'message' => 'Gagal menghapus device di Fonnte',
+                'error'   => $delete['error'] ?? null,
+            ], 500);
+        }
+
+        $payload = $this->deviceRealtimePayload($device, 'disconnect');
+
+        // Hapus dari database lokal
+        $device->delete();
+
+        event(new DeviceRealtimeEvent('deleted', $payload));
+
         return response()->json([
-            'message' => 'Gagal menghapus device',
-            'error'   => $delete['error'],
-        ], 500);
+            'message' => 'Device berhasil dihapus dari Fonnte dan database',
+        ]);
     }
-
-    return response()->json([
-        'message' => 'Device berhasil dihapus',
-    ]);
-}
 
     // Mengirim request OTP untuk penghapusan perangkat
     protected function requestOTPForDeleteDevice($notificationId, $deviceId)
@@ -272,9 +329,9 @@ class DeviceController extends Controller
         }
     }
 
-    public function checkDeviceStatus()
+    public function checkDeviceStatus(Request $request)
     {
-        $accountToken = config('services.fonnte.token'); // Assuming you have your token stored in config/services.php
+        $accountToken = config('services.fonnte.account_token');
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
@@ -288,7 +345,76 @@ class DeviceController extends Controller
         $response = curl_exec($curl);
         curl_close($curl);
 
-        return response()->json(json_decode($response, true));
+        $data = json_decode($response, true);
+        $deviceToken = $request->input('token');
+        $phoneNumber = $request->input('device');
+
+        if (!$deviceToken && !$phoneNumber) {
+            return response()->json($data);
+        }
+
+        $device = Device::query()
+            ->when($deviceToken, fn ($query) => $query->where('token', $deviceToken))
+            ->when(!$deviceToken && $phoneNumber, fn ($query) => $query->where('device', $phoneNumber))
+            ->first();
+
+        $targetToken = $device?->token ?? $deviceToken;
+        $targetPhone = $device?->device ?? $phoneNumber;
+
+        $fonnteDevice = collect($data['data'] ?? [])->first(function ($item) use ($targetToken, $targetPhone) {
+            $itemToken = trim((string) ($item['token'] ?? ''));
+            $itemPhone = $this->normalizePhoneNumber($item['device'] ?? $item['whatsapp'] ?? $item['number'] ?? '');
+
+            return ($targetToken && $itemToken === trim((string) $targetToken))
+                || ($targetPhone && $itemPhone === $this->normalizePhoneNumber($targetPhone));
+        });
+
+        $fonnteStatus = strtolower(trim((string) ($fonnteDevice['status'] ?? '')));
+        $connected = in_array($fonnteStatus, ['connect', 'connected', 'online'], true);
+
+        $deviceProfile = null;
+
+        if ($targetToken) {
+            $profileResponse = $this->fonnteService->getDeviceProfile($targetToken);
+            $deviceProfile = $profileResponse['data'] ?? null;
+            $profileStatus = strtolower(trim((string) ($deviceProfile['device_status'] ?? '')));
+
+            if ($profileStatus) {
+                $fonnteStatus = $profileStatus;
+                $connected = in_array($profileStatus, ['connect', 'connected', 'online'], true);
+            }
+
+            if (!$fonnteDevice && !empty($deviceProfile['status'])) {
+                $fonnteDevice = [
+                    'device' => $deviceProfile['device'] ?? $targetPhone,
+                    'name' => $deviceProfile['name'] ?? $device?->name,
+                    'quota' => $deviceProfile['quota'] ?? null,
+                    'status' => $deviceProfile['device_status'] ?? null,
+                    'token' => $targetToken,
+                ];
+            }
+        }
+
+        if ($device && $connected) {
+            if (!$device->is_activated || $device->qr_url || $device->qr_requested_at) {
+                $device->update([
+                    'is_activated' => true,
+                    'qr_url' => null,
+                    'qr_requested_at' => null,
+                ]);
+            }
+
+            event(new DeviceRealtimeEvent('connect', $this->deviceRealtimePayload($device->fresh(), 'connect')));
+        }
+
+        return response()->json([
+            'status' => (bool) ($data['status'] ?? false),
+            'connected' => $connected,
+            'device' => $fonnteDevice,
+            'device_profile' => $deviceProfile,
+            'fonnte_status' => $fonnteStatus,
+            'local_device_updated' => (bool) ($device && $connected),
+        ]);
     }
 
     public function sendMessage(Request $request)
@@ -318,5 +444,23 @@ class DeviceController extends Controller
         }
 
         return response()->json(['message' => 'Pesan berhasil dikirim!', 'data' => $response['data']]);
+    }
+
+    protected function deviceRealtimePayload(Device $device, ?string $status = null): array
+    {
+        return [
+            'id' => $device->id,
+            'name' => $device->name,
+            'device' => $device->device,
+            'token' => $device->token,
+            'quota' => '-',
+            'status' => $status ?? ($device->is_activated ? 'connect' : 'disconnect'),
+            'is_activated' => (bool) $device->is_activated,
+        ];
+    }
+
+    protected function normalizePhoneNumber($phoneNumber): string
+    {
+        return preg_replace('/\D+/', '', (string) $phoneNumber);
     }
 }

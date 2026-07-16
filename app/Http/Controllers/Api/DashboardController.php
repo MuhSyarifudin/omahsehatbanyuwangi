@@ -11,7 +11,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Transaksi;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class DashboardController extends Controller
 {
@@ -35,13 +34,7 @@ class DashboardController extends Controller
     }
 
     public function get_visitor_count(){
-        $visitors = Visitor::whereBetween('visit_date', [
-            now()->subDays(29),
-            now()
-        ])
-        ->whereNull('user_id')
-        ->where('role','!=','admin')
-        ->count();
+        $visitors = Visitor::all()->count();
 
     return response()->json([
         'last_30_days' => $visitors
@@ -211,7 +204,7 @@ class DashboardController extends Controller
                 return [
                     'id' => $user->id,
                     'name' => $user->name,
-                    'avatars' => $user->avatars ?? null,
+                    'avatar' => $user->avatar ?? null,
                     'last_activity' => $user->last_activity->diffForHumans(),
                     'status' => $minutes <= 5
                         ? 'online'

@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('transaksi', function (Blueprint $table) {
             $table->id();
-            $table->string('order_id');
+            $table->string('order_id')->unique();
+            $table->string('invoice_token', 64)->unique();
             $table->string('nama');
             $table->unsignedBigInteger('terapi_id');
             $table->string('nama_terapi');
@@ -27,8 +28,8 @@ return new class extends Migration
             $table->integer('jumlah');
             $table->unsignedBigInteger('total_harga');
             $table->string('status')->default('pending');
+            $table->text('snap_token')->nullable();
             $table->timestamps();
-            $table->timestamp('expired_at')->nullable()->after('created_at');
         });
     }
 

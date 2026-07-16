@@ -6,7 +6,9 @@
 
 @section('content')
 
-<section class="hero min-h-screen bg-fixed bg-cover bg-center relative flex items-center" style="background-image: url('{{ url(asset('assets/img/team.jpg')) }}');" id="beranda">
+<div class="w-full overflow-x-hidden">
+
+{{-- <section class="hero hero-section min-h-[100dvh] bg-cover bg-center relative flex items-center py-24 sm:py-28" style="background-image: url('{{ url(asset('assets/img/team.jpg')) }}');" id="beranda">
   <div class="absolute inset-0 bg-slate-900/60"></div>
   
   <div class="container mx-auto px-6 relative z-10">
@@ -34,11 +36,65 @@
           </div>
       </div>
   </div>
+</section> --}}
+
+<section 
+    class="hero h-[55vh] md:min-h-screen
+bg-cover bg-center
+relative flex items-center"
+    style="background-image: url('{{ url(asset('assets/img/team.jpg')) }}');"
+    id="beranda"
+>
+    <!-- Overlay -->
+    <div class="absolute inset-0 bg-slate-900/70"></div>
+
+    <!-- Content -->
+    <div class="container mx-auto px-5 sm:px-6 relative z-10">
+        
+        <div 
+            class="w-full max-w-full md:max-w-2xl text-left"
+            data-aos="fade-up"
+            data-aos-duration="800"
+        >
+
+            <!-- Small Text -->
+            <span class="text-blue-400 font-semibold tracking-[0.25em] text-[10px] sm:text-xs uppercase mb-4 block">
+                Pusat Terapi & Kesehatan
+            </span>
+
+            <!-- Heading -->
+            <h1 class="w-full text-2xl sm:text-3xl md:text-5xl font-bold text-white leading-tight mb-4 md:mb-6">
+                Selamat Datang di <br>
+                Omah Sehat Banyuwangi
+            </h1>
+
+            <!-- Description -->
+            <p class="w-full text-xs sm:text-sm md:text-lg text-gray-300 leading-relaxed mb-5 md:mb-8">
+                Dapatkan keseimbangan tubuh dan pikiran melalui layanan terapi profesional kami.
+                Pesan jadwal Anda dengan mudah secara online.
+            </p>
+
+            <!-- Buttons -->
+            <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+
+                <a href="{{ route('pesan.reservasi.terapi') }}"
+                   class="w-[132px] md:w-auto inline-flex bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 md:px-8 py-2.5 md:py-3 rounded-md transition-all duration-300 text-[10px] sm:text-xs md:text-sm uppercase tracking-wider">
+                    Reservasi Online
+                </a>
+
+                <a href="#layanan-terapi"
+                   class="w-[132px] md:w-auto inline-flex border border-white/50 hover:border-white text-white px-4 md:px-8 py-2.5 md:py-3 rounded-md transition-all duration-300 text-[10px] sm:text-xs md:text-sm uppercase tracking-wider">
+                    Pelajari Layanan
+                </a>
+
+            </div>
+
+        </div>
+    </div>
 </section>
 
 <section class="py-16 bg-gray-50" id="layanan-terapi">
-  <div class="container mx-auto px-4">
-      <div class="text-center mb-12">
+  <div class="container mx-auto px-6"> <div class="text-center mb-12">
           <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Layanan Kami</h2>
           <p class="text-gray-500 max-w-2xl mx-auto">Klik atau jelajahi berbagai metode terapi kesehatan dan kecantikan holistik yang kami sediakan untuk Anda.</p>
       </div>
@@ -140,7 +196,8 @@
   </div>
 </section>
 
-<section class="py-20 bg-[#1e40af]" id="visi-misi"> <div class="container mx-auto px-6 lg:px-16">
+<section class="py-20 bg-[#1e40af]" id="visi-misi"> 
+<div class="container mx-auto px-6 lg:px-16">
   <div class="text-center mb-16">
       <h2 class="text-4xl font-extrabold text-white mb-4 tracking-tight">Visi & Misi</h2>
       <div class="w-20 h-1.5 bg-yellow-400 mx-auto rounded-full mb-6"></div>
@@ -191,9 +248,7 @@
 </section>
 
 
-<!-- Team Section -->
-<section class="py-20" id="team">
-  <div class="text-center mb-16">
+<section class="py-20 bg-slate-50 overflow-hidden" id="team"> <div class="text-center mb-16 px-4">
     <h2 class="text-4xl font-bold text-slate-800 mb-4">Tenaga Terapis Profesional</h2>
     <div class="w-16 h-1 bg-blue-600 mx-auto rounded-full"></div>
     <p class="text-gray-500 mt-4 max-w-xl mx-auto">Percayakan kesehatan Anda kepada tim ahli kami yang berpengalaman di bidang terapi holistik dan kecantikan.</p>
@@ -379,18 +434,15 @@
     </div>
 </section>
 
-
-<!-- Scroll to Top Button -->
 <button id="scrollToTop" class="fixed bottom-8 right-8 w-14 h-14 flex items-center justify-center bg-white text-blue-600 rounded-full shadow-[0_10px_25px_-5px_rgba(0,0,0,0.1),0_8px_10px_-6px_rgba(0,0,0,0.1)] hover:shadow-[0_20px_25px_-5px_rgba(0,0,0,0.1),0_10px_10px_-5px_rgba(0,0,0,0.04)] hover:-translate-y-2 transition-all duration-300 z-[1000] border border-gray-100 group">
     <i class="fa-solid fa-arrow-up text-xl group-hover:animate-bounce"></i>
 </button>
 
-@endsection
+</div> @endsection
 
 @push('bottom')
   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
   <script>
-
       var map = L.map('map').setView([ -8.2318518, 114.3465796 ], 16);
 
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -409,5 +461,4 @@
   <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
   <script src="{{ url(asset('assets/js/nav.js')) }}"></script>
   <script src="{{ url(asset('assets/js/home.js')) }}"></script>
-
 @endpush

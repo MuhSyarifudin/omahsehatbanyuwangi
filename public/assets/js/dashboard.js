@@ -90,9 +90,12 @@ addEventListener("DOMContentLoaded", () => {
     loadUserCount();
 
         Echo.join('notification-bell')
-        .listen('.notification-update', () => {
+        .listen('.notification-update', async () => {
             loadKeuntungan();
-            loadReservasiCount()
+            loadReservasiCount();
+
+            await refreshProfitChart();
+
         });
 
         Echo.join('registered-event')
@@ -126,7 +129,7 @@ function loadChart(tahun) {
             }
 
             chart = new Chart(ctx, {
-                type: 'line',
+                type: 'bar',
                 data: {
                     labels: data.labels,
                     datasets: [{
@@ -166,14 +169,3 @@ function refreshProfitChart() {
 }
 
 let chartTimeout;
-
-Echo.join('notification-bell')
-    .listen('.notification-update', () => {
-
-        loadKeuntungan();
-
-        clearTimeout(chartTimeout);
-        chartTimeout = setTimeout(() => {
-            refreshProfitChart();
-        }, 300);
-    });

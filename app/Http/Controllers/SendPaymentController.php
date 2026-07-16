@@ -2,29 +2,50 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Device;
 use App\Models\Transaksi;
-use App\Models\WaToken;
+use App\Services\FonnteService;
 
 class SendPaymentController extends Controller
 {
+
+    protected $fonnteService;
+
+    public function __construct(FonnteService $fonnteService)
+    {
+        $this->fonnteService = $fonnteService;
+    }
+
     public function sendPaymentPage($id){
 
-        $token = WaToken::where('active',true)->first();
-
-        $transaksi = Transaksi::where('id',$id)->first();
-        
-        $pesan = [
+        $token = Device::where('is_activated',true)->value('token');
+        $transaksi = Transaksi::select('transaksi.*', 'jenis_terapi.nama AS nama_jenis_terapi')
+        ->join('layanan_terapi', 'transaksi.terapi_id', '=', 'layanan_terapi.id')
+        ->join('jenis_terapi', 'layanan_terapi.jenis_terapi', '=', 'jenis_terapi.id')
+        ->where('transaksi.id', $id)
+        ->first();
+            
+            $data = [
             'target'=>$transaksi->nohp,
-            'message'=>'
-✅ *Reservasi Tersedia!* 🎉  
-Kabar baik! Reservasi untuk hari tersebut *tersedia* 🗓✨  
-Silakan lakukan pembayaran terlebih dahulu untuk mengamankan slot Anda. 🔒💳  
+            'message' => "Halo, reservasi Anda untuk tanggal tersebut tersedia.\n\n"
+    ."Silakan melanjutkan pembayaran agar jadwal dapat diproses dan diamankan.\n\n"
+    ."Link pembayaran:\n"
+    .route('show.payment.page',['id'=>$transaksi->id])
+    ."\n\nTerima kasih."];
 
-🔗 *Bayar Sekarang:* '.route('show.payment.page',['id'=>$transaksi->id]).'  
+            // $data = [
+            //     'target' => $transaksi->nohp,
+            //     'message' => 'Reservasi tersedia. Silakan bayar: ' . route('show.payment.page', ['id'=>$transaksi->id])
+            // ];
+       
+            $this->fonnteService->sendWhatsAppMessage(
+            $data['target'],
+            $data['message'],
+            $token
+            );
 
-Terima kasih telah mempercayai layanan kami! 😊🙏 '];
-
-        kirimPesan($token->token,$pesan);
+        // dd($response);
+       
         return back();
     }
 }

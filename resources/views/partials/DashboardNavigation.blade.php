@@ -105,8 +105,8 @@
                         @click="linkActive = !linkActive"
                         class="cursor-pointer"
                     >
-                        <img 
-                            src="{{ url($user->avatars ? asset('storage/'.$user->avatars) : asset('assets/img/blank-profile.png')) }}"
+                        <img id="foto-profil" 
+                            src="{{ url($user->avatar ? asset('storage/'.$user->avatar) : asset('assets/img/blank-profile.png')) }}"
                             class="w-10 rounded-full"
                         >
                     </div>

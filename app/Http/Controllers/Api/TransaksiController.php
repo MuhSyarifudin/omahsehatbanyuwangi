@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\WaToken;
-use App\Models\Transaksi;
-use App\Http\Controllers\Controller;
 use App\Events\NotifikasiPaymentBerhasilEvent;
-use App\Models\Device;
+use App\Http\Controllers\Controller;
+use App\Models\Transaksi;
 
 class TransaksiController extends Controller
 { 
- 
+
     public function callback(){
 
     $json = json_decode(file_get_contents('php://input'), true);
@@ -21,88 +19,54 @@ class TransaksiController extends Controller
     $gross_amount = $json['gross_amount'];
     $signature_key = $json['signature_key'];
 
-    $userId = $json['custom_field1'] ?? null;
+    $transaksi_id = $json['custom_field1'] ?? null;
 
-    $transaksi = Transaksi::where('id', $userId)->first();
+    $transaksi= Transaksi::select('transaksi.*', 'jenis_terapi.nama AS nama_jenis_terapi')
+    ->join('layanan_terapi', 'transaksi.terapi_id', '=', 'layanan_terapi.id')
+    ->join('jenis_terapi', 'layanan_terapi.jenis_terapi', '=', 'jenis_terapi.id')
+    ->where('transaksi.id', $transaksi_id)
+    ->first();
+
     if ($transaksi == null) {
         return response()->json(['error','Transaksi tidak ditemukan'],404);
     }
     
     $serverKey = config('midtrans.server_key');
     $hashed = hash("sha512",$orderId.$status_code.$gross_amount.$serverKey);
+    
     if ($hashed == $signature_key) {
 
-            if ($transaction == 'capture' || $transaction == 'settlement') {
+    // Simpan status lama
+    $statusLama = $transaksi->status;
 
-                $transaksi->status = 'paid';
+    if ($transaction == 'capture' || $transaction == 'settlement') {
 
-                event(new NotifikasiPaymentBerhasilEvent($transaksi));
+        // Hanya proses jika sebelumnya belum paid
+        if ($statusLama !== 'paid') {
 
-            } elseif ($transaction == 'pending') {
-
-                $transaksi->status = 'pending';
-
-            } elseif ($transaction == 'cancel' || $transaction == 'deny' || $transaction == 'expire') {
-                
-                $transaksi->status = 'canceled';
-            
-            }
-
+            $transaksi->status = 'paid';
             $transaksi->save();
-        };
 
-
-        
-
-$device = Device::where('is_activated',true)->first();
-
-if ($transaksi->tempat == "Center") {
-    $pesan = [
-        'target'=>$transaksi->nohp,
-        'message'=>"
-📌 *Detail Reservasi*  
-👤 *Nama:* ".$transaksi->nama."  
-📱 *No. Whatsapp:* ".$transaksi->nohp."  
-🏠 *Jenis Layanan:* ".$transaksi->tempat."  
-🗓 *Tanggal:* ".dateid('l, j F Y', $transaksi->tanggal)."  
-⏰ *Jam:* ".$transaksi->jam."  
-💆‍♂️ *Jenis Terapi:* ".$transaksi->nama_layanan." - ".$transaksi->nama_jenis_terapi."  
-👥 *Jumlah:* ".$transaksi->jumlah." Orang  
-💰 *Total Harga:* ".rupiah($transaksi->total_harga)."  
-
-✅ Transaksi Anda *Berhasil/Lunas*!  
-✨ Silakan kunjungi tempat terapi kami pada *".dateid('l, j F Y', $transaksi->tanggal)."*  
-
-📍 *Lokasi:* https://maps.app.goo.gl/4zxYbCwPog1yeE2a7
-                "];
-
-kirimPesan($token->token,$pesan);
-} else if($device->tempat == "Homecare") {
-$pesan = [
-    'target'=>$transaksi->nohp,
-    'message'=>"
-📌 *Detail Reservasi*  
-👤 *Nama:* ".$transaksi->nama."  
-📱 *No. Whatsapp:* ".$transaksi->nohp."  
-🏠 *Jenis Layanan:* ".$transaksi->tempat."  
-📍 *Alamat*: ".$transaksi->alamat."  
-🗓 *Tanggal:* ".dateid('l, j F Y', $transaksi->tanggal)."  
-⏰ *Jam:* ".$transaksi->jam."  
-💆‍♂️ *Jenis Terapi:* ".$transaksi->nama_jenis_terapi." - ".$transaksi->nama_layanan."
-👥 *Jumlah:* ".$transaksi->jumlah." Orang  
-💰 *Total Harga:* ".rupiah($transaksi->total_harga)."  
-
-✅ Transaksi Anda *Berhasil/Lunas*!  
-🚗 Kunjungan ke tempat Anda akan dilakukan pada *".dateid('l, j F Y', $transaksi->tanggal)."*  
-
-📍 Lokasi: https://maps.app.goo.gl/4zxYbCwPog1yeE2a7  
-
-Terima kasih telah mempercayai layanan kami! 😊✨ 
-                "];
-
-            kirimPesan($device->token,$pesan);
-
+            // Event ini akan trigger NotifikasiPaymentBerhasilListener
+            // yang menangani pengiriman WhatsApp message
+            event(new NotifikasiPaymentBerhasilEvent($transaksi));
         }
+
+    } elseif ($transaction == 'pending') {
+
+        $transaksi->status = 'pending';
+        $transaksi->save();
+
+    } elseif (
+        $transaction == 'cancel' ||
+        $transaction == 'deny' ||
+        $transaction == 'expire'
+    ) {
+
+        $transaksi->status = 'canceled';
+        $transaksi->save();
+    }
+}
 
     return response()->json(['message' => 'Status pembayaran diperbarui'], 200);
     }

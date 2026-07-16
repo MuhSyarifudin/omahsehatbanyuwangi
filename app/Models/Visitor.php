@@ -12,6 +12,13 @@ class Visitor extends Model
     protected $fillable = [
         'ip_address',
         'user_id',
-        'visit_date'
+        'visitor_id',
+        'visit_date',
+        'user_agent',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

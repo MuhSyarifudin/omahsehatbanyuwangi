@@ -20,7 +20,6 @@
     </head>
     <body>
         @yield('content')
-
         @stack('bottom')
     </body>
 </html>

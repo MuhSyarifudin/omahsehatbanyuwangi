@@ -6,7 +6,6 @@ use App\Events\NotificationBellEvent;
 use App\Events\NotifikasiReservasiEvent;
 use App\Models\User;
 use App\Notifications\NotifikasiReservasi;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Notification;
 
 class NotifikasiReservasiListener

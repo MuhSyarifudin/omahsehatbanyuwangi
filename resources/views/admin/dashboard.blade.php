@@ -1,5 +1,7 @@
 @extends('layouts.DashboardLayout')
 @push('top')
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 @endpush
 @section('content')
                  <!-- start::Stats -->
@@ -118,28 +120,33 @@
                             </div>
                         </div>
                         <div class="w-full max-w-md rounded-xl border border-gray-200 bg-white shadow-sm">
-                            <div class="px-4 py-2 border-b border-gray-100">
-                                <h3 class="text-sm font-semibold text-gray-700">
-                                    Recently Active Users
-                                </h3>
-                            </div>
-                        
-                            <div class="overflow-x-auto">
-                                <table class="w-full text-sm">
-                                    <thead class="bg-gray-50 text-gray-500">
-                                        <tr>
-                                            <th class="px-4 py-2 text-left font-medium">User</th>
-                                            <th class="px-2 py-2 text-left font-medium">Status</th>
-                                            <th class="px-4 py-2 text-right font-medium">Last Active</th>
-                                        </tr>
-                                    </thead>
-                                    <tr>
-                                        <td colspan="3"
-                                            class="px-4 py-3 text-center text-xs text-gray-400">
-                                            Loading...
-                                        </td>
-                                    </tr>
-                                </table>
+                            <div class="w-full max-w-md rounded-xl border border-gray-200 bg-white shadow-sm">
+                                <div class="px-4 py-2 border-b border-gray-100">
+                                    <h3 class="text-sm font-semibold text-gray-700">
+                                        Recently Active Users
+                                    </h3>
+                                </div>
+
+                                <div class="overflow-x-auto">
+                                    <table class="w-full text-sm">
+                                        <thead class="bg-gray-50 text-gray-500">
+                                            <tr>
+                                                <th class="px-4 py-2 text-left font-medium">User</th>
+                                                <th class="px-2 py-2 text-left font-medium">Status</th>
+                                                <th class="px-4 py-2 text-right font-medium">Last Active</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody id="recently-users-body">
+                                            <tr>
+                                                <td colspan="3"
+                                                    class="px-4 py-3 text-center text-xs text-gray-400">
+                                                    Loading...
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                         
@@ -151,5 +158,95 @@
 
 @push('bottom')
 <script type="module" src="{{ url(asset('assets/js/dashboard.js')) }}"></script>
+<script>
+
+$(document).ready(function () {
+
+    loadRecentlyUsers(true);
+
+    setInterval(() => {
+        $.get('/heartbeat');
+        loadRecentlyUsers(false);
+    }, 60000);
+
+
+    function loadRecentlyUsers(showLoading = false)
+    {
+        $.ajax({
+            url: '/api/recently-users',
+            type: 'GET',
+
+            beforeSend: function () {
+
+                if(showLoading)
+                {
+                    $('#recently-users-body').html(`
+                        <tr>
+                            <td colspan="3" class="px-4 py-4">
+                                <div class="h-[50px] w-full bg-gray-200 rounded animate-pulse"></div>
+                            </td>
+                        </tr>
+                    `);
+                }
+
+            },
+
+            success: function (response) {
+
+                let html = '';
+
+                if(response.length === 0)
+                {
+                    html = `
+                        <tr>
+                            <td colspan="3"
+                                class="px-4 py-3 text-center text-xs text-gray-400">
+                                No active users
+                            </td>
+                        </tr>
+                    `;
+                }
+                else
+                {
+                    response.forEach(user => {
+
+                        html += `
+                            <tr class="border-t border-gray-100">
+
+                                <td class="px-4 py-3 font-medium text-gray-700">
+                                    ${user.name}
+                                </td>
+
+                                <td class="px-2 py-3">
+                                    <span class="inline-flex items-center gap-1 text-xs
+                                        ${user.is_online
+                                            ? 'text-green-600'
+                                            : 'text-gray-400'}">
+
+                                        <span class="w-2 h-2 rounded-full
+                                            ${user.is_online
+                                                ? 'bg-green-500'
+                                                : 'bg-gray-400'}">
+                                        </span>
+
+                                        ${user.status}
+                                    </span>
+                                </td>
+
+                                <td class="px-4 py-3 text-right text-gray-500 text-xs">
+                                    ${user.last_active}
+                                </td>
+
+                            </tr>
+                        `;
+                    });
+                }
+
+                $('#recently-users-body').html(html);
+            }
+        });
+    }
+
+});
 </script>
 @endpush

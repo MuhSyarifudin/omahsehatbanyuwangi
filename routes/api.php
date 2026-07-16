@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\TransaksiController;
+use App\Http\Controllers\Api\VisitorController;
+use App\Http\Controllers\Api\WhatsappMessageController;
+use App\Http\Controllers\FonnteWebhookController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,13 +23,10 @@ Route::middleware(['auth'])->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::get('/recently-users', [VisitorController::class, 'recentlyUsers']);
 Route::post('/midtrans-callback',[TransaksiController::class,'callback']);
+Route::post('/fonnte-webhook/status',[FonnteWebhookController::class, 'status']);
+Route::get('/whatsapp-messages/transaksi/{transaksi_id}', [WhatsappMessageController::class, 'getByTransaksi']);
+Route::get('/whatsapp-messages/summary/{transaksi_id}', [WhatsappMessageController::class, 'getStatusSummary']);
+Route::get('/whatsapp-messages/{message_id}', [WhatsappMessageController::class, 'show']);
 Route::get('/tes',[DashboardController::class,'tes']);
-
-// Route::middleware('auth:sanctum')->group(function () {
-// Route::get('/get-count', [DashboardController::class, 'jumlah_notifikasi']);
-// Route::get('/get-notifikasi', [DashboardController::class, 'get_notifikasi']);
-// Route::get('/get-reservasi-count', [DashboardController::class, 'get_reservasi_count']);
-// Route::get('/get-users-count', [DashboardController::class, 'get_users_count']);
-// Route::post('/notifikasi/{id}/read',[DashboardController::class,'markAsRead']);
-// });

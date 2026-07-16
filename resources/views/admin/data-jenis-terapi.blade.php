@@ -16,7 +16,11 @@
 @section('content')
     
 <div class="bg-white rounded-lg px-8 py-6 overflow-x-scroll mb-12">
-    <h4 class="text-xl font-semibold mb-5">Jenis Terapi Table</h4>
+
+    <!-- HEADER -->
+    <div class="flex items-center justify-between mb-5">
+
+    <h4 class="text-xl font-semibold mb-5">Data Jenis Terapi</h4>
 
     <a id="btnTambahLayanan"
        class="openModal cursor-pointer hover:cursor-pointer inline-flex items-center gap-2 bg-blue-600 hover:bg-opacity-90 text-white text-sm font-medium px-4 py-2 mb-4 rounded-lg shadow transition duration-200">
@@ -27,6 +31,7 @@
         </svg>
         Tambah Jenis Terapi
     </a>
+    </div>
 
         <!-- Modal Tambah Layanan -->
 <div
@@ -101,9 +106,9 @@ class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdro
     
     <!-- Header -->
     <div class="flex items-center gap-3 border-b px-6 py-4">
-        <div class="flex h-10 w-10 items-center justify-center rounded-full bg-yellow-100">
+        <div class="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100">
             <svg xmlns="http://www.w3.org/2000/svg"
-                 class="h-5 w-5 text-yellow-600"
+                 class="h-5 w-5 text-blue-600"
                  fill="none"
                  viewBox="0 0 24 24"
                  stroke="currentColor">
@@ -115,10 +120,10 @@ class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdro
         </div>
         <div>
             <h2 class="text-lg font-semibold text-gray-800">
-                Edit Nama Jenis Terapi
+                Edit Jenis Terapi
             </h2>
             <p class="text-sm text-gray-500">
-                Perbarui nama Jenis Terapi
+                Perbarui Jenis Terapi
             </p>
         </div>
     </div>
@@ -129,13 +134,13 @@ class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdro
 
         <div>
             <label class="mb-1 block text-sm font-medium text-gray-700">
-                Nama Layanan
+                Nama Jenis Terapi
             </label>
             <input
                 type="text"
                 name="nama"
                 id="edit_nama"
-                class="w-full rounded-lg border px-4 py-2 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500"
+                class="w-full rounded-lg border px-4 py-2 focus:border-blur-500 focus:ring-2 focus:ring-blue-500"
                 placeholder="Contoh: Konsultasi"
                 required>
         </div>
@@ -151,7 +156,7 @@ class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdro
         <button
             type="submit"
             form="formEditLayanan"
-            class="rounded-lg bg-yellow-500 px-5 py-2 text-sm font-medium text-white hover:bg-yellow-600">
+            class="rounded-lg bg-blue-500 px-5 py-2 text-sm font-medium text-white hover:bg-blue-600">
             Update
         </button>
     </div>
